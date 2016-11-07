@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>  
+<!DOCTYPE dynamic-hibernate-statement SYSTEM "classpath://hibernate/dynamic-hibernate-statement-1.0.dtd">
+<dynamic-hibernate-statement>
+	<!-- 分页查询得分模型 -->
+	<sql-query name="scoreModelDao.getPageScoreModels">  
+    <![CDATA[ 
+    	select sm_id modelId, mod_code modelCode, mod_name modelName,
+    	mod_desc modelDesc, algor_desc algorithmDesc, scene,create_time createTime,
+    	update_time updateTime, status
+    	FROM credit_db.sp_score_model where 1=1
+    	<#if modelCode ?exists>
+			and sm_id = ${modelCode} 
+        </#if>
+    	<#if modelName ?exists>
+        	and mod_name like '%${modelName}%'
+        </#if>
+	]]>
+    </sql-query>
+    
+    <!-- 查询得分模型总数 -->
+    <hql-query name="scoreModelDao.getPageScoreModelsCount">  
+    <![CDATA[ 
+    	select count(modelId) FROM ScoreModelEntity where 1=1
+    	<#if modelCode ?exists>
+    	   and modelId = '${modelCode}'
+    	</#if>
+    	<#if modelName ?exists>
+    		and modelName like '%${modelName}%'
+    	</#if>
+	]]>   
+    </hql-query>
+    
+    <!-- 根据企业ID查询企业所使用的算法 -->
+    <sql-query name="scoreModelDao.getScoreModelEntityByRegId">  
+    <![CDATA[ 
+    	SELECT csm.sm_id modelId, csm.mod_code modelCode, csm.mod_name modelName, csm.mod_desc modelDesc, 
+            csm.algor_desc algorithmDesc, csm.reserve1, csm.reserve2, csm.create_user createUser, 
+            csm.create_time createTime, csm.update_time updateTime 
+        FROM credit_db.ods_agent_algor taa, credit_db.sp_score_model csm 
+        WHERE taa.algor_id = csm.sm_id AND taa.reg_id = '${regId}' 
+	]]>   
+    </sql-query>
+</dynamic-hibernate-statement>

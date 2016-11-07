@@ -1,0 +1,24 @@
+body {
+  font-family: Microsoft YaHei, '宋体' , Tahoma, Helvetica, Arial, "\5b8b\4f53", sans-serif;
+}
+#left {
+  background-color: #ececec;
+  margin-top: -9.5px;
+}
+.panel-group .panel+.panel{
+  margin-top: 0px;
+}
+.panel-heading>a {
+  width: 100%;
+}
+.footerIndex{
+  min-width:1000px;
+  width:100%;
+  height:30px;
+  text-align: center;
+  line-height: 30px;
+  background: #000;
+  opacity: .6;
+  color: #fff;
+  filter:alpha(opacity=60);
+}

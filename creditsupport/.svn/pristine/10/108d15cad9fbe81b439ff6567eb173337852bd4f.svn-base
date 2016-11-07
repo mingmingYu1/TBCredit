@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>  
+<!DOCTYPE dynamic-hibernate-statement SYSTEM "classpath://hibernate/dynamic-hibernate-statement-1.0.dtd">
+<dynamic-hibernate-statement>
+	<!-- 设置模板为不可用状态 -->
+	<sql-query name="reportTempletDao.setDisabled">  
+    <![CDATA[ 
+    	update credit_db.ods_report_templet set status=0 where id=${id}
+	]]>   
+    </sql-query>
+    
+    <!-- 分页查询征信报告模板记录 -->
+	<sql-query name="reportTempletDao.getPageTemplet">  
+    <![CDATA[ 
+    	select id, number, name, module_list moduleList, create_time createTime,`declare`, type 
+    	from credit_db.ods_report_templet WHERE status!=0
+    		<#if number ?exists>
+                 and number like '${number}'
+            </#if>
+            <#if name ?exists>
+                 and name like '${name}'
+            </#if>
+            <#if order ?exists>
+                 order by ${order}
+            <#else>
+            	 order by create_time desc 
+            </#if>
+	]]>   
+    </sql-query>
+    
+    <!-- 查询征信报告模板总数 -->
+    <sql-query name="reportTempletDao.getPageTempletCount">  
+    <![CDATA[ 
+    	select count(id) 
+		from credit_db.ods_report_templet WHERE status!=0
+    		<#if number ?exists>
+                 and number like '${number}'
+            </#if>
+            <#if name ?exists>
+                 and name like '${name}'
+            </#if>
+	]]>   
+    </sql-query>
+    
+</dynamic-hibernate-statement>

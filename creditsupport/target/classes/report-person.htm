@@ -1,0 +1,1474 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title></title>
+		<style type="text/css">
+body {
+	font-family: simsun;
+	font-size: 14px;
+}
+
+.font_16 {
+	font-size: 20px;
+}
+
+.align-left {
+	text-align: left;
+}
+
+.align-right {
+	text-align: right;
+}
+
+.align-center {
+	text-align: center;
+}
+
+.title-whole-line {
+	width: 100%;
+	padding-bottom: 10px;
+}
+.title-left {
+	font-weight: bold;
+	float: left;
+	width: 200px;
+}
+.title-right {
+	font-weight: bold;
+	float: right;
+	width: 200px;
+}
+
+.line_height {
+	line-height: 30px;
+}
+
+.title {
+	width: 100%;
+	font-size: 32px;
+}
+
+.section-blue {
+	font-size: 20px;
+	color: blue;
+	font-weight: bold;
+}
+
+.setion-blue-title2 {
+	font-size: 18px;
+	color: blue;
+	font-weight: bold;
+}
+
+.setion-blue-title3 {
+	font-size: 15px;
+	color: blue;
+	font-weight: bold;
+}
+
+.section-2 {
+	text-indent: 20px;
+	font-size: 16px;
+	color: blue;
+	font-weight: bold;
+}
+
+.section-red {
+	font-size: 20px;
+	color: red;
+}
+
+.whole-line {
+	line-height: 25px;
+	padding-bottom: 10px;
+	width: 100%;
+}
+
+.text-top-left {
+	font-weight: bold;
+	width: 15%;
+	float: left;
+}
+
+.text-top-right {
+	width: 85%;
+	float: left;
+}
+
+.text-left {
+	font-weight: bold;
+	width: 140px;
+	float: left;
+}
+
+.text-right {
+	width: 190px;
+	float: left;
+}
+
+.text-right-3 {
+	float: left;
+}
+
+.checkbox-font {
+	height: 12px;
+	line-height: 12px;
+	float: left;
+}
+.checkbox-solid {
+	width: 14px;
+	height: 14px;
+	background-color: #000;
+	float: left;
+}
+
+.checkbox-top-solid {
+	width: 1px;
+	height: 1px;
+}
+
+.checkbox-left-solid {
+	float: left;
+	width: 1px;
+	height: 1px;
+}
+
+.checkbox-hollow {
+	float: left;
+	width: 12px;
+	height: 12px;
+	background-color: #fff;
+}
+
+table {
+	width: 100%;
+	border-collapse: collapse;
+	border-spacing: 0;
+	border-left: 1px solid #000;
+	border-top: 1px solid #000;
+	text-align: center;
+}
+
+th, td {
+	border-right: 1px solid #000;
+	border-bottom: 1px solid #000;
+	padding: 5px 2px;
+	font-size: 14px;
+}
+
+th {
+	font-weight: bold;
+}
+
+.font_bold {
+	font-weight: bold;
+}
+</style>
+	</head>
+	<body>
+		<div class="title-whole-line">
+			<div class="title-left">编号：<#if (baseInfo.regId)??>${baseInfo.regId}</#if></div>
+			<div class="title-right">
+				<#if reportType??>
+					<div class="checkbox-solid">
+						<#if reportType == 1>
+						<#else>
+						<div class="checkbox-top-solid">&nbsp;</div>
+						<div class="checkbox-left-solid">&nbsp;</div>
+						<div class="checkbox-hollow">&nbsp;</div>
+						</#if>
+					</div><div class="checkbox-font">&nbsp;授信&nbsp;&nbsp;</div>
+					<!-- <div class="checkbox-solid">
+						<#if reportType == 2>
+						<#else>
+						<div class="checkbox-top-solid">&nbsp;</div>
+						<div class="checkbox-left-solid">&nbsp;</div>
+						<div class="checkbox-hollow">&nbsp;</div>
+						</#if>
+					</div><div class="checkbox-font">&nbsp;贷款&nbsp;&nbsp;</div> -->
+					<div class="checkbox-solid">
+						<#if reportType == 3>
+						<#else>
+						<div class="checkbox-top-solid">&nbsp;</div>
+						<div class="checkbox-left-solid">&nbsp;</div>
+						<div class="checkbox-hollow">&nbsp;</div>
+						</#if>
+					</div><div class="checkbox-font">&nbsp;交易&nbsp;&nbsp;</div>
+				</#if>
+			</div>
+		</div>
+		<div class="title-whole-line">
+			<div class="title-left">日期：${curDate?if_exists}</div>
+			<div class="title-right">算法名称：${algor?if_exists}</div>
+		</div>
+			<h1 class="title align-center">个人征信报告</h1>
+			<div class="whole-line">
+				<div class="text-left font_16">信用等级</div>
+				<div class="text-right font_16"></div>
+				<div class="text-left font_16">信用得分</div>
+				<div class="text-right font_16"></div>
+			</div>
+			
+			<div class="whole-line">
+				<div class="text-top-left">报告内容</div>
+				<div class="text-top-right">
+					<!-- <#if repItemList?exists> 
+						<#list repItemList as item>
+							${item}
+						</#list> 
+					</#if> -->
+			  <span>一、基本信息</span>
+            <br />
+            <span>二、驾驶证信息</span>
+            <br />
+            <span>三、个人对外投资信息</span>
+            <br />
+            &nbsp;&nbsp;<span>3.1、失信被执行人</span>&nbsp;<span>3.2、被执行人</span>&nbsp;<span>3.3、企业法定代表人</span>&nbsp;<span>3.4、管理人员</span>
+            &nbsp;&nbsp;<span>3.5、企业股东</span>
+            <br/>
+            <span>四、个人司法信息</span>
+            <br/>
+            &nbsp;&nbsp;<span>4.1、曝光台</span>&nbsp;<span>4.2、裁判文书</span>&nbsp;<span>4.3、失信公告</span>&nbsp;<span>4.4、网贷黑名单</span> 
+            <span>4.5、执行公告</span>
+            <br />
+            <span>五、阿里欠贷信息</span>
+            <br />
+            <span>六、银联三要素验证信息</span>
+            <br/>
+            <span>七、个人消费信息</span>
+            <br/>
+            &nbsp;&nbsp;<span>7.1、资产状况及交易行为</span>&nbsp;<span>7.2、消费大类分布信息</span>&nbsp;<span>7.3、城市消费状况信息</span>
+            &nbsp;&nbsp;&nbsp;<span>7.4、每月消费状况信息</span>&nbsp;<span>7.5、消费行为信息</span>&nbsp;<span>7.6、信用相关交易统计信息</span>
+            <br />
+				</div>
+			</div>
+			
+			<!-- <div class="whole-line">
+				<div class="text-top-left">评分简述</div>
+				<div class="text-top-right">
+					<span>征信报告总评分由通用信息评分和行业信息评分组成:</span><br/>
+					<span>通用信息占总评分权重:&nbsp;${(score.score1Weight)?if_exists}&nbsp;&nbsp;&nbsp;&nbsp;在总评分中计分&nbsp;${(score.score1)?if_exists}&nbsp;&nbsp;&nbsp;&nbsp;按百分制单独评分&nbsp;${(score.score1Per)?if_exists}</span><br/>
+					<span>行业信息占总评分权重:&nbsp;${(score.score2Weight)?if_exists}&nbsp;&nbsp;&nbsp;&nbsp;在总评分中计分&nbsp;${(score.score2)?if_exists}&nbsp;&nbsp;&nbsp;&nbsp;按百分制单独评分&nbsp;${(score.score2Per)?if_exists}</span><br/>
+					<span>(详见评分报告)</span><br/>
+				</div>
+			</div> -->
+			
+			<#assign templetIndexFather = 1/>
+			<p class="section-blue">${templetIndexFather}、基本信息</p>
+			<div class="whole-line">
+				<div class="text-left align-right">姓名：</div>
+				<div class="text-right-3"><#if (baseInfo.name)??>${baseInfo.name}</#if></div>
+				<div class="text-left align-right">身份证号：</div>
+				<div class="text-right"><#if (baseInfo.cardId)??>${baseInfo.cardId}</#if></div>
+			</div>
+			<div class="whole-line">
+				<div class="text-left align-right">性别：</div>
+				<div class="text-right-3"><#if (baseInfo.sex)??>${baseInfo.sex}</#if></div>
+				<div class="text-left align-right">地址：</div>
+				<div class="text-right"><#if (baseInfo.address)??>${baseInfo.address}</#if></div>
+			</div>
+			<div class="whole-line">
+				<div class="text-left align-right">验证结果：</div>
+				<div class="text-right-3"><#if (baseInfo.compStatus)??>${baseInfo.compStatus}</#if></div>
+				<div class="text-left align-right">验证结果描述：</div>
+				<div class="text-right"><#if (baseInfo.compResult)??>${baseInfo.compResult}</#if></div>
+			</div>
+		
+		<table>
+				<tr>
+					<th>序号</th>
+					<th>银行卡号</th>
+					<th>验证结果</th>
+				</tr>
+				<#if verifyBankCardInfo?exists> 
+				<#if (verifyBankCardInfo?size>0)>
+				   <#list verifyBankCardInfo as item>
+				<tr>
+					<td>${item_index?if_exists+1}</td>
+					<td>${item.accountno?if_exists}</td>
+					<td>${item.message?if_exists}</td>
+				</tr>
+				    </#list> 
+				<#else>
+				<tr>
+				<td colspan="3" class="align-center">无相关信息</td>
+				</tr>
+				</#if>
+				</#if>
+			</table>
+			<br/>
+			<table>
+				<tr>
+					<th>序号</th>
+					<th>手机号</th>
+					<th>验证结果</th>
+				</tr>
+				<#if test?exists> 
+				<#if (test?size>0)>
+				   <#list test as item>
+				<tr>
+					<td>${item_index?if_exists+1}</td>
+					<td>${item.phoneNo?if_exists}</td>
+					<td>${item.message?if_exists}</td>
+				</tr>
+				    </#list> 
+				<#else>
+				<tr>
+				<td colspan="3" class="align-center">无相关信息</td>
+				</tr>
+				</#if>
+				</#if>
+			</table>
+		
+		
+  <#if compStatus??>
+  <#if compStatus == "1">
+			
+	<#if (templetMap.driverLicence)??>
+		<#if templetMap.driverLicence == 1>
+		    <#assign templetIndexFather = templetIndexFather + 1/>
+			<p class="section-blue">${templetIndexFather}、驾驶证信息</p>
+			<table>
+				<tr>
+					<th>序号</th>
+					<th>身份证号</th>
+					<th>姓名</th>
+					<th>驾驶证匹配结果</th>
+					<th>状态</th>
+				</tr>
+				<#if driverInfo?exists> 
+				<#if (driverInfo?size>0)>
+				   <#list driverInfo as item>
+				<tr>
+					<td>${item_index?if_exists+1}</td>
+					<td>${item.cardId?if_exists}</td>
+					<td>${item.name?if_exists}</td>
+					<td>${item.xm?if_exists}</td>
+					<td>${item.zt?if_exists}</td>
+				</tr>
+				    </#list> 
+				<#else>
+				<tr>
+				<td colspan="5" class="align-center">无相关信息</td>
+				</tr>
+				</#if>
+				</#if>
+			</table>
+		</#if>
+	</#if>
+	
+	<#if templetMap.persxbzxr == 1 || templetMap.perbzxr == 1 || templetMap.perqyfddbr == 1 || templetMap.perglry == 1 || templetMap.perqygd == 1>
+	  <#assign templetIndexFather = templetIndexFather + 1/>
+	  <p class="section-blue">${templetIndexFather}、个人对外投资信息</p>
+	</#if>
+	
+	<#if (templetMap.persxbzxr)??>
+		<#if templetMap.persxbzxr == 1>
+			<#assign templetIndex = 1/>			
+			<p class="setion-blue-title2">&nbsp;&nbsp;${templetIndexFather}.${templetIndex}、失信被执行人信息</p>
+				<#if punishBreakInfo?exists> 
+				<#if (punishBreakInfo?size>0)>
+			<table>
+				   <#list punishBreakInfo as item>
+				<tr>
+					<td class="font_bold">身份证号</td>
+					<td>${item.cardId?if_exists}</td>
+					<td class="font_bold">案号</td>
+					<td>${item.caseNo?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">被执行人姓名</td>
+					<td>${item.name?if_exists}</td>
+					<td class="font_bold">失信类型</td>
+					<td>${item.type?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">性别</td>
+					<td>${item.sex?if_exists}</td>
+					<td class="font_bold">年龄 </td>
+					<td>${item.age?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">身份证始发地</td>
+					<td>${item.identityDeparture?if_exists}</td>
+					<td class="font_bold">法定代表人</td>
+					<td>${item.head?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">立案时间</td>
+					<td><#if (item.filingDate)??>${item.filingDate?string("yyyy-MM-dd")}</#if></td>
+					<td class="font_bold">公布时间</td>
+					<td><#if (item.publishDate)??>${item.publishDate?string("yyyy-MM-dd")}</#if></td>
+				</tr>
+				<tr>
+					<td class="font_bold">执行法院</td>
+					<td>${item.executeCourt?if_exists}</td>
+					<td class="font_bold">省份</td>
+					<td>${item.province?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">执行文号</td>
+					<td>${item.executeDocumentnumber?if_exists}</td>
+					<td class="font_bold">做出执行依据单位</td>
+					<td>${item.gistunit?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">生效法律文书确定的义务</td>
+					<td>${item.duty?if_exists}</td>
+					<td class="font_bold">失信被执行人为具体情形</td>
+					<td>${item.disrupttypename?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">被执行人的履情况</td>
+					<td>${item.performance?if_exists}</td>
+					<td class="font_bold">已履行</td>
+					<td>${item.performedpart?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">未履行</td>
+					<td>${item.unperformpart?if_exists}</td>
+					<td class="font_bold">关注次数</td>
+					<td>${item.focusNumber?if_exists}</td>
+				</tr>
+				
+				    </#list> 
+			</table>
+				<#else>
+				<table>
+				<tr>
+				<th>序号</th>
+				<th>身份证号</th>
+              <th>案号</th>
+              <th>被执行姓名</th>
+              <th>失信类型</th>
+              <th>性别</th>
+              <th>年龄</th>
+              <th>身份证原始发地</th>
+              <th>法定代表人</th>
+              <th>立案时间</th>
+              <th>公布时间</th>
+              <th>执行法院</th>
+              <th>省份</th>
+              <th>执行文号</th>
+              <th>做出执行依据单位</th>
+              <th>生效法律文书确定的义务</th>
+              <th>失信被执行人为具体情形</th>
+              <th>被执行人的履情况</th>
+              <th>已履行</th>
+              <th>未履行</th>
+              <th>关注次数</th>
+				</tr>
+				<tr>
+				<td colspan="21" class="align-center">无相关信息</td>
+				</tr>
+				</table>
+				</#if>
+				</#if>
+		</#if>
+	</#if>
+	
+	<#if (templetMap.perbzxr)??>
+		<#if templetMap.perbzxr == 1>
+			<#assign templetIndex = templetIndex + 1/>			
+			<p class="setion-blue-title2">&nbsp;&nbsp;${templetIndexFather}.${templetIndex}、被执行人信息</p>
+				<#if punishedInfo?exists> 
+				<#if (punishedInfo?size>0)>
+			<table>
+				   <#list punishedInfo as item>
+				<tr>
+					<td class="font_bold">身份证号</td>
+					<td>${item.cardId?if_exists}</td>
+					<td class="font_bold">案号</td>
+					<td>${item.caseNo?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">被执行人姓名</td>
+					<td>${item.name?if_exists}</td>
+					<td class="font_bold">性别</td>
+					<td>${item.sex?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">年龄 </td>
+					<td>${item.age?if_exists}</td>
+					<td class="font_bold">身份证始发地</td>
+					<td>${item.identityDeparture?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">立案时间</td>
+					<td><#if (item.filingDate)??>${item.filingDate?string("yyyy-MM-dd")}</#if></td>
+					<td class="font_bold">执行标的</td>
+					<td>${item.executeTarget?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">省份</td>
+					<td>${item.province?if_exists}</td>
+					<td class="font_bold">关注次数</td>
+					<td>${item.focusNumber?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">案件状态</td>
+					<td>${item.caseState?if_exists}</td>
+					<td class="font_bold">执行法院</td>
+					<td>${item.courtName?if_exists}</td>
+				</tr>
+				    </#list> 
+			</table>
+				<#else>
+				<table>
+				<tr>
+				<th>序号</th>
+				<th>身份证号</th>
+              <th>案号</th>
+              <th>被执行人姓名</th>
+              <th>性别</th>
+              <th>年龄</th>
+              <th>身份证原始发地</th>
+              <th>立案时间</th>
+              <th>执行标的</th>
+              <th>省份</th>
+              <th>关注次数</th>
+              <th>案件状态</th>
+              <th>执行法院</th>
+				</tr>
+				<tr>
+				<td colspan="13" class="align-center">无相关信息</td>
+				</tr>
+				</table>
+				</#if>
+				</#if>
+		</#if>
+	</#if>
+	
+	<#if (templetMap.perqyfddbr)??>
+		<#if templetMap.perqyfddbr == 1>
+			<#assign templetIndex = templetIndex + 1/>			
+		   <p class="setion-blue-title2">&nbsp;&nbsp;${templetIndexFather}.${templetIndex}、企业法定代表人</p>
+			<table>
+				<tr>
+					<th>序号</th>
+					<th>身份证号</th>
+                    <th>查询人姓名</th>
+                    <th>企业名称</th>
+                    <th>企业注册号</th>
+                    <th>企业类型</th>
+                    <th>注册资本（万元）</th>
+                    <th>币种</th>
+                    <th>企业状态</th>
+				</tr>
+				<#if ryposfrInfo?exists> 
+				<#if (ryposfrInfo?size>0)>
+				   <#list ryposfrInfo as item>
+				<tr>
+					<td>${item_index?if_exists+1}</td>
+					<td>${item.cardId?if_exists}</td>
+					<td>${item.name?if_exists}</td>
+					<td>${item.entName?if_exists}</td>
+					<td>${item.entNo?if_exists}</td>
+					<td>${item.entType?if_exists}</td>
+					<td>${item.regcapital?if_exists}</td>
+					<td>${item.currency?if_exists}</td>
+					<td>${item.status?if_exists}</td>
+				</tr>
+				    </#list> 
+				<#else>
+				<tr>
+				<td colspan="9" class="align-center">无相关信息</td>
+				</tr>
+				</#if>
+				</#if>
+			</table>
+		</#if>
+	</#if>
+	
+	<#if (templetMap.perglry)??>
+		<#if templetMap.perglry == 1>
+			<#assign templetIndex = templetIndex + 1/>			
+		   <p class="setion-blue-title2">&nbsp;&nbsp;${templetIndexFather}.${templetIndex}、管理人员</p>
+			<table>
+				<tr>
+					<th>序号</th>
+					<th>身份证号</th>
+                    <th>企业名称</th>
+                    <th>企业注册号</th>
+                    <th>企业类型</th>
+                    <th>注册资本（万元）</th>
+                    <th>币种</th>
+                    <th>企业状态</th>
+                    <th>职务</th>
+				</tr>
+				<#if ryposperInfo?exists> 
+				<#if (ryposperInfo?size>0)>
+				   <#list ryposperInfo as item>
+				<tr>
+					<td>${item_index?if_exists+1}</td>
+					<td>${item.cardId?if_exists}</td>
+					<td>${item.entName?if_exists}</td>
+					<td>${item.entNo?if_exists}</td>
+					<td>${item.entType?if_exists}</td>
+					<td>${item.regcapital?if_exists}</td>
+					<td>${item.currency?if_exists}</td>
+					<td>${item.status?if_exists}</td>
+					<td>${item.position?if_exists}</td>
+				</tr>
+				    </#list> 
+				<#else>
+				<tr>
+				<td colspan="9" class="align-center">无相关信息</td>
+				</tr>
+				</#if>
+				</#if>
+			</table>
+		</#if>
+	</#if>
+	
+	<#if (templetMap.perqygd)??>
+		<#if templetMap.perqygd == 1>
+			<#assign templetIndex = templetIndex + 1/>			
+		   <p class="setion-blue-title2">&nbsp;&nbsp;${templetIndexFather}.${templetIndex}、企业股东</p>
+			<table>
+				<tr>
+					<th>序号</th>
+					<th>身份证号</th>
+					<th>查询人姓名</th>
+                    <th>企业名称</th>
+                    <th>企业注册号</th>
+                    <th>企业类型</th>
+                    <th>注册资本（万元）</th>
+                    <th>币种</th>
+                    <th>企业状态</th>
+                    <th>认缴出资额</th>
+				</tr>
+				<#if ryposshaInfo?exists> 
+				<#if (ryposshaInfo?size>0)>
+				   <#list ryposshaInfo as item>
+				<tr>
+					<td>${item_index?if_exists+1}</td>
+					<td>${item.cardId?if_exists}</td>
+					<td>${item.name?if_exists}</td>
+					<td>${item.entName?if_exists}</td>
+					<td>${item.entNo?if_exists}</td>
+					<td>${item.entType?if_exists}</td>
+					<td>${item.regcapital?if_exists}</td>
+					<td>${item.currency?if_exists}</td>
+					<td>${item.status?if_exists}</td>
+					<td>${item.contribution?if_exists}(${item.contributionCurrency?if_exists}</td>
+				</tr>
+				    </#list> 
+				<#else>
+				<tr>
+				<td colspan="10" class="align-center">无相关信息</td>
+				</tr>
+				</#if>
+				</#if>
+			</table>
+		</#if>
+	</#if>
+	
+	<#if templetMap.perbgt == 1 || templetMap.percpws == 1 || templetMap.persxgg == 1 || templetMap.perwdhmd == 1 || templetMap.perzxgg == 1>
+	  <#assign templetIndexFather = templetIndexFather + 1/>
+	  <p class="section-blue">${templetIndexFather}、个人司法信息</p>
+	</#if>
+	
+	<#if (templetMap.perbgt)??>
+		<#if templetMap.perbgt == 1>
+			<#assign templetIndex = 1/>			
+		   <p class="setion-blue-title2">&nbsp;&nbsp;${templetIndexFather}.${templetIndex}、曝光台</p>
+			<table>
+				<tr>
+					<th>序号</th>
+					<th>身份证号</th>
+					<th>曝光台ID</th>
+                    <th>立案日期</th>
+                    <th>数据类型</th>
+                    <th>匹配度</th>
+                    <th>当事人</th>
+                    <th>法院名称</th>
+                    <th>案号</th>
+				</tr>
+				<#if riskBgtInfo?exists> 
+				<#if (riskBgtInfo?size>0)>
+				   <#list riskBgtInfo as item>
+				<tr>
+					<td>${item_index?if_exists+1}</td>
+					<td>${item.cardId?if_exists}</td>
+					<td>${item.bgtid?if_exists}</td>
+					<td>${item.sorttime?if_exists}</td>
+					<td>${item.datatype?if_exists}</td>
+					<td>${item.matchratio?if_exists}</td>
+					<td>${item.pname?if_exists}</td>
+					<td>${item.court?if_exists}</td>
+					<td>${item.caseno?if_exists}</td>
+				</tr>
+				    </#list> 
+				<#else>
+				<tr>
+				<td colspan="9" class="align-center">无相关信息</td>
+				</tr>
+				</#if>
+				</#if>
+			</table>
+		</#if>
+	</#if>
+	
+	<#if (templetMap.percpws)??>
+		<#if templetMap.percpws == 1>
+			<#assign templetIndex = templetIndex + 1/>			
+			<p class="setion-blue-title2">&nbsp;&nbsp;${templetIndexFather}.${templetIndex}、裁判文书信息</p>
+				<#if riskCpwsInfo?exists> 
+				<#if (riskCpwsInfo?size>0)>
+				<table>
+				   <#list riskCpwsInfo as item>
+				<tr>
+					<td class="font_bold">身份证号</td>
+					<td>${item.cardId?if_exists}</td>
+					<td class="font_bold">裁判文书ID</td>
+					<td>${item.cpwsid?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">审结时间</td>
+					<td>${item.sorttime?if_exists}</td>
+					<td class="font_bold">数据类型类型</td>
+					<td>${item.datatype?if_exists}</td>
+				</tr>
+				<tr>
+				    <td class="font_bold">案由编码 </td>
+					<td>${item.casecause?if_exists}</td>
+					<td class="font_bold">标题</td>
+					<td>${item.title?if_exists}</td>
+				</tr>
+				<tr>
+				    <td class="font_bold">审理程序</td>
+					<td>${item.trialprocedure?if_exists}</td>
+					<td class="font_bold">当事人ID</td>
+					<td>${item.partyid?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">匹配度</td>
+					<td>${item.matchratio?if_exists}</td>
+					<td class="font_bold">法院名称</td>
+					<td>${item.court?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">案号</td>
+					<td colspan="3">${item.caseno?if_exists}</td>
+				</tr>
+				</#list> 
+				     </table>
+				<#else>
+				<table>
+				<tr>
+				    <th>序号</th>
+                    <th>身份证号</th>
+              <th>裁判文书ID</th>
+              <th>审结时间</th>
+              <th>数据类型</th>
+              <th>案由</th>
+              <th>标题</th>
+              <th>审理程序</th>
+              <th>当事人ID</th>
+              <th>匹配度</th>
+              <th>法院名称</th>
+              <th>案号</th>
+				</tr>
+				<tr>
+					<td colspan="12" class="align-center">无相关信息</td>
+				</tr>
+				</table>
+				</#if>
+				</#if>
+		</#if>
+	</#if>
+	
+	<#if (templetMap.persxgg)??>
+		<#if templetMap.persxgg == 1>
+			<#assign templetIndex = templetIndex + 1/>			
+			<p class="setion-blue-title2">&nbsp;&nbsp;${templetIndexFather}.${templetIndex}、失信公告信息</p>
+				<#if riskDishonerInfo?exists> 
+				<#if (riskDishonerInfo?size>0)>
+				<table>
+				   <#list riskDishonerInfo as item>
+				<tr>
+					<td class="font_bold">身份证号</td>
+					<td>${item.cardId?if_exists}</td>
+					<td class="font_bold">失信公告ID</td>
+					<td>${item.shixinid?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">姓名</td>
+					<td>${item.pname?if_exists}</td>
+					<td class="font_bold">立案时间</td>
+					<td>${item.sorttime?if_exists}</td>
+				</tr>
+				<tr>
+				    <td class="font_bold">性别 </td>
+					<td>${item.sex?if_exists}</td>
+					<td class="font_bold">被执行人的履行情况 </td>
+					<td>${item.lxqk?if_exists}</td>
+				</tr>
+				<tr>
+				    <td class="font_bold">执行依据文号</td>
+					<td>${item.yjcode?if_exists}</td>
+					<td class="font_bold">执行法院名称</td>
+					<td>${item.court?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">做出执行依据单位</td>
+					<td>${item.yjdw?if_exists}</td>
+					<td class="font_bold">数据类型</td>
+					<td>${item.datatype?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">失信被执行人行为具体情形</td>
+					<td>${item.jtqx?if_exists}</td>
+					<td class="font_bold">生效法律文书确定的义务</td>
+					<td>${item.yiwu?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">年龄</td>
+					<td>${item.age?if_exists}</td>
+					<td class="font_bold">匹配度</td>
+					<td>${item.matchratio?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">省份</td>
+					<td>${item.province?if_exists}</td>
+					<td class="font_bold">案号</td>
+					<td>${item.caseno?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">发布时间</td>
+					<td colspan="3">${item.posttime?if_exists}</td>
+				</tr>
+				
+				</#list> 
+				     </table>
+				<#else>
+				<table>
+				<tr>
+				    <th>序号</th>
+                    <th>身份证号</th>
+              <th>失信公告ID</th>
+              <th>姓名</th>
+              <th>立案时间</th>
+              <th>性别</th>
+              <th>被执行人的履行情况</th>
+              <th>执行依据文号</th>
+              <th>执行法院名称</th>
+              <th>做出执行依据单位</th>
+              <th>数据类型</th>
+              <th>失信被执行人行为具体情形 </th>
+              <th>生效法律文书确定的义务 </th>
+              <th>年龄</th>
+              <th>匹配度</th>
+              <th>省份</th>
+              <th>案号</th>
+              <th>发布时间</th>
+				</tr>
+				<tr>
+					<td colspan="18" class="align-center">无相关信息</td>
+				</tr>
+				</table>
+				</#if>
+				</#if>
+		</#if>
+	</#if>
+	
+	<#if (templetMap.perwdhmd)??>
+		<#if templetMap.perwdhmd == 1>
+			<#assign templetIndex = templetIndex + 1/>			
+			<p class="setion-blue-title2">&nbsp;&nbsp;${templetIndexFather}.${templetIndex}、网贷黑名单</p>
+				<#if riskNetloadInfo?exists> 
+				<#if (riskNetloadInfo?size>0)>
+				<table>
+				   <#list riskNetloadInfo as item>
+				<tr>
+				    <td class="font_bold">身份证号</td>
+					<td>${item.cardId?if_exists}</td>
+					<td class="font_bold">姓名</td>
+					<td>${item.pname?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">网贷黑名单ID</td>
+					<td>${item.wdhmdid?if_exists}</td>
+					<td class="font_bold">贷款时间</td>
+					<td>${item.sorttime?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">性别</td>
+					<td>${item.ownerSex?if_exists}</td>
+					<td class="font_bold">居住电话</td>
+					<td>${item.phone?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">信息更新时间</td>
+					<td>${item.updatetime?if_exists}</td>
+					<td class="font_bold">执行法院</td>
+					<td>${item.court?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">数据类型</td>
+					<td>${item.datatype?if_exists}</td>
+					<td class="font_bold">案号</td>
+					<td>${item.casecode?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">未还/罚息</td>
+					<td>${item.whfx?if_exists}</td>
+					<td class="font_bold">本金/本息</td>
+					<td>${item.bjbx?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">居住地址</td>
+					<td>${item.address?if_exists}</td>
+					<td class="font_bold">手机号</td>
+					<td>${item.mobile?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">邮箱地址</td>
+					<td>${item.email?if_exists}</td>
+					<td class="font_bold">来源</td>
+					<td>${item.sourcename?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">年龄</td>
+					<td>${item.age?if_exists}</td>
+					<td class="font_bold">匹配度</td>
+					<td>${item.matchratio?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">已还金额(元)</td>
+					<td>${item.yhje?if_exists}</td>
+				</tr>
+				</#list> 
+				     </table>
+				<#else>
+				<table>
+				<tr>
+				<td>序号</td>
+				<td>身份证号</td>
+				<td>姓名</td>
+				<td>网贷黑名单ID</td>
+              <td>贷款时间</td>
+              <td>性别</td>
+              <td>居住电话</td>
+              <td>信息更新时间</td>
+              <td>执行法院</td>
+              <td>数据类型</td>
+              <td>未还/罚息</td>
+              <td>本金/本息</td>
+              <td>案号</td>
+               <td>居住地址</td>
+              <td>邮箱地址</td>
+              <td>来源</td>
+              <td>年龄</td>
+              <td>匹配度</td>
+               <td>数据源</td>
+              <td>已还金额(元)</td>
+              <td>手机号</td>
+				</tr>
+				<tr>
+					<td colspan="21" class="align-center">无相关信息</td>
+				</tr>
+				</table>
+				</#if>
+				</#if>
+		</#if>
+	</#if>
+	
+	<#if (templetMap.perzxgg)??>
+		<#if templetMap.perzxgg == 1>
+			<#assign templetIndex = templetIndex + 1/>			
+			<p class="setion-blue-title2">&nbsp;&nbsp;${templetIndexFather}.${templetIndex}、执行公告信息</p>
+				<#if riskExecuteDocInfo?exists> 
+				<#if (riskExecuteDocInfo?size>0)>
+				<table>
+				   <#list riskExecuteDocInfo as item>
+				<tr>
+				    <td class="font_bold">身份证号</td>
+					<td>${item.cardId?if_exists}</td>
+					<td class="font_bold">执行公告ID</td>
+					<td>${item.zxggid?if_exists}</td>
+				</tr>
+				<tr>
+				    <td class="font_bold">审结时间</td>
+					<td>${item.sorttime?if_exists}</td>
+					<td class="font_bold">内容</td>
+					<td>${item.body?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">标题</td>
+					<td>${item.title?if_exists}</td>
+					<td class="font_bold">执行状态</td>
+					<td>${item.status?if_exists}</td>
+				</tr>
+				<tr>
+				    <td class="font_bold">执行法院名称</td>
+					<td>${item.court?if_exists}</td>
+					<td class="font_bold">申请人 </td>
+					<td>${item.proposer?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">数据类型</td>
+					<td>${item.datatype?if_exists}</td>
+					<td class="font_bold">标题</td>
+					<td>${item.title?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">匹配度</td>
+					<td>${item.matchratio?if_exists}</td>
+					<td class="font_bold">姓名</td>
+					<td>${item.pname?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">案号</td>
+					<td>${item.caseno?if_exists}</td>
+					<td class="font_bold">案件状态</td>
+					<td>${item.casestate?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">执行标的</td>
+					<td colspan="3">${item.execmoney?if_exists}</td>
+				</tr>
+				</#list> 
+				     </table>
+				<#else>
+				<table>
+				<tr>
+				<td>序号</td>
+				<td>身份证号</td>
+             <td>执行公告ID</td>
+              <td>审结时间</td>
+              <td>内容</td>
+              <td>标题</td>
+              <td>执行状态</td>
+              <td>执行法院名称</td>
+              <td>申请人</td>
+               <td>数据类型</td>
+              <td>标题</td>
+               <td>匹配度</td>
+              <td>姓名</td>
+              <td>案号</td>
+              <td>案件状态</td>
+              <td>执行标的</td>
+				</tr>
+				<tr>
+					<td colspan="16" class="align-center">无相关信息</td>
+				</tr>
+				</table>
+				</#if>
+				</#if>
+		</#if>
+	</#if>
+	
+	
+	<#if (templetMap.peralqd)??>
+		<#if templetMap.peralqd == 1>
+		   <#assign templetIndexFather = templetIndexFather + 1/>
+	        <p class="section-blue">${templetIndexFather}、阿里欠贷信息</p>
+				<#if invesAlidebtInfo?exists> 
+				<#if (invesAlidebtInfo?size>0)>
+				<table>
+				   <#list invesAlidebtInfo as item>
+				<tr>
+				    <td class="font_bold">身份证号</td>
+					<td>${item.cardId?if_exists}</td>
+					<td class="font_bold">欠款额度</td>
+					<td>${item.arrears?if_exists}</td>
+				</tr>
+				<tr>
+				    <td class="font_bold">违约情况</td>
+					<td>${item.isBreach?if_exists}</td>
+					<td class="font_bold">贷到款期时间</td>
+					<td>${item.loanDate?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">淘宝账户</td>
+					<td>${item.taobaoAccount?if_exists}</td>
+					<td class="font_bold">法定代表人</td>
+					<td>${item.legalPerson?if_exists}</td>
+				</tr>
+				<tr>
+				    <td class="font_bold">到款期限</td>
+					<td>${item.loanTimelimit?if_exists}</td>
+					<td class="font_bold">被执行人姓名</td>
+					<td>${item.name?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">性别</td>
+					<td>${item.sex?if_exists}</td>
+					<td class="font_bold">年龄</td>
+					<td>${item.age?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">身份证源始发地</td>
+					<td>${item.identityDeparture?if_exists}</td>
+					<td class="font_bold">省份</td>
+					<td>${item.province?if_exists}</td>
+				</tr>
+				</#list> 
+				     </table>
+				<#else>
+				<table>
+				<tr>
+				<td>序号</td>
+				<td>欠款额度</td>
+             <td>违约情况</td>
+              <td>货到款时间</td>
+              <td>淘宝账户</td>
+              <td>法定代表人</td>
+              <td>到款期限</td>
+              <td>被执行人姓名</td>
+              <td>性别</td>
+               <td>年龄</td>
+              <td>身份证源始发地</td>
+               <td>省份</td>
+				</tr>
+				<tr>
+					<td colspan="12" class="align-center">无相关信息</td>
+				</tr>
+				</table>
+				</#if>
+				</#if>
+		</#if>
+	</#if>
+	
+	<#if (templetMap.perylsys)??>
+		<#if templetMap.perylsys == 1>
+		    <#assign templetIndexFather = templetIndexFather + 1/>
+			<p class="section-blue">${templetIndexFather}、银联三要素验证信息</p>
+			<table>
+				<tr>
+					<th>序号</th>
+					<th>姓名</th>
+					<th>银行账户</th>
+					<th>身份证</th>
+					<th>银行预留号码</th>
+					<th>认证结果</th>
+					<th>描述信息</th>
+				</tr>
+				<#if verifyBankCardInfo?exists> 
+				<#if (verifyBankCardInfo?size>0)>
+				   <#list verifyBankCardInfo as item>
+				<tr>
+					<td>${item_index?if_exists+1}</td>
+					<td>${item.name?if_exists}</td>
+					<td>${item.accountno?if_exists}</td>
+					<td>${item.idcardnum?if_exists}</td>
+					<td>${item.bankpremobile?if_exists}</td>
+					<td>${item.result?if_exists}</td>
+					<td>${item.message?if_exists}</td>
+				</tr>
+				    </#list> 
+				<#else>
+				<tr>
+				<td colspan="7" class="align-center">无相关信息</td>
+				</tr>
+				</#if>
+				</#if>
+			</table>
+		</#if>
+	</#if>
+	
+	<#if templetMap.perzczkjyxw == 1 || templetMap.perxfdlfb == 1 || templetMap.perxfdlfb == 1 || templetMap.permyxfzk == 1 || templetMap.perxfxw == 1 || templetMap.perxyxgjytj == 1>
+	  <#assign templetIndexFather = templetIndexFather + 1/>
+	  <p class="section-blue">${templetIndexFather}、个人消费信息</p>
+	</#if>
+	
+	<#if (templetMap.perzczkjyxw)??>
+		<#if templetMap.perzczkjyxw == 1>
+		   <#assign templetIndex = 1/>
+	        <p class="setion-blue-title2">&nbsp;&nbsp;${templetIndexFather}.${templetIndex}、资产状况及交易行为信息</p>
+				<#if reportBasicInfo?exists> 
+				<#if (reportBasicInfo?size>0)>
+				<table>
+				   <#list reportBasicInfo as item>
+				<tr>
+				    <td class="font_bold">身份证号</td>
+					<td>${item.cardId?if_exists}</td>
+					<td class="font_bold">姓名</td>
+					<td>${item.name?if_exists}</td>
+				</tr>
+				<tr>
+				    <td class="font_bold">手机号码</td>
+					<td>${item.mobile?if_exists}</td>
+					<td class="font_bold">银行卡号</td>
+					<td>${item.card?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">每月还贷能力，金额范围</td>
+					<td>${item.repaymentAbility?if_exists}</td>
+					<td class="font_bold">依照相关交易行为判定个人是否有房</td>
+					<td>${item.hasHouse?if_exists}</td>
+				</tr>
+				<tr>
+				    <td class="font_bold">房产预估购买时间</td>
+					<td>${item.housePurTime?if_exists}</td>
+					<td class="font_bold">房产估值（万元）</td>
+					<td>${item.houseValue?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">有无汽车</td>
+					<td>${item.hasCar?if_exists}</td>
+					<td class="font_bold">汽车预估购买时间</td>
+					<td>${item.carPurTime?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">汽车估值（万元）</td>
+					<td colspan="3">${item.carValue?if_exists}</td>
+				</tr>
+				</#list> 
+				     </table>
+				<#else>
+				<table>
+				<tr>
+				<td>序号</td>
+				<td>身份证号</td>
+             <td>姓名</td>
+              <td>手机号</td>
+              <td>银行卡号</td>
+              <td>每月还贷能力，金额范围</td>
+              <td>依照相关交易行为判定个人是否有房</td>
+              <td>房产预估购买时间</td>
+              <td>房产估值（万元）</td>
+              <td>有无汽车</td>
+              <td>汽车预估购买时间</td>
+              <td>汽车估值（万元）</td>
+				</tr>
+				<tr>
+					<td colspan="12" class="align-center">无相关信息</td>
+				</tr>
+				</table>
+				</#if>
+				</#if>
+		</#if>
+	</#if>
+	
+	<#if (templetMap.perxfdlfb)??>
+		<#if templetMap.perxfdlfb == 1>
+		    <#assign templetIndex = templetIndex + 1/>
+			<p class="setion-blue-title2">&nbsp;&nbsp;${templetIndexFather}.${templetIndex}、消费大类发布</p>
+			<table>
+				<tr>
+					<th>序号</th>
+					<th>身份证号</th>
+					<th>银行卡号</th>
+					<th>行业</th>
+					<th>消费金额（元）</th>
+					<th>消费笔数</th>
+				</tr>
+				<#if reportConsumeCategoryInfo?exists> 
+				<#if (reportConsumeCategoryInfo?size>0)>
+				   <#list reportConsumeCategoryInfo as item>
+				<tr>
+					<td>${item_index?if_exists+1}</td>
+					<td>${item.cardId?if_exists}</td>
+					<td>${item.card?if_exists}</td>
+					<td>${item.name?if_exists}</td>
+					<td>${item.amount?if_exists}</td>
+					<td>${item.count?if_exists}</td>
+				</tr>
+				    </#list> 
+				<#else>
+				<tr>
+				<td colspan="6" class="align-center">无相关信息</td>
+				</tr>
+				</#if>
+				</#if>
+			</table>
+		</#if>
+	</#if>
+	
+	<#if (templetMap.percsxfzk)??>
+		<#if templetMap.percsxfzk == 1>
+		    <#assign templetIndex = templetIndex + 1/>
+			<p class="setion-blue-title2">&nbsp;&nbsp;${templetIndexFather}.${templetIndex}、城市消费状况</p>
+			<table>
+				<tr>
+					<th>序号</th>
+					<th>身份证号</th>
+					<th>银行卡号</th>
+					<th>消费地域</th>
+					<th>消费金额（元）</th>
+					<th>消费笔数</th>
+				</tr>
+				<#if reportConsumeCityInfo?exists> 
+				<#if (reportConsumeCityInfo?size>0)>
+				   <#list reportConsumeCityInfo as item>
+				<tr>
+					<td>${item_index?if_exists+1}</td>
+					<td>${item.cardId?if_exists}</td>
+					<td>${item.card?if_exists}</td>
+					<td>${item.name?if_exists}</td>
+					<td>${item.amount?if_exists}</td>
+					<td>${item.count?if_exists}</td>
+				</tr>
+				    </#list> 
+				<#else>
+				<tr>
+				<td colspan="6" class="align-center">无相关信息</td>
+				</tr>
+				</#if>
+				</#if>
+			</table>
+		</#if>
+	</#if>
+	
+	<#if (templetMap.permyxfzk)??>
+		<#if templetMap.permyxfzk == 1>
+		    <#assign templetIndex = templetIndex + 1/>
+			<p class="setion-blue-title2">&nbsp;&nbsp;${templetIndexFather}.${templetIndex}、每月消费状况</p>
+			<table>
+				<tr>
+					<th>序号</th>
+					<th>身份证号</th>
+					<th>银行卡号</th>
+					<th>消费月</th>
+					<th>每月消费金额及汇总（元）</th>
+					<th>消费金额在本市的排名</th>
+					<th>消费笔数及汇总</th>
+					<th>消费笔数在本市的排名</th>
+				</tr>
+				<#if reportMonthConsumeInfo?exists> 
+				<#if (reportMonthConsumeInfo?size>0)>
+				   <#list reportMonthConsumeInfo as item>
+				<tr>
+					<td>${item_index?if_exists+1}</td>
+					<td>${item.cardId?if_exists}</td>
+					<td>${item.card?if_exists}</td>
+					<td>${item.month?if_exists}</td>
+					<td>${item.amount?if_exists}</td>
+					<td>${item.amountranking?if_exists}</td>
+					<td>${item.count?if_exists}</td>
+					<td>${item.countranking?if_exists}</td>
+				</tr>
+				    </#list> 
+				<#else>
+				<tr>
+				<td colspan="8" class="align-center">无相关信息</td>
+				</tr>
+				</#if>
+				</#if>
+			</table>
+		</#if>
+	</#if>
+	
+	<#if (templetMap.perxfxw)??>
+		<#if templetMap.perxfxw == 1>
+		   <#assign templetIndex = templetIndex + 1/>
+	        <p class="setion-blue-title2">&nbsp;&nbsp;${templetIndexFather}.${templetIndex}、消费行为信息</p>
+				<#if reportTransBehivorInfo?exists> 
+				<#if (reportTransBehivorInfo?size>0)>
+				<table>
+				   <#list reportTransBehivorInfo as item>
+				<tr>
+				    <td class="font_bold">身份证号</td>
+					<td>${item.cardId?if_exists}</td>
+					<td class="font_bold">银行卡号</td>
+					<td>${item.card?if_exists}</td>
+				</tr>
+				<tr>
+				    <td class="font_bold">有无出差</td>
+					<td>${item.businesstrip?if_exists}</td>
+					<td class="font_bold">有无婚庆消费</td>
+					<td>${item.marriageconsume?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">有无家庭特征</td>
+					<td>${item.childinvest?if_exists}</td>
+					<td class="font_bold">有无夜消费</td>
+					<td>${item.nightconsume?if_exists}</td>
+				</tr>
+				<tr>
+				    <td class="font_bold">是否就业</td>
+					<td>${item.employed?if_exists}</td>
+					<td class="font_bold">常住城市</td>
+					<td>${item.city?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">工作时间消费区域</td>
+					<td>${item.workregion?if_exists}</td>
+					<td class="font_bold">非工作时间消费区域</td>
+					<td>${item.freeregion?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">是否失业</td>
+					<td colspan="3">${item.unemployed?if_exists}</td>
+				</tr>
+				</#list> 
+				     </table>
+				<#else>
+				<table>
+				<tr>
+				<td>序号</td>
+				<td>身份证号</td>
+             <td>银行卡号</td>
+              <td>有无出差</td>
+              <td>有无婚庆消费</td>
+              <td>有无家庭特征</td>
+              <td>有无夜消费</td>
+              <td>是否就业</td>
+              <td>常住城市</td>
+              <td>工作时间消费区域</td>
+              <td>非工作时间消费区域</td>
+              <td>是否失业</td>
+				</tr>
+				<tr>
+					<td colspan="12" class="align-center">无相关信息</td>
+				</tr>
+				</table>
+				</#if>
+				</#if>
+		</#if>
+	</#if>
+	
+	<#if (templetMap.perxyxgjytj)??>
+		<#if templetMap.perxyxgjytj == 1>
+		    <#assign templetIndex = templetIndex + 1/>
+			<p class="setion-blue-title2">&nbsp;&nbsp;${templetIndexFather}.${templetIndex}、信用相关交易统计</p>
+			<table>
+				<tr>
+					<th>序号</th>
+					<th>身份证号</th>
+					<th>银行卡号</th>
+					<th>消费地域</th>
+					<th>消费金额（元）</th>
+					<th>消费笔数</th>
+				</tr>
+				<#if reportTransCreditInfo?exists> 
+				<#if (reportTransCreditInfo?size>0)>
+				   <#list reportTransCreditInfo as item>
+				<tr>
+					<td>${item_index?if_exists+1}</td>
+					<td>${item.cardId?if_exists}</td>
+					<td>${item.card?if_exists}</td>
+					<td>${item.name?if_exists}</td>
+					<td>${item.amount?if_exists}</td>
+					<td>${item.count?if_exists}</td>
+				</tr>
+				    </#list> 
+				<#else>
+				<tr>
+				<td colspan="6" class="align-center">无相关信息</td>
+				</tr>
+				</#if>
+				</#if>
+			</table>
+		</#if>
+	</#if>
+	
+	</#if>
+	</#if>
+	
+			<#if declareList?exists> 
+				<#if (declareList?size>0)>
+			<p class="section-red">重要声明</p>
+			<ul>
+				<#list declareList as item>
+				<li>${item}</li>
+				</#list> 
+			</ul>
+				</#if>
+			</#if>
+	</body>
+</html>

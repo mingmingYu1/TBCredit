@@ -1,0 +1,57 @@
+.loginBox{
+  position: absolute;
+  left: 8%;
+  top: 37%;
+  width: 25%;
+  height: 240px;
+  padding: 20px;
+  border: 1px solid #fff;
+  border-radius: 4px;
+  box-shadow: 0 0 15px #666;
+  font: 14px/1.5em 'Microsoft YaHei' ;
+  background: #fff;
+  z-index: 1000;
+}
+.loginBox div div input,
+.loginBox div div button{
+  width:100%
+}
+#bgImg {
+  position: relative;
+  background: url('../../images/logobg.png') no-repeat center;
+  min-width: 1100px;
+  min-height: 510px;
+}
+#imgContainer {
+  position: absolute;
+  left: 10%;
+  top: 5%;
+  width: 20%;
+  height: 200px;
+}
+
+#personBgImg {
+  position: relative;
+  background: url('../../images/logobg.png') no-repeat center;
+  min-width: 1100px;
+  min-height: 510px;
+}
+
+#perImgContainer {
+  position: absolute;
+  left: 10%;
+  top: 5%;
+  width: 20%;
+  height: 200px;
+}
+
+
+.logoFooter {
+  width: 100%;
+  height: 30px;
+  text-align: center;
+  line-height: 30px;
+  background: #00bcd4;
+  min-width:1010px;
+  color: #fff;
+}

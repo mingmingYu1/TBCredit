@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>  
+<!DOCTYPE dynamic-hibernate-statement SYSTEM "classpath://hibernate/dynamic-hibernate-statement-1.0.dtd">
+<dynamic-hibernate-statement>  
+    <!-- 通过角色展示菜单 -->  
+    <sql-query name="menuDao.getMenuByRoleId">  
+    <![CDATA[
+        SELECT        
+            m.menu_id menuId,        
+            m.menu_name menuName,        
+            m.parent_id parentId,        
+            CASE IFNULL(rm.role_id,0) WHEN 0 THEN '0' ELSE '1' END  as  isSelected        
+        FROM credit_db.sp_menu m        
+        LEFT JOIN credit_db.sp_role_menu rm
+        ON m.menu_id = rm.menu_id and rm.role_id = ${roleId}
+    ]]>   
+    </sql-query>
+    <!-- 通过用户id获取菜单 -->  
+    <sql-query name="menuDao.getMenuByUserId">  
+    <![CDATA[
+        SELECT        
+            DISTINCT m.menu_id menuId, m.menu_name menuName, m.url url        
+        FROM credit_db.sp_menu m        
+        LEFT JOIN credit_db.sp_role_menu rm ON m.menu_id = rm.menu_id        
+        LEFT JOIN credit_db.sp_user_role ur ON rm.role_id = ur.role_id        
+        LEFT JOIN credit_db.sp_cas_user u ON ur.user_id = u.u_id        
+        WHERE u.u_id = ${userId}
+        ORDER BY m.menu_id 
+    ]]>   
+    </sql-query>
+    
+    <!-- 通过个人用户id获取菜单 -->  
+    <sql-query name="menudao.getMenuByPerUserId">  
+    <![CDATA[
+        SELECT        
+            DISTINCT m.menu_id menuId, m.menu_name menuName, m.url url        
+        FROM credit_db.sp_per_menu m        
+        LEFT JOIN credit_db.sp_per_role_menu rm ON m.menu_id = rm.menu_id        
+        LEFT JOIN credit_db.sp_per_user_role ur ON rm.role_id = ur.role_id        
+        LEFT JOIN credit_db.sp_per_user u ON ur.user_id = u.u_id        
+        WHERE u.u_id = ${userId}
+        ORDER BY m.menu_id 
+    ]]>   
+    </sql-query>
+    
+</dynamic-hibernate-statement>

@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>  
+<!DOCTYPE dynamic-hibernate-statement SYSTEM "classpath://hibernate/dynamic-hibernate-statement-1.0.dtd">
+<dynamic-hibernate-statement>  
+    <!-- 个人分页查询 -->  
+    <sql-query name="personDao.getPagePersons">  
+    <![CDATA[ 
+        SELECT tai.card_id cardId, tai.name name, 
+            tai.sex sex, tai.address address, tai.add_time addtime, 
+            tai.mod_time modTime, tfm1.INDI_SCOR indScore, 
+            IFNULL(csm.mod_code,'Delphi') algorCode, IFNULL(csm.mod_name, '专家法') algorName
+        FROM credit_db.ods_person_info tai
+        LEFT JOIN credit_db.ods_person_algor taa ON taa.card_id = tai.card_id
+        LEFT JOIN credit_db.sp_score_model csm ON taa.algor_id = csm.sm_id
+        LEFT JOIN credit_db.person_fact_model tfm1  ON tai.card_id = tfm1.card_id 
+            AND tfm1.INDICATOR = 'TOTAL_SCORE' and tfm1.TYPE = IFNULL(csm.mod_code,'Delphi')
+        WHERE 1=1
+            <#if cardId ?exists>
+                and tai.card_id like '%${cardId}%'
+            </#if>
+            <#if cardName ?exists> 
+                and tai.name like '%${cardName}%'
+            </#if>
+            <#if sortStr ?exists>
+	            order by ${sortStr}
+	            <#else>
+	            order by modTime desc 
+	        </#if>
+    ]]>   
+    </sql-query>
+    
+    <!-- 企业分页查询计数，在原sqlname的基础上添加Count作为sqlMapperId -->
+    <sql-query name="personDao.getPagePersonsCount">  
+    <![CDATA[ 
+        SELECT distinct tai.card_id 
+        FROM credit_db.ods_person_info tai
+        LEFT JOIN credit_db.ods_person_algor taa ON taa.card_id = tai.card_id
+        LEFT JOIN credit_db.sp_score_model csm ON taa.algor_id = csm.sm_id 
+        LEFT JOIN credit_db.person_fact_model tfm1  ON tai.card_id = tfm1.card_id 
+            AND tfm1.INDICATOR = 'TOTAL_SCORE' and tfm1.TYPE = IFNULL(csm.mod_code,'Delphi')
+        WHERE 1=1
+            <#if cardId ?exists>
+                and tai.card_id like '%${cardId}%'
+            </#if>
+            <#if cardName ?exists> 
+                and tai.name like '%${cardName}%'
+            </#if>
+    ]]>   
+    </sql-query> 
+    
+    <!-- 驾驶证信息 -->
+    <hql-query name="personDao.getDriverLicenseStatusInfo">
+   	<![CDATA[from OdsPersonDriverlicensestatusEntity where cardId = ?]]>  
+    </hql-query>
+    
+    <!-- 失信被执行人信息 -->
+    <hql-query name="personDao.getInvesPunishBreakInfo">
+   	<![CDATA[from OdsPersonInvestPunishbreakEntity where cardId = ?]]>  
+    </hql-query>
+    
+    <!-- 执行人信息 -->
+    <hql-query name="personDao.getInvesPunishedInfo">
+   	<![CDATA[from OdsPersonInvestPunishedEntity where cardId = ?]]>  
+    </hql-query>
+    
+    <!-- 法定代表人信息 -->
+    <hql-query name="personDao.getInvesRyposfrInfo">
+   	<![CDATA[from OdsPersonInvestRyposfrEntity where cardId = ?]]>  
+    </hql-query>
+    
+    <!-- 管理人员 -->
+    <hql-query name="personDao.getInvesRyposperInfo">
+   	<![CDATA[from OdsPersonInvestRyposperEntity where cardId = ?]]>  
+    </hql-query>
+    
+    
+    <!-- 企业股东-->
+    <hql-query name="personDao.getInvesRyposshaInfo">
+   	<![CDATA[from OdsPersonInvestRyposshaEntity where cardId = ?]]>  
+    </hql-query>
+    
+     <!-- 曝光台-->
+    <hql-query name="personDao.getRiskBgtInfo">
+   	<![CDATA[from OdsPersonRiskBgtEntity where cardId = ?]]>  
+    </hql-query>
+    
+     <!-- 裁判文书 -->
+    <hql-query name="personDao.getRiskCpwsInfo">
+   	<![CDATA[from OdsPersonRiskCpwsEntity where cardId = ?]]>  
+    </hql-query>
+    
+     <!-- 失信公告-->
+    <hql-query name="personDao.getRiskDishonerInfo">
+   	<![CDATA[from OdsPersonRiskShixinEntity where cardId = ?]]>  
+    </hql-query>
+    
+     <!-- 网贷黑名单 -->
+    <hql-query name="personDao.getRiskNetloadInfo">
+   	<![CDATA[from OdsPersonRiskWdhmdEntity where cardId = ?]]>  
+    </hql-query>
+    
+     <!-- 执行公告公告-->
+    <hql-query name="personDao.getRiskExecuteDocInfo">
+   	<![CDATA[from OdsPersonRiskZxggEntity where cardId = ?]]>  
+    </hql-query>
+    
+    <!-- 阿里欠贷-->
+    <hql-query name="personDao.getInvestAlidebtInfo">
+   	<![CDATA[from OdsPersonInvestAlidebtEntity where cardId = ?]]>  
+    </hql-query>
+    
+    <!-- 银联三要素验证信息-->
+    <sql-query name = "personDao.getVerifyBankCardInfo">
+     <![CDATA[
+        select name,accountno,idcardnum,bankpremobile,result,message 
+        from credit_db.ods_person_verifybankcardby3ele 
+        where idcardnum = '${cardId}'
+     ]]>
+    </sql-query>
+    
+     <!-- 个人资产及交易信息行为-->
+     <hql-query name="personDao.getReportBasicInfo">
+   	<![CDATA[from OdsPersonReportBasicEntity where cardId = ?]]>  
+    </hql-query>
+    
+     <!-- 消费大类分布-->
+    <hql-query name="personDao.getReportConsumeCategoryInfo">
+   	<![CDATA[from OdsPersonReportConsumecategoriesEntity where cardId = ?]]>  
+    </hql-query>
+
+     <!-- 城市消费状况-->
+    <hql-query name="personDao.getReportConsumeCityInfo">
+   	<![CDATA[from OdsPersonReportConsumecitiesEntity where cardId = ?]]>  
+    </hql-query>
+    
+     <!-- 每月消费状况-->
+    <hql-query name="personDao.getReportMonthConsumeInfo">
+   	<![CDATA[from OdsPersonReportMonthconsumesEntity where cardId = ?]]>  
+    </hql-query>
+
+     <!-- 消费行为-->
+    <hql-query name="personDao.getReportTransBehaviorInfo">
+   	<![CDATA[from OdsPersonReportTransbehaviorEntity where cardId = ?]]>  
+    </hql-query>
+    
+     <!-- 信用相关交易统计-->
+    <hql-query name="personDao.getReportTransCreditInfo">
+   	<![CDATA[from OdsPersonReportTranscreditsEntity where cardId = ?]]>  
+    </hql-query>
+
+    
+    
+</dynamic-hibernate-statement>

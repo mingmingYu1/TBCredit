@@ -1,0 +1,343 @@
+<?xml version="1.0" encoding="utf-8"?>  
+<!DOCTYPE dynamic-hibernate-statement SYSTEM "classpath://hibernate/dynamic-hibernate-statement-1.0.dtd">
+<dynamic-hibernate-statement>  
+	<sql-query name="companydao.getOneCompany">  
+    <![CDATA[
+        SELECT tai.comp_name compName, tai.reg_id regId, 
+            tai.lper_name lperName, tai.`status`, tai.create_time createTime, 
+            tai.update_time updateTime, tfm1.INDI_SCOR indScore, 
+            IFNULL(csm.mod_code,'Delphi') algorCode, IFNULL(csm.mod_name, '专家法') algorName
+        FROM credit_db.ods_agent_info tai
+        LEFT JOIN credit_db.ods_agent_algor taa ON taa.reg_id = tai.reg_id
+        LEFT JOIN credit_db.sp_score_model csm ON taa.algor_id = csm.sm_id
+        LEFT JOIN credit_db.dm_enterprise_score_row tfm1  ON tai.reg_id = tfm1.reg_id 
+            AND tfm1.INDICATOR = 'TOTAL_SCORE' and tfm1.TYPE = IFNULL(csm.mod_code,'Delphi')
+        WHERE tai.reg_id = '${regId}'
+    ]]>   
+    </sql-query>
+
+    <!-- 企业分页查询 -->  
+    <sql-query name="companyDao.getPageCompanys">  
+    <![CDATA[ 
+        SELECT tai.comp_name compName, tai.reg_id regId, 
+            tai.lper_name lperName, tai.`status`, tai.create_time createTime, 
+            tai.update_time updateTime, tfm1.INDI_SCOR indScore, 
+            IFNULL(csm.mod_code,'Delphi') algorCode, IFNULL(csm.mod_name, '专家法') algorName
+        FROM credit_db.ods_agent_info tai
+        LEFT JOIN credit_db.ods_agent_algor taa ON taa.reg_id = tai.reg_id
+        LEFT JOIN credit_db.sp_score_model csm ON taa.algor_id = csm.sm_id
+        LEFT JOIN credit_db.dm_enterprise_score_row tfm1  ON tai.reg_id = tfm1.reg_id 
+            AND tfm1.INDICATOR = 'TOTAL_SCORE' and tfm1.TYPE = IFNULL(csm.mod_code,'Delphi')
+        WHERE 1=1
+            <#if regId ?exists>
+                and tai.reg_id like '%${regId}%'
+            </#if>
+            <#if compName ?exists> 
+                and tai.comp_name like '%${compName}%'
+            </#if>
+            <#if lpName ?exists>
+                and tai.lper_name like '%${lpName}%'
+            </#if>
+            <#if status ?exists>
+                <#if status == '在营'> 
+                    and (tai.status like '%在营%' or tai.status  like '%在业%' or tai.status  like '%开业%'  or tai.status  like '%登记成立%') 
+                </#if>
+                <#if status == '吊销'> 
+                    and tai.status like '%吊销%'  
+                </#if>
+                <#if status == '注销'> 
+                    and tai.status like '%注销%'  
+                </#if>
+                <#if status == '待查'> 
+                    and ((tai.status not like '%在营%' and tai.status not like '%在业%' and tai.status  not like '%开业%'  and tai.status not like '%登记成立%' 
+                        and tai.status not like '%吊销%' and tai.status not like '%注销%') or tai.status  is null or tai.status = '' )
+                </#if>
+            </#if>
+            <#if sortStr ?exists>
+	            order by ${sortStr}
+	        <#else>
+	            order by updateTime desc
+	        </#if>
+	        , regId ASC 
+    ]]>   
+    </sql-query>
+    <!-- 企业分页查询计数，在原sqlname的基础上添加Count作为sqlMapperId -->
+    <sql-query name="companyDao.getPageCompanysCount">  
+    <![CDATA[ 
+        SELECT distinct tai.reg_id 
+        FROM credit_db.ods_agent_info tai
+        LEFT JOIN credit_db.ods_agent_algor taa ON taa.reg_id = tai.reg_id
+        LEFT JOIN credit_db.sp_score_model csm ON taa.algor_id = csm.sm_id 
+        LEFT JOIN credit_db.dm_enterprise_score_row tfm1  ON tai.reg_id = tfm1.reg_id 
+            AND tfm1.INDICATOR = 'TOTAL_SCORE' and tfm1.TYPE = IFNULL(csm.mod_code,'Delphi')
+        WHERE 1=1
+            <#if regId ?exists>
+                and tai.reg_id like '%${regId}%'
+            </#if>
+            <#if compName ?exists> 
+                and tai.comp_name like '%${compName}%'
+            </#if>
+            <#if lpName ?exists>
+                and tai.lper_name like '%${lpName}%'
+            </#if>
+            <#if status ?exists>
+	            <#if status == '在营'> 
+	                and (tai.status like '%在营%' or tai.status  like '%在业%' or tai.status  like '%开业%'  or tai.status  like '%登记成立%') 
+	            </#if>
+	            <#if status == '吊销'> 
+	                and tai.status like '%吊销%'  
+	            </#if>
+	            <#if status == '注销'> 
+	                and tai.status like '%注销%'  
+	            </#if>
+	            <#if status == '待查'> 
+	                and ((tai.status not like '%在营%' and tai.status not like '%在业%' and tai.status  not like '%开业%'  and tai.status not like '%登记成立%' 
+	                    and tai.status not like '%吊销%' and tai.status not like '%注销%') or tai.status  is null or tai.status = '' )
+	            </#if>
+	        </#if>
+    ]]>   
+    </sql-query> 
+    <!-- 按组查询企业信息 -->
+    <sql-query name="companyDao.findAgentBygroupId">  
+    <![CDATA[
+    	SELECT a.info_id,a.info_name,a.info_creditcode from credit_db.sp_crawler_agent_info a
+    	LEFT JOIN credit_db.sp_crawler_agentgroup_agentinfo i on i.info_id = a.info_id WHERE i.group_id = ${group_id}
+    ]]>   
+    </sql-query> 
+    
+    <!-- 查询当前高管记录 -->
+    <hql-query name="companyHisDao.getTopManagerInfo">
+   	<![CDATA[from TopManagerInfoEntity where regId = ?]]>  
+    </hql-query>
+    
+    <!-- 查询当前对外股权投资记录 -->
+    <hql-query name="companyHisDao.getOthEntInvestsInfo">
+   	<![CDATA[from OthEntInvestsInfoEntity where regId = ?]]>  
+    </hql-query>
+    
+    <!-- 查询企业变更信息 -->
+    <hql-query name="companyHisDao.getAgentChangeInfo">
+   	<![CDATA[from AgentChangeEntity where regId = ?]]>  
+    </hql-query>
+    
+     <!-- 分支机构信息 -->
+    <hql-query name="companyHisDao.getAgentFiliationInfo">
+   	<![CDATA[from AgentFiliationEntity where regId = ?]]>  
+    </hql-query>
+    
+     <!-- 清算信息 -->
+    <hql-query name="companyHisDao.getAgentLiquidationInfo">
+   	<![CDATA[from AgentLiquidationEntity where regId = ?]]>  
+    </hql-query>
+    
+     <!-- 动产抵押信息 -->
+    <hql-query name="companyHisDao.getAgentMortgageInfo">
+   	<![CDATA[from AgentMortgageEntity where regId = ?]]>  
+    </hql-query>
+    
+    <!-- 股权冻结历史信息 -->
+    <hql-query name="companyHisDao.getAgentSharesInfo">
+   	<![CDATA[from AgentSharesFroEntity where regId = ?]]>  
+    </hql-query>
+    
+     <!-- 股权出质历史信息 -->
+    <hql-query name="companyHisDao.getAgentSharesImpawInfo">
+   	<![CDATA[from AgentSharesImpawnEntity where regId = ?]]>  
+    </hql-query>
+    
+    <!-- 税务信息 -->
+    <hql-query name="companyHisDao.getAgentTaxAccoutInfo">
+   	<![CDATA[from AgentTaxAccountEntity where regId = ?]]>  
+    </hql-query>
+    
+    <!-- 经营变化趋势信息 -->
+    <hql-query name="companyHisDao.getMerchantReportChangeInfo">
+   	<![CDATA[from MerchantTrandeReportChange where regId = ?]]>  
+    </hql-query>
+    
+    <!-- 月异常交易信息 -->
+    <hql-query name="companyHisDao.getMerchantTradeAbormalInfo">
+   	<![CDATA[from MerchantTradeReportAbormal where regId = ?]]>  
+    </hql-query>
+    
+     <!-- 本市同行对比信息 -->
+    <hql-query name="companyHisDao.getMerchantReportConstrastInfo">
+   	<![CDATA[from MerchantTrandeReportConstrast where regId = ?]]>  
+    </hql-query>
+    
+     <!-- 客户地域分布信息 -->
+    <hql-query name="companyHisDao.getMerchantReportAreaInfo">
+   	<![CDATA[from MerchantTrandeReportArea where regId = ?]]>  
+    </hql-query>
+    
+     <!-- 客户忠诚度 -->
+    <hql-query name="companyHisDao.getMerchantReportLoyalInfo">
+   	<![CDATA[from MerchantTrandeReportLoyalty where regId = ?]]>  
+    </hql-query>
+    
+    
+    <!-- 违法违规裁判文书信息 -->
+    <hql-query name="companyHisDao.getAgentJudgementDocInfo">
+   	<![CDATA[from AgentJudgementDocumentEntity where regId = ?]]>  
+    </hql-query>
+    
+    <!-- 违法违规执行公告信息 -->
+    <hql-query name="companyHisDao.getAgentCoutEnforceInfo">
+   	<![CDATA[from AgentCourEnforcementEntity where regId = ?]]>  
+    </hql-query>
+    
+    <!-- 法定代表人失信裁判文书 -->
+    <hql-query name="companyHisDao.getAgentTopLeaderJudgmentDocInfo">
+   	<![CDATA[from AgentTopLeaderJudgementDocumentEntity where regId = ? and CASE_OWNER_TYPE = ?]]>  
+    </hql-query>
+    
+     <!-- 法定代表人失信执行公告信息 -->
+    <hql-query name="companyHisDao.getAgentTopLeaderExdocInfo">
+   	<![CDATA[from AgentTopLeaderExecuteDocEntity where regId = ? and CASE_OWNER_TYPE = ?]]>  
+    </hql-query>
+    
+     <!-- 法定代表人失信失信公告 -->
+    <hql-query name="companyHisDao.getAgentTopLeaderDishourInfo">
+   	<![CDATA[from AgentTopleaderDishonourNoticEntity where regId = ? and CASE_OWNER_TYPE = ?]]>  
+    </hql-query>
+    
+      <!-- 法定代表人失信网贷黑名单 -->
+    <hql-query name="companyHisDao.getAgentTopLeaderNetloadInfo">
+   	<![CDATA[from AgentTopleaderNetloanEntity where regId = ? and CASE_OWNER_TYPE = ?]]>  
+    </hql-query>
+    
+    <!-- 法定代表人失信曝光台 -->
+    <hql-query name="companyHisDao.getAgentTopLeaderCourtExposInfo">
+   	<![CDATA[from AgentTopleaderCourExposureEntity where regId = ? and CASE_OWNER_TYPE = ?]]>  
+    </hql-query>
+    
+    <!-- 阿里欠贷 -->
+    <hql-query name="companyHisDao.getAgentAliloadBreakInfo">
+   	<![CDATA[from AgentAliLoanbreakEntity where regId = ?]]>  
+    </hql-query>
+    
+    <!-- 核心经营信息 -->
+    <hql-query name="companyHisDao.getMerchantTradeInfo">
+   	<![CDATA[from MerchantTrandeReportBase where regId = ?]]>  
+    </hql-query>
+    
+      <!-- 经营稳定性信息 -->
+    <hql-query name="companyHisDao.getMerchantStabilityInfo">
+   	<![CDATA[from MerchantTrandeReportStability where regId = ?]]>  
+    </hql-query>
+    
+    <!-- 法人投资信息 -->
+   	<sql-query name="companyHisDao.getLegPerQuity">
+   	<![CDATA[
+		SELECT distinct ste.reg_id regId, ste.ENT_NAME entName, ste.REG_CAP regCap, ste.CASH_RATE cashRate,
+			ste.NAME name, ste.REG_NO regNo, ste.ENT_TYPE entType,ste.CUR_TYPE curType,ste.CANCEL_TIME cancelTime,
+			ste.REVOKE_TIME revokeTime,ste.REG_ORG regOrg,ste.SUBSCRIBE_CON_CUR_TYPE subscribeConCurType,ste.OPERATION_TIME operationTime,
+			ste.SUB_CONAM subConam,ste.ENT_STATUS entStatus,dit.NAME curTypeName
+		FROM credit_db.ods_leg_per_equity ste
+		LEFT JOIN credit_db.ods_dict dit ON ste.cur_type = dit.VALUE AND dit.CATEGORY = '100005'
+		WHERE ste.reg_id='${regId}'
+	]]>  
+    </sql-query>
+    
+    
+     <!-- 法人在其他机构任职查询 -->
+    <sql-query name="companyHisDao.getLegPerNew">
+   	<![CDATA[
+		SELECT distinct ste.reg_id regId, ste.org_name orgName, ste.org_sta orgSta, ste.position position,
+			ste.reg_assets regAssets, ste.cash_con cashCon, ste.ent_type entType,ste.reg_auth regAuth,ste.type type,
+			ste.cur_type curType,ste.is_legal isLegal,ste.REG_NO regNo,ste.ENTERPRISE_TYPE enterpriseType,
+			ste.CANCEL_TIME cancelTime,ste.REVOKE_TIME revokeTime,ste.REG_ORGNIZATION regOrgnization,ste.SUBSCRIBLE_CON subscribleCon,
+			ste.SUBSCRIBLE_CON_CUR_TYPE subscribleConCurType,ste.OPERATION_TIME operationTime,dit.NAME curTypeName
+		FROM credit_db.ods_leg_per_info ste
+		LEFT JOIN credit_db.ods_dict dit ON ste.cur_type = dit.VALUE AND dit.CATEGORY = '100005'
+		WHERE ste.reg_id='${regId}'
+	]]>  
+    </sql-query>
+    
+     <!-- 资产负债表查询 -->
+    <sql-query name="companyHisDao.getBalanceSheetInfo">
+   <![CDATA[
+		SELECT b.item_name item,a.last_year lastYear,a.ending_balance endingBalance FROM credit_db.ods_balance_sheet a
+        right join ods_profit_balance_items b on b.item_name = a.item
+        WHERE b.item_type >= 2
+        ORDER BY item_sort
+	]]> 
+    </sql-query>
+    
+     <!-- 利润表查询 -->
+    <sql-query name="companyHisDao.getProfitInfo">
+   	<![CDATA[
+		SELECT b.item_name item,a.pre_amount preAmount,a.cur_amount curAmount FROM credit_db.ods_profit a
+        right JOIN ods_profit_balance_items b on b.item_name = a.item
+        WHERE b.item_type = 1
+        ORDER BY item_sort
+	]]>
+    </sql-query>
+    
+    <!-- 更加动产抵押查询动产抵押物信息 -->
+    <sql-query name="companyHisDao.getMortgageItemInfo">
+   	<![CDATA[
+		SELECT a.MOR_REG_ID,a.QUAN,a.GUA_NAME,a.VALUE from credit_db.ods_mortgage_item a,  
+		credit_db.ods_agent_mortgage_info b  
+		where b.REG_ID = '${regId}' and a.MOR_REG_ID = b.MOR_REG_ID
+	]]>  
+    </sql-query>
+    
+    <!-- 查询当前企业联系地址记录 -->
+    <sql-query name="companyHisDao.getEntAttrInfo">
+   	<![CDATA[
+		SELECT ea.reg_id regId, ea.district, ea.addr, ea.tel, ea.post, ea.type, dit.NAME typeName 
+		FROM credit_db.ods_ent_attr_info ea 
+		LEFT JOIN credit_db.ods_dict dit ON ea.type = dit.VALUE
+		WHERE ea.reg_id='${regId}' AND dit.CATEGORY = '100010'
+	]]>  
+    </sql-query>
+    
+    <!-- 查询当前法院记录 -->
+    <sql-query name="companyHisDao.getSpecialInfo">
+   	<![CDATA[
+		SELECT si.reg_id regId, si.name, si.object, si.court, si.num, si.case_date caseDate,
+			si.getinfo_date getinfoDate, si.status status, si.type type, si.status statuName 
+		FROM credit_db.ods_special_info si WHERE si.reg_id='${regId}'
+	]]>  
+    </sql-query>
+    
+    <!-- 查询当前法人记录 -->
+    <sql-query name="companyHisDao.getLegPerInfo">
+   	<![CDATA[
+		SELECT lpe.reg_id regId, lpe.org_name orgName, lpe.type type, lpe.is_legal isLegal,
+			lpe.position, lpe.reg_assets regAssets, lpe.cash_con cashCon, lpe.cur_type curType,
+			lpe.ent_type entType, lpe.reg_auth regAuth, dit1.NAME orgSta, dit2.NAME curTypeName, dit3.NAME isLegalName
+		FROM credit_db.ods_leg_per_info lpe
+		LEFT JOIN credit_db.ods_dict dit1 ON lpe.org_sta = dit1.VALUE
+		LEFT JOIN credit_db.ods_dict dit2 ON lpe.cur_type = dit2.VALUE
+		LEFT JOIN credit_db.ods_dict dit3 ON lpe.is_legal = dit3.VALUE
+		WHERE lpe.reg_id='${regId}'
+		    AND dit1.CATEGORY = '100012' 
+            AND dit2.CATEGORY = '100005'
+            AND dit3.CATEGORY = '100011'
+			<#if type ?exists> and lpe.type = ${type} </#if>
+	]]>  
+    </sql-query>
+    
+   <!-- 查询当前股东记录 -->
+   <sql-query name="companyHisDao.getStockholderInfo">
+   	<![CDATA[
+		SELECT distinct ste.reg_id regId, ste.name name, ste.cash_con cashCon, ste.cur_type curType,
+			ste.cash_rate cashRate, ste.con_date conDate, dit.NAME curTypeName
+		FROM credit_db.ods_stockholder_info ste
+        INNER JOIN credit_db.ods_agent_info agent ON ste.REG_ID = agent.REG_ID
+        LEFT JOIN credit_db.ods_dict dit 
+              ON (ste.cur_type = dit.VALUE OR agent.CUR_TYPE = dit.NAME) AND dit.CATEGORY = '100005'
+		WHERE ste.reg_id='${regId}'
+	]]>  
+    </sql-query>
+    
+    <!-- 删除企业后删除该企业的信用得分信息 -->
+    <sql-query name="companyDao.deleteCompScore">
+        <![CDATA[
+            delete from credit_db.dm_enterprise_score_row where reg_id = '${regId}'
+        ]]>
+    </sql-query>
+    
+</dynamic-hibernate-statement>

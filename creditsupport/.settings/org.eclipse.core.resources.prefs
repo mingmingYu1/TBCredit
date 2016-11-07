@@ -1,0 +1,15 @@
+eclipse.preferences.version=1
+encoding//src/main/java=UTF-8
+encoding//src/main/java/cn/com/yodata/creditdataweb/webservice/ICreditDataWS.java=UTF-8
+encoding//src/main/java/cn/com/yodata/creditdataweb/webservice/ICreditDataWSService.java=UTF-8
+encoding//src/main/java/cn/com/yodata/creditdataweb/webservice/ICreditDataWSServiceLocator.java=UTF-8
+encoding//src/main/java/cn/com/yodata/creditdataweb/webservice/ICreditDataWSServiceSoapBindingStub.java=UTF-8
+encoding//src/main/java/cn/com/yodata/creditdataweb/webservice/IPersonCreditDataWS.java=UTF-8
+encoding//src/main/java/cn/com/yodata/creditdataweb/webservice/IPersonCreditDataWSService.java=UTF-8
+encoding//src/main/java/cn/com/yodata/creditdataweb/webservice/IPersonCreditDataWSServiceLocator.java=UTF-8
+encoding//src/main/java/cn/com/yodata/creditdataweb/webservice/IPersonCreditDataWSServiceSoapBindingStub.java=UTF-8
+encoding//src/main/java/cn/com/yodata/creditdataweb/webservice/PersonDTO.java=UTF-8
+encoding//src/main/resources=UTF-8
+encoding//src/main/webapp/css/main.css=UTF-8
+encoding//src/test/java=UTF-8
+encoding/<project>=UTF-8

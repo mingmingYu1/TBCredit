@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<taglib xmlns="http://java.sun.com/xml/ns/j2ee"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-jsptaglibrary_2_0.xsd"
+        version="2.0">
+
+    <tlib-version>1.0</tlib-version>
+    <short-name>mrp</short-name>
+    <uri>http://www.baifendian.com/mrp</uri>
+
+    <tag>
+        <name>p</name>
+        <tag-class>com.yodata.creditsupport.jstl.Permission</tag-class>
+        <body-content>JSP</body-content>
+        <attribute>
+            <description>这个是资源的id</description>
+            <name>rId</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>这个指的是资源的URI</description>
+            <name>uri</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+    </tag>
+
+</taglib>

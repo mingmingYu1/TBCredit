@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>  
+<!DOCTYPE dynamic-hibernate-statement SYSTEM "classpath://hibernate/dynamic-hibernate-statement-1.0.dtd">
+<dynamic-hibernate-statement>
+	<!-- 根据算法类型查询企业各指标得分信息 -->
+	<sql-query name="indicatorScoreDao.getIndicatorScoreList">  
+    <![CDATA[ 
+    	SELECT DISTINCT tdi.ID id, tfm.reg_id regId, tdi.INDICATOR indicator, tdi.ind_attr indAttr, 
+	          tdi.DETAIL_URL detailURL, tdi.LEVEL1 level1, 
+	          tdi.LEVEL2 level2, tdi.IND_NAME indicatorName, tfm.INDI_SCOR score,
+	          tdm.WEIGHT weight
+	    FROM credit_db.ods_dim_indicator tdi 
+	    LEFT JOIN credit_db.fact_model tfm ON tdi.INDICATOR = tfm.INDICATOR 
+	    LEFT JOIN credit_db.ods_dim_model tdm ON tdi.INDICATOR = tdm.INDICATOR 
+	    WHERE tdi.AVAILABLE = 1 AND tdi.IF_EVAL = 1 AND tfm.reg_id = '${regId}' 
+	        AND tdm.CREATE_TIME = (SELECT MAX(CREATE_TIME) FROM credit_db.ods_dim_model
+	          	WHERE TYPE = '${algorithmType}' ) 
+	        AND tdm.TYPE = '${algorithmType}' AND tfm.TYPE = '${algorithmType}' 
+	    ORDER BY tdi.SORT 
+	]]>   
+    </sql-query>
+    
+    <!-- 根据指标类型、算法类型查询企业各指标得分信息 -->
+    <sql-query name="indicatorScoreDao.getIndicatorScoreListByAttr">  
+    <![CDATA[ 
+    	SELECT DISTINCT tdi.ID id, tfm.reg_id regId, tdi.INDICATOR indicator, tdi.ind_attr indAttr, 
+	          tdi.DETAIL_URL detailURL, tdi.LEVEL1 level1, 
+	          tdi.LEVEL2 level2, tdi.IND_NAME indicatorName, tfm.INDI_SCOR score,
+	          tdm.WEIGHT weight
+	    FROM credit_db.ods_dim_indicator tdi 
+	    LEFT JOIN credit_db.fact_model tfm ON tdi.INDICATOR = tfm.INDICATOR 
+	    LEFT JOIN credit_db.ods_dim_model tdm ON tdi.INDICATOR = tdm.INDICATOR 
+	    WHERE tdi.AVAILABLE = 1 AND tdi.IF_EVAL = 1 AND tdi.IND_ATTR='${indAttr}'
+	        AND tfm.reg_id = '${regId}' 
+	        AND tdm.CREATE_TIME = (SELECT MAX(CREATE_TIME) FROM credit_db.ods_dim_model
+	          	WHERE TYPE = '${algorithmType}' ) 
+	        AND tdm.TYPE = '${algorithmType}' 
+	        AND tfm.TYPE = '${algorithmType}' 
+	    ORDER BY tdi.SORT 
+	]]>   
+    </sql-query>
+    
+    <!-- 根据指标类型、算法类型查询企业各二级指标得分信息 -->
+    <sql-query name="indicatorScoreDao.getIndicatorScoreListLevel2ByAttr">  
+    <![CDATA[ 
+    	SELECT DISTINCT tfm.reg_id regId, tdi.LEVEL1 level1, tdi.LEVEL2 level2, 
+              sum(tfm.INDI_SCOR) level2Score, sum(tdm.WEIGHT) level2Weight, count(1) level2Count 
+        FROM credit_db.ods_dim_indicator tdi 
+        LEFT JOIN credit_db.fact_model tfm ON tdi.INDICATOR = tfm.INDICATOR 
+        LEFT JOIN credit_db.ods_dim_model tdm ON tdi.INDICATOR = tdm.INDICATOR 
+        WHERE tdi.AVAILABLE = 1 AND tdi.IF_EVAL = 1 AND tdi.IND_ATTR='${indAttr}'
+              AND tfm.reg_id = '${regId}' 
+              AND tdm.CREATE_TIME = (SELECT MAX(CREATE_TIME) FROM credit_db.ods_dim_model WHERE TYPE = '${algorithmType}') 
+              AND tdm.TYPE = '${algorithmType}' 
+              AND tfm.TYPE = '${algorithmType}' 
+        GROUP BY tfm.reg_id, tdi.LEVEL1, tdi.LEVEL2 
+	]]>   
+    </sql-query>
+    
+    <!-- 根据指标类型、算法类型查询企业各一级指标得分信息 -->
+    <sql-query name="indicatorScoreDao.getIndicatorScoreListLevel1ByAttr">  
+    <![CDATA[ 
+    	SELECT DISTINCT tfm.reg_id regId, tdi.LEVEL1 level1, 
+              sum(tfm.INDI_SCOR) level1Score, sum(tdm.WEIGHT) level1Weight, count(1) level1Count 
+        FROM credit_db.ods_dim_indicator tdi 
+        LEFT JOIN credit_db.fact_model tfm ON tdi.INDICATOR = tfm.INDICATOR 
+        LEFT JOIN credit_db.ods_dim_model tdm ON tdi.INDICATOR = tdm.INDICATOR 
+        WHERE tdi.AVAILABLE = 1 AND tdi.IF_EVAL = 1 AND tdi.IND_ATTR='${indAttr}'
+            AND tfm.reg_id = '${regId}' 
+            AND tdm.CREATE_TIME = (SELECT MAX(CREATE_TIME) FROM credit_db.ods_dim_model WHERE TYPE = '${algorithmType}' ) 
+            AND tdm.TYPE = '${algorithmType}' 
+            AND tfm.TYPE = '${algorithmType}' 
+        GROUP BY tfm.reg_id, tdi.LEVEL1 
+	]]>   
+    </sql-query>
+    
+    <!-- 根据算法类型查询企业总得分信息 -->
+    <sql-query name="indicatorScoreDao.getIndicatorScoreByTotal">  
+    <![CDATA[ 
+    	SELECT DISTINCT tfm.reg_id regId, tfm.INDICATOR indicator, tfm.INDI_SCOR score 
+        FROM credit_db.fact_model tfm 
+        WHERE tfm.INDICATOR = 'TOTAL_SCOR' AND tfm.reg_id = '${regId}' 
+            AND tfm.TYPE = '${algorithmType}' 
+	]]>   
+    </sql-query>
+    
+    <!-- 根据算法类型查询企业各二级指标得分信息 -->
+    <sql-query name="indicatorScoreDao.getIndicatorScoreListByLevel2">  
+    <![CDATA[ 
+    	SELECT DISTINCT tfm.reg_id regId, tdi.LEVEL1 level1, tdi.LEVEL2 level2, 
+             sum(tfm.INDI_SCOR) level2Score, sum(tdm.WEIGHT) level2Weight, count(1) level2Count 
+        FROM credit_db.ods_dim_indicator tdi 
+        LEFT JOIN credit_db.fact_model tfm ON tdi.INDICATOR = tfm.INDICATOR 
+        LEFT JOIN credit_db.ods_dim_model tdm ON tdi.INDICATOR = tdm.INDICATOR 
+        WHERE tdi.AVAILABLE = 1 AND tdi.IF_EVAL = 1 
+             AND tfm.reg_id = '${regId}' 
+             AND tdm.CREATE_TIME = (SELECT MAX(CREATE_TIME) FROM credit_db.ods_dim_model WHERE TYPE = '${algorithmType}') 
+             AND tdm.TYPE = '${algorithmType}' 
+             AND tfm.TYPE = '${algorithmType}' 
+        GROUP BY tfm.reg_id, tdi.LEVEL1, tdi.LEVEL2 
+	]]>   
+    </sql-query>
+    
+    <!-- 根据算法类型查询企业各一级指标得分信息 -->
+    <sql-query name="indicatorScoreDao.getIndicatorScoreListByLevel1">  
+    <![CDATA[ 
+    	SELECT DISTINCT tfm.reg_id regId, tdi.LEVEL1 level1, 
+             sum(tfm.INDI_SCOR) level1Score, sum(tdm.WEIGHT) level1Weight, count(1) level1Count 
+        FROM credit_db.ods_dim_indicator tdi 
+        LEFT JOIN credit_db.fact_model tfm ON tdi.INDICATOR = tfm.INDICATOR 
+        LEFT JOIN credit_db.ods_dim_model tdm ON tdi.INDICATOR = tdm.INDICATOR 
+        WHERE tdi.AVAILABLE = 1 AND tdi.IF_EVAL = 1 
+             AND tfm.reg_id = '${regId}' 
+             AND tdm.CREATE_TIME = (SELECT MAX(CREATE_TIME) FROM credit_db.ods_dim_model WHERE TYPE = '${algorithmType}' ) 
+             AND tdm.TYPE = '${algorithmType}' 
+             AND tfm.TYPE = '${algorithmType}' 
+        GROUP BY tfm.reg_id, tdi.LEVEL1 
+	]]>   
+    </sql-query>
+    
+    <!-- 查询企业各类指标信息 -->
+    <sql-query name="indicatorScoreDao.getIndicatorAttrList">  
+    <![CDATA[ 
+    	SELECT DISTINCT tai.REG_ID regId, tai.OPEN_DATE openDate, tai.REG_ASSETS regAssets, tai.EMPS emps, 
+             tci.AVE_AMT_ATK_LSMON aveAmtAtkLsmon, tci.ATK_SALES_INC_RATIO_LSMON atkSalesIncRatioLsmon, tci.GROSS_PROFIT_OF_LTYEAR grossProfitOfLtyear, 
+             tti.SIX_M_VOTES sixMVotes, tti.SIX_M_VOTES_RATE sixMVotesRate, tti.SIX_M_INVALID_RATE sixMInvalidRate, 
+             tdi.LPER_CRECARD_REC lperCrecardRec, tdi.ENT_CRE_REC entCreRec, tdi.RYX_BUS_OVERDUE_REC ryxBusOverdueRec, 
+             tsi.TYPE type
+        FROM credit_db.ods_agent_info tai 
+        LEFT JOIN credit_db.ods_capacity_info tci ON tai.reg_id = tci.reg_id 
+        LEFT JOIN credit_db.ods_tr_info tti ON tai.reg_id = tti.reg_id 
+        LEFT JOIN credit_db.ods_credit_info tdi ON tai.reg_id = tdi.reg_id 
+        LEFT JOIN credit_db.ods_special_info tsi ON tai.reg_id = tsi.reg_id 
+        WHERE tai.reg_id = '${regId}' 
+	]]>   
+    </sql-query>
+    
+    <!-- 查询企业最近六个月征信得分信息 -->
+    <sql-query name="indicatorScoreDao.getCreditScore">  
+    <![CDATA[ 
+        SELECT DISTINCT fm.reg_id regId, fm.CREATE_TIME DATE_ID, maxDay.`year`, maxDay.`month`, fm.TOTAL_SCOR  indiScore
+		FROM credit_db.ods_model_output fm,
+		    (SELECT tdt.`year`, tdt.`month`, MAX(tdt.date_id) date_id FROM credit_db.ods_model_output tfm, credit_db.dim_time tdt 
+		    WHERE reg_id = '${regId}'  AND TYPE = '${algorithmType}' 
+		        AND DATE_FORMAT(tfm.CREATE_TIME,'%Y%m%d') = CONCAT(tdt.date_id,'')
+		    GROUP BY tdt.`year`, tdt.`month`) maxDay
+		WHERE DATE_FORMAT(fm.CREATE_TIME,'%Y%m%d') = maxDay.date_id 
+		    AND fm.reg_id = '${regId}' AND fm.TYPE = '${algorithmType}' 
+		ORDER BY DATE_ID DESC LIMIT 6 
+	]]>   
+    </sql-query>
+    
+    
+</dynamic-hibernate-statement>

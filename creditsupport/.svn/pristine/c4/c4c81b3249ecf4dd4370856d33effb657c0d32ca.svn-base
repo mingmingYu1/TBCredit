@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>  
+<!DOCTYPE dynamic-hibernate-statement SYSTEM "classpath://hibernate/dynamic-hibernate-statement-1.0.dtd">
+<dynamic-hibernate-statement>
+	<!-- 根据企业编号，查询注册资金历史记录和增长率 -->
+	<sql-query name="scoreDetalDao.getCapitalGrowthList">  
+    <![CDATA[ 
+    	SELECT DISTINCT tra1.`year` year, tra1.amount amount 
+        FROM credit_db.ods_reg_assets tra1 WHERE tra1.reg_id = '${regId}' 
+        ORDER BY tra1.`year` DESC LIMIT 6 
+	]]>   
+    </sql-query>
+    
+    <!-- 查询企业 毛利额-增长率 -->
+    <sql-query name="scoreDetalDao.getGrossProfit">  
+    <![CDATA[ 
+    	select dt.year, sum(ifnull(fent.amount,0)) amount from credit_db.dim_time dt 
+    	left join (select date_id, amount from credit_db.fact_enterprise where reg_id='${regId}' and kpi_id=${kpiId}) fent
+			on dt.date_id=fent.date_id where dt.date_id >= ${minDate} and dt.date_id < ${maxDate} group by dt.year 
+			order by dt.date_id
+	]]>   
+    </sql-query>
+    
+    <!-- 查询企业的月退废票 -->
+    <sql-query name="scoreDetalDao.getRetirementTicketMonth">  
+    <![CDATA[ 
+		select dt.year, dt.month, sum(ifnull(fent.amount,0)) amount from credit_db.dim_time dt
+		left join (select date_id, amount from credit_db.fact_enterprise where reg_id='${regId}' and kpi_id=${kpiId}) fent
+			on dt.date_id=fent.date_id where dt.date_id >= ${minDate} and dt.date_id < ${maxDate} group by dt.month 
+			order by dt.date_id
+	]]>   
+    </sql-query>
+    
+    <!-- 查询企业的天退废票 -->
+    <sql-query name="scoreDetalDao.getRetirementTicketDay">  
+    <![CDATA[ 
+		select dt.year, dt.month, dt.day, ifnull(fent.amount,0) amount from credit_db.dim_time dt
+		left join credit_db.fact_enterprise fent
+			on dt.date_id = fent.date_id and reg_id='${regId}' and kpi_id=${kpiId}
+		where dt.date_id >= ${minDate} and dt.date_id < ${maxDate}
+	]]>   
+    </sql-query>
+</dynamic-hibernate-statement>

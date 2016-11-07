@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee" xmlns:jsp="http://java.sun.com/xml/ns/javaee/jsp" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" id="WebApp_ID" version="3.0">
+  <display-name>Archetype Created Web Application</display-name>
+  <context-param>
+    <param-name>contextConfigLocation</param-name>
+    <param-value>classpath*:/config.xml</param-value>
+  </context-param>
+   <listener>
+     <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+   </listener>
+  
+  <!-- CAS单点登录 start 
+  <listener>
+    <listener-class>org.jasig.cas.client.session.SingleSignOutHttpSessionListener</listener-class>
+  </listener>
+
+	<filter>
+		<description>该过滤器用于实现单点登出功能，可选配置</description>
+		<filter-name>CAS Single Sign Out Filter</filter-name>
+		<filter-class>org.jasig.cas.client.session.SingleSignOutFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>CAS Single Sign Out Filter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+ 
+	<filter>
+		<filter-name>CAS Authentication Filter</filter-name>
+		<filter-class>org.jasig.cas.client.authentication.AuthenticationFilter</filter-class>
+		<init-param>
+			<description>CAS服务端登录地址</description>
+			<param-name>casServerLoginUrl</param-name>
+			<param-value>http://172.16.13.178:8088/CAS/login</param-value>
+		</init-param>
+		<init-param>
+			<param-name>renew</param-name>
+			<param-value>false</param-value>
+		</init-param>
+		<init-param>
+			<param-name>gateway</param-name>
+			<param-value>false</param-value>
+		</init-param>
+		<init-param>
+			<description>CAS客户端服务器地址 iport</description>
+			<param-name>serverName</param-name>
+			<param-value>http://localhost:80</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>CAS Authentication Filter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+ 
+	<filter>
+		<filter-name>CAS Validation Filter</filter-name>
+		<filter-class>org.jasig.cas.client.validation.Cas20ProxyReceivingTicketValidationFilter</filter-class>
+		<init-param>
+			<description>CAS服务端访问地址</description>
+			<param-name>casServerUrlPrefix</param-name>
+			<param-value>http://172.16.13.178:8088/CAS</param-value>
+		</init-param>
+		<init-param>
+			<description>CAS客户端服务器地址 iport</description>
+			<param-name>serverName</param-name>
+			<param-value>http://localhost:80</param-value>
+		</init-param>
+		<init-param>
+			<param-name>useSession</param-name>
+			<param-value>true</param-value>
+		</init-param>
+		<init-param>
+			<param-name>redirectAfterValidation</param-name>
+			<param-value>true</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>CAS Validation Filter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+	<filter>
+		<filter-name>CAS HttpServletRequest Wrapper Filter</filter-name>
+		<filter-class>org.jasig.cas.client.util.HttpServletRequestWrapperFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>CAS HttpServletRequest Wrapper Filter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+	<filter>
+		<description>该过滤器使得开发者可以通过org.jasig.cas.client.util.AssertionHolder来获取用户的登录名。 比如AssertionHolder.getAssertion().getPrincipal().getName()。
+        </description>
+		<filter-name>CAS Assertion Thread Local Filter</filter-name>
+		<filter-class>org.jasig.cas.client.util.AssertionThreadLocalFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>CAS Assertion Thread Local Filter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+     CAS单点登录 end -->
+  
+  <filter>
+    <filter-name>encodingFilter</filter-name>
+    <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+    <init-param>
+      <param-name>encoding</param-name>
+      <param-value>UTF-8</param-value>
+    </init-param>
+    <init-param>
+      <param-name>forceEncoding</param-name>
+      <param-value>true</param-value>
+    </init-param>
+    <init-param>
+      <param-name>ignore</param-name>
+      <param-value>true</param-value>
+    </init-param>
+  </filter>
+  <filter-mapping>
+    <filter-name>encodingFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+  <filter>
+    <filter-name>SessionFilter</filter-name>
+    <filter-class>com.yodata.creditsupport.filter.CheckLoginFilter</filter-class>
+    <init-param>
+      <description>将当前登录的用户的信息保存在 session 中时使用的key，如果没有配置此参数，则该过滤器不起作用</description>
+      <param-name>sessionKey</param-name>
+      <param-value>sessionUser</param-value>
+    </init-param>
+    <init-param>
+      <description>
+         如果用户未登录（即在 session 中 key 为 sessionKey 的属性不存在或为空），则将请求重定向到该 url。
+         该 url 不包含web应用的 ContextPath。
+         如果不配置此参数，则在用户未登录系统的情况下，直接重定向到web应用的根路径（/）
+     </description>
+      <param-name>forwardUrl</param-name>
+       <param-value>/jsp/login.jsp</param-value>
+    </init-param>
+    <init-param>
+      <description>
+         不需要进行拦截的 url 的正则表达式，即：如果当前请求的 url 的 servletPath 能匹配该正则表达式，则直接放行（即使未登录系统）。
+         此参数的值一般为 loginServlet 和 registServlet 等。
+         另外，参数 redirectUrl 的值不用包含在该正则表达式中，因为 redirectUrl 对应的 url 会被自动放行。
+         还有一点需要说明的是，该参数的值不包含web应用的 ContextPath。
+     </description>
+      <param-name>excepUrlRegex</param-name>
+      <param-value>(/login/(login|logout|personLogin|updatePassword|getUserInfos))</param-value>
+    </init-param>
+  </filter>
+  <filter-mapping>
+    <filter-name>SessionFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+  <filter>
+    <filter-name>commonFilter</filter-name>
+    <filter-class>com.yodata.creditsupport.filter.CommonFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>commonFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+  
+  <!-- jason  -->
+  <!--  <filter>
+	   <filter-name>SpringOpenSessionInViewFilter</filter-name>
+	   <filter-class>org.springframework.orm.hibernate4.support.OpenSessionInViewFilter</filter-class>
+	 </filter>
+  <filter-mapping>
+    <filter-name>SpringOpenSessionInViewFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping> -->
+   <!-- jason  -->
+  
+  <servlet>
+    <servlet-name>dispatcher</servlet-name>
+    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+    <init-param>
+      <param-name>contextConfigLocation</param-name>
+      <param-value>classpath*:/config.xml</param-value>
+    </init-param>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>dispatcher</servlet-name>
+    <url-pattern>/</url-pattern>
+  </servlet-mapping>
+  <session-config>
+    <session-timeout>1800</session-timeout>
+    <tracking-mode>COOKIE</tracking-mode>
+  </session-config>
+  <error-page>
+    <error-code>404</error-code>
+    <location>/error/jsp/error-page-noexist.jsp</location>
+  </error-page>
+  <error-page>
+    <exception-type>java.lang.Exception</exception-type>
+    <location>/error/jsp/error-page.jsp</location>
+  </error-page>
+  <jsp-config>
+    <taglib>
+      <taglib-uri>http://www.baifendian.com/mrp</taglib-uri>
+      <taglib-location>mrp.tld</taglib-location>
+    </taglib>
+  </jsp-config>
+  <welcome-file-list>
+    <welcome-file>index.html</welcome-file>
+    <welcome-file>index</welcome-file>
+    <welcome-file>index.do</welcome-file>
+    <welcome-file>index.jsp</welcome-file>
+  </welcome-file-list>
+</web-app>

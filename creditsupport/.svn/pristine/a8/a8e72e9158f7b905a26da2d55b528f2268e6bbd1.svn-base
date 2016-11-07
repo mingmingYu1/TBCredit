@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>  
+<!DOCTYPE dynamic-hibernate-statement SYSTEM "classpath://hibernate/dynamic-hibernate-statement-1.0.dtd">
+<dynamic-hibernate-statement>
+    
+    <!-- 分页查询征信报告模板记录 -->
+	<sql-query name="reportTempletDao.getPageTemplet">  
+    <![CDATA[ 
+    	select id, number, name, module_list moduleList, create_time createTime,`declare`, type, status
+    	from credit_db.ods_report_templet WHERE status!=0
+    		<#if number ?exists>
+                 and number like '${number}'
+            </#if>
+            <#if name ?exists>
+                 and name like '${name}'
+            </#if>
+            <#if order ?exists>
+                 order by ${order}
+            <#else>
+            	 order by create_time desc 
+            </#if>
+	]]>   
+    </sql-query>
+    
+    <!-- 查询征信报告模板总数 -->
+    <sql-query name="reportTempletDao.getPageTempletCount">  
+    <![CDATA[ 
+    	select count(id) 
+		from credit_db.ods_report_templet WHERE status!=0
+    		<#if number ?exists>
+                 and number like '${number}'
+            </#if>
+            <#if name ?exists>
+                 and name like '${name}'
+            </#if>
+	]]>   
+    </sql-query>
+    
+    <!-- 查询征信报告全部标题信息 -->
+    <sql-query name="reportTempletDao.getReportTitle">  
+    <![CDATA[ 
+    	SELECT ID AS id, PARENT_ID AS parentId, NAME AS name, KEY_VALUE AS keyName, `LEVEL` AS level, REMARK AS remark 
+    	FROM credit_db.ods_templet_dict ORDER BY SORT
+	]]>   
+    </sql-query>
+</dynamic-hibernate-statement>

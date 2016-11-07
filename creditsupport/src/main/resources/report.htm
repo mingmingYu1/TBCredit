@@ -1,0 +1,2987 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title></title>
+		<style type="text/css">
+body {
+	font-family: simsun;
+	font-size: 14px;
+}
+
+.font_16 {
+	font-size: 20px;
+}
+
+.align-left {
+	text-align: left;
+}
+
+.align-right {
+	text-align: right;
+}
+
+.align-center {
+	text-align: center;
+}
+
+.title-whole-line {
+	width: 100%;
+	padding-bottom: 10px;
+}
+.title-left {
+	font-weight: bold;
+	float: left;
+	width: 200px;
+}
+.title-right {
+	font-weight: bold;
+	float: right;
+	width: 200px;
+}
+
+.line_height {
+	line-height: 30px;
+}
+
+.title {
+	width: 100%;
+	font-size: 32px;
+}
+
+.section-blue {
+	font-size: 20px;
+	color: blue;
+	font-weight: bold;
+}
+
+.setion-blue-title2 {
+	font-size: 18px;
+	color: blue;
+	font-weight: bold;
+}
+
+.setion-blue-title3 {
+	font-size: 15px;
+	color: blue;
+	font-weight: bold;
+}
+
+.section-2 {
+	text-indent: 20px;
+	font-size: 16px;
+	color: blue;
+	font-weight: bold;
+}
+
+.section-red {
+	font-size: 20px;
+	color: red;
+}
+
+.whole-line {
+	line-height: 25px;
+	padding-bottom: 10px;
+}
+
+.text-top-left {
+	font-weight: bold;
+}
+
+.text-top-right {
+	padding-top: -26px;
+	padding-left: 75px;
+}
+
+.text-left {
+	font-weight: bold;
+	width: 140px;
+	float: left;
+}
+
+.text-right {
+	width: 190px;
+	float: left;
+}
+
+.text-right-3 {
+	float: left;
+}
+
+.checkbox-font {
+	height: 12px;
+	line-height: 12px;
+	float: left;
+}
+.checkbox-solid {
+	width: 14px;
+	height: 14px;
+	background-color: #000;
+	float: left;
+}
+
+.checkbox-top-solid {
+	width: 1px;
+	height: 1px;
+}
+
+.checkbox-left-solid {
+	float: left;
+	width: 1px;
+	height: 1px;
+}
+
+.checkbox-hollow {
+	float: left;
+	width: 12px;
+	height: 12px;
+	background-color: #fff;
+}
+
+table {
+	width: 100%;
+	border-collapse: collapse;
+	border-spacing: 0;
+	border-left: 1px solid #000;
+	border-top: 1px solid #000;
+	text-align: center;
+}
+
+th, td {
+	border-right: 1px solid #000;
+	border-bottom: 1px solid #000;
+	padding: 5px 2px;
+	font-size: 14px;
+}
+
+th {
+	font-weight: bold;
+}
+
+.font_bold {
+	font-weight: bold;
+}
+.indent_left {
+	padding-left: 5px;
+}
+</style>
+	</head>
+	<body>
+		<div class="title-whole-line">
+			<div class="title-left">编号：<#if (baseInfo.regId)??>${baseInfo.regId}</#if></div>
+			<div class="title-right">
+				<#if reportType??>
+					<div class="checkbox-solid">
+						<#if reportType == 1>
+						<#else>
+						<div class="checkbox-top-solid">&nbsp;</div>
+						<div class="checkbox-left-solid">&nbsp;</div>
+						<div class="checkbox-hollow">&nbsp;</div>
+						</#if>
+					</div><div class="checkbox-font">&nbsp;授信&nbsp;&nbsp;</div>
+					<div class="checkbox-solid">
+						<#if reportType == 2>
+						<#else>
+						<div class="checkbox-top-solid">&nbsp;</div>
+						<div class="checkbox-left-solid">&nbsp;</div>
+						<div class="checkbox-hollow">&nbsp;</div>
+						</#if>
+					</div><div class="checkbox-font">&nbsp;贷款&nbsp;&nbsp;</div>
+					<div class="checkbox-solid">
+						<#if reportType == 3>
+						<#else>
+						<div class="checkbox-top-solid">&nbsp;</div>
+						<div class="checkbox-left-solid">&nbsp;</div>
+						<div class="checkbox-hollow">&nbsp;</div>
+						</#if>
+					</div><div class="checkbox-font">&nbsp;交易&nbsp;&nbsp;</div>
+				</#if>
+			</div>
+		</div>
+		<div class="title-whole-line">
+			<div class="title-left">日期：${curDate?if_exists}</div>
+			<div class="title-right">算法名称：${algor?if_exists}</div>
+		</div>
+			<h1 class="title align-center">${(baseInfo.compName)?if_exists}<br/>征信报告</h1>
+			<div class="whole-line">
+				<div class="text-left font_16">信用等级</div>
+				<div class="text-right font_16"><#if (creditScore.level)??>${creditScore.level}</#if><#if (creditScore.levelDesc)??>${creditScore.levelDesc}</#if></div>
+				<div class="text-left font_16">信用得分</div>
+				<div class="text-right font_16"><#if (creditScore.score)??>${creditScore.score}分</#if></div>
+			</div>
+				
+			<div class="whole-line">
+				<span class="text-top-left">报告内容</span>
+				<div class="text-top-right">
+<#if templetList??>
+	<#list templetList as title>
+		<span>${title.name}</span><br/>
+		<div class="indent_left">
+		<#if (title.children)??>
+			<#list title.children as title2>
+				<span>${title2.name}</span>
+				<#if (title2.children)??>
+				<br/>
+				<div class="indent_left">
+					<#list title2.children as title3>
+					<span>${title3.name}</span>
+					</#list>
+				</div>
+				</#if>
+			</#list>
+		</#if>
+		</div>
+	</#list>
+</#if>
+				</div>
+			</div>
+			<div class="whole-line">
+				<span class="text-top-left">评分简述</span>
+				<div class="text-top-right">
+					<span>征信报告总评分由通用信息评分和行业信息评分组成:</span><br/>
+					<span>通用信息占总评分权重:&nbsp;${(scoreMap.score1Weight)?if_exists}&nbsp;&nbsp;&nbsp;&nbsp;在总评分中计分&nbsp;${(scoreMap.score1)?if_exists}&nbsp;&nbsp;&nbsp;&nbsp;按百分制单独评分&nbsp;${(scoreMap.score1Per)?if_exists}</span><br/>
+					<span>行业信息占总评分权重:&nbsp;${(scoreMap.score2Weight)?if_exists}&nbsp;&nbsp;&nbsp;&nbsp;在总评分中计分&nbsp;${(scoreMap.score2)?if_exists}&nbsp;&nbsp;&nbsp;&nbsp;按百分制单独评分&nbsp;${(scoreMap.score2Per)?if_exists}</span><br/>
+					<span>(详见评分报告)</span><br/>
+				</div>
+			</div>
+
+<#if (templetMap.basicInfo)??>
+			<p class="section-blue">${templetMap.basicInfo}</p>
+		<#if (templetMap.basic)??>
+			<p class="setion-blue-title3">&nbsp;&nbsp;${templetMap.basic}</p>
+			<div class="whole-line">
+				<div class="text-left align-right">企业名称：</div>
+				<div class="text-right-3"><#if (baseInfo.compName)??>${baseInfo.compName}</#if></div>
+			</div>
+			<div class="whole-line">
+				<div class="text-left align-right">法人姓名：</div>
+				<div class="text-right"><#if (baseInfo.lperName)??>${baseInfo.lperName}</#if></div>
+				<div class="text-left align-right">企业状态：</div>
+				<div class="text-right">${entStatus?if_exists}</div>
+			</div>
+			<div class="whole-line">
+				<div class="text-left align-right">工商注册号：</div>
+				<div class="text-right"><#if (baseInfo.regId)??>${baseInfo.regId}</#if></div>
+				<div class="text-left align-right">注册资本：</div>
+				<div class="text-right"><#if (baseInfo.regAssetsStr)??>${baseInfo.regAssetsStr}万元</#if></div>
+			</div>
+
+			<div class="whole-line">
+				<div class="text-left align-right">企业类型：</div>
+				<div class="text-right"><#if (baseInfo.typeEnt)??>${baseInfo.typeEnt}</#if></div>
+				<div class="text-left align-right">货币种类：</div>
+				<div class="text-right"><#if (baseInfo.curTypeName)??>${baseInfo.curTypeName}</#if></div>
+			</div>
+
+			<div class="whole-line">
+				<div class="text-left align-right">开业日期：</div>
+				<div class="text-right-3"><#if (baseInfo.openDate)??>${baseInfo.openDate?string("yyyy年MM月dd日")}</#if></div>
+			</div>
+			<div class="whole-line">
+				<div class="text-left align-right">经营期限：</div>
+				<div class="text-right-3"><#if (baseInfo.opePeriod)??>${baseInfo.opePeriod}</#if></div>
+			</div>
+
+			<div class="whole-line">
+				<div class="text-left align-right">最后年检年度：</div>
+				<div class="text-right"><#if (baseInfo.lastYear)??>${baseInfo.lastYear}</#if></div>
+				<div class="text-left align-right">最后年检日期：</div>
+				<div class="text-right"><#if (baseInfo.lastDate)??>${baseInfo.lastDate?string("yyyy年MM月dd日")}</#if></div>
+			</div>
+			<div class="whole-line">
+				<div class="text-left align-right">注销日期：</div>
+				<div class="text-right"><#if (baseInfo.cancelledDate)??>${baseInfo.cancelledDate?string("yyyy年MM月dd日")}</#if></div>
+				<div class="text-left align-right">吊销日期：</div>
+				<div class="text-right"><#if (baseInfo.revokDate)??>${baseInfo.revokDate?string("yyyy年MM月dd日")}</#if></div>
+			</div>
+
+			<div class="whole-line">
+				<div class="text-left align-right">行业门类代码：</div>
+				<div class="text-right"></div>
+				<div class="text-left align-right">原注册号：</div>
+				<div class="text-right"></div>
+			</div>
+
+			<div class="whole-line">
+				<div class="text-left align-right">营业有效开始日期：</div>
+				<div class="text-right"><#if (baseInfo.cancelledDate)??>${baseInfo.cancelledDate?string("yyyy年MM月dd日")}</#if></div>
+				<div class="text-left align-right">营业有效结束日期：</div>
+				<div class="text-right"><#if (baseInfo.revokDate)??>${baseInfo.revokDate?string("yyyy年MM月dd日")}</#if></div>
+			</div>
+			<div class="whole-line">
+				<div class="text-left align-right">行业分类名称：</div>
+				<div class="text-right-3"><#if (baseInfo.industryName)??>${baseInfo.industryName}</#if></div>
+			</div>
+
+			<div class="whole-line">
+				<div class="text-left align-right">经营范围：</div>
+				<div class="text-right-3"><#if (baseInfo.busCope)??>${baseInfo.busCope}</#if></div>
+			</div>
+			<div class="whole-line">
+				<div class="text-left align-right">社会信用代码：</div>
+				<div class="text-right"><#if (baseInfo.orgCode)??>${baseInfo.orgCode}</#if></div>
+				<div class="text-left align-right">企业网址：</div>
+				<div class="text-right"><#if (baseInfo.webSite)??>${baseInfo.webSite}</#if></div>
+			</div>
+			<div class="whole-line">
+				<div class="text-left align-right">机构类型：</div>
+				<div class="text-right"><#if (baseInfo.typeOrg)??>${baseInfo.typeOrg}</#if></div>
+				<div class="text-left align-right">员工人数：</div>
+				<div class="text-right"><#if (baseInfo.emps)??>${baseInfo.emps}</#if></div>
+			</div>
+			<div class="whole-line">
+				<div class="text-left align-right">所属行业：</div>
+				<div class="text-right-3"><#if (baseInfo.industry)??>${baseInfo.industry}</#if></div>
+			</div>
+		</#if>
+
+		<#if (templetMap.addr)??>
+			<p class="setion-blue-title3">&nbsp;&nbsp;${templetMap.addr}</p>
+			<table>
+				<tr>
+					<th>序号</th>
+					<th>类型</th>
+					<th>行政区划</th>
+					<th>地址</th>
+					<th>电话</th>
+					<th>邮政编码</th>
+				</tr>
+				<#if entAttrInfo?exists>
+				<#if (entAttrInfo?size>0)>
+				   <#list entAttrInfo as item>
+				<tr>
+					<td>${item_index?if_exists+1}</td>
+					<td>${item.typeName?if_exists}</td>
+					<td>${item.district?if_exists}</td>
+					<td>${item.addr?if_exists}</td>
+					<td>${item.tel?if_exists}</td>
+					<td>${item.post?if_exists}</td>
+				</tr>
+				    </#list>
+				<#else>
+				<tr>
+				<td colspan="5" class="align-center">无相关信息</td>
+				</tr>
+				</#if>
+				</#if>
+			</table>
+		</#if>
+		<#if (templetMap.stockH)??>
+			<p class="setion-blue-title3">&nbsp;&nbsp;${templetMap.stockH}</p>
+			<table>
+				<tr>
+					<th>序号</th>
+					<th>股东名称</th>
+					<th>证件类型</th>
+					<th>证件号码</th>
+					<th>国别</th>
+					<th>股东地址</th>
+					<th>认缴出资额（ 万元）</th>
+					<th>出资比例（ %）</th>
+					<th>出资币种</th>
+					<th>出资日期</th>
+				</tr>
+				<#if stockholderInfo?exists>
+				<#if (stockholderInfo?size>0)>
+				   <#list stockholderInfo as item>
+				<tr>
+					<td>${item_index?if_exists+1}</td>
+					<td>${item.name?if_exists}</td>
+					<td>${item.identifyType?if_exists}</td>
+					<td>${item.identifyNo?if_exists}</td>
+					<td>${item.address?if_exists}</td>
+					<td>${item.country?if_exists}</td>
+					<td>${item.cashConStr?if_exists}</td>
+					<td>${item.cashRateStr?if_exists}</td>
+					<td><#if (item.curTypeName)?exists>${item.curTypeName}<#else>${baseInfo.curTypeName?if_exists}</#if></td>
+					<td><#if (item.conDate)??>${item.conDate?string("yyyy-MM-dd")}</#if></td>
+				</tr>
+				    </#list>
+				<#else>
+				<tr>
+				<td colspan="10" class="align-center">无相关信息</td>
+				</tr>
+				</#if>
+				</#if>
+			</table>
+		</#if>
+		<#if (templetMap.topM)??>
+			<p class="setion-blue-title3">&nbsp;&nbsp;${templetMap.topM}</p>
+			<table>
+				<tr>
+					<th>序号</th>
+					<th>姓名</th>
+					<th>性别</th>
+					<th>证件名称</th>
+					<th>证件号码</th>
+					<th>联系电话</th>
+					<th>职务</th>
+				</tr>
+				<#if topManagerInfo?exists>
+				<#if (topManagerInfo?size>0)>
+				   <#list topManagerInfo as item>
+				<tr>
+					<td>${item_index?if_exists+1}</td>
+					<td>${item.name?if_exists}</td>
+					<td>${item.sex?if_exists}</td>
+					<td>${item.phone?if_exists}</td>
+					<td>${item.identifyType?if_exists}</td>
+					<td>${item.identifyNo?if_exists}</td>
+					<td>${item.position?if_exists}</td>
+				</tr>
+				    </#list>
+				<#else>
+				<tr>
+				<td colspan="7" class="align-center">无相关信息</td>
+				</tr>
+				</#if>
+				</#if>
+			</table>
+		</#if>
+		<#if (templetMap.othEnt)??>
+		   <p class="setion-blue-title3">&nbsp;&nbsp;${templetMap.othEnt}</p>
+			<table>
+				<tr>
+					<th>序号</th>
+					<th>企业名称</th>
+					<th>注册资本（ 万元）</th>
+					<th>出资比例（ %）</th>
+				</tr>
+				<#if othEntInvestsInfo?exists>
+				<#if (othEntInvestsInfo?size>0)>
+				   <#list othEntInvestsInfo as item>
+				<tr>
+					<td>${item_index?if_exists+1}</td>
+					<td>${item.name?if_exists}</td>
+					<td>${item.regAssetsStr?if_exists}</td>
+					<td>${item.cashRateStr?if_exists}</td>
+				</tr>
+				    </#list>
+				<#else>
+				<tr>
+				<td colspan="4" class="align-center">无相关信息</td>
+				</tr>
+				</#if>
+				</#if>
+			</table>
+		</#if>
+		<#if (templetMap.legPerPo)??>
+			<p class="setion-blue-title3">&nbsp;&nbsp;${templetMap.legPerPo}</p>
+			<p class="section-2">汇总信息</p>
+			<table>
+				<tr>
+					<th>序号</th>
+					<th>机构名称</th>
+					<th>职务</th>
+					<th>机构状态</th>
+				</tr>
+				<#if legPerInfo1?exists>
+				<#if (legPerInfo1?size>0)>
+				   <#list legPerInfo1 as item>
+				<tr>
+					<td>${item_index?if_exists+1}</td>
+					<td>${item.orgName?if_exists}</td>
+					<td>${item.position?if_exists}</td>
+					<td><#if (item.orgSta)??>${item.orgSta}</#if></td>
+				</tr>
+				    </#list>
+				<#else>
+				<tr>
+				<td colspan="4" class="align-center">无相关信息</td>
+				</tr>
+				</#if>
+				</#if>
+			</table>
+			<p class="section-2">任职机构概要信息</p>
+				<#if legPerInfo1?exists>
+				<#if (legPerInfo1?size>0)>
+			<table>
+				   <#list legPerInfo1 as item>
+				<tr>
+					<td class="font_bold">机构名称</td>
+					<td>${item.orgName?if_exists}</td>
+					<td class="font_bold">机构状态</td>
+					<td><#if (item.orgSta)??>${item.orgSta}</#if></td>
+				</tr>
+				<tr>
+					<td class="font_bold">工商注册号</td>
+					<td>${item.regNo?if_exists}</td>
+					<td class="font_bold">担任职务</td>
+					<td>${item.position?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">注册资本</td>
+					<td>${item.regAssetsStr?if_exists} 万元  (${item.curTypeName?if_exists})</td>
+					<td class="font_bold">企业类型 </td>
+					<td>${item.entType?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">登记机关</td>
+					<td colspan="3">${item.regAuth?if_exists}</td>
+				</tr>
+				<#if (legPerInfo1?size > (item_index + 1))>
+					<tr><td colspan="4">&nbsp;&nbsp;</td></tr>
+				</#if>
+				    </#list>
+			</table>
+				<#else>
+				<table>
+				<tr>
+				<td colspan="2" class="align-center">无相关信息</td>
+				</tr>
+				</table>
+				</#if>
+				</#if>
+		</#if>
+
+		<#if (templetMap.legPerSt)??>
+			<p class="setion-blue-title3">&nbsp;&nbsp;${templetMap.legPerSt}</p>
+			<p class="section-2">汇总信息</p>
+			<table>
+				<tr>
+					<td>累计投资总数</td>
+					<td><#if legPer2Count??>${legPer2Count}</#if></td>
+					<td>累计投资金额（万元）</td>
+					<td><#if legPer2Total??>${legPer2Total}</#if></td>
+				</tr>
+			</table>
+			<br />
+			<table>
+				<tr>
+					<th rowspan="2">序号</th>
+					<th rowspan="2">被投资机构名称</th>
+					<th>注册资本 </th>
+					<th>认缴出资额</th>
+					<th>出资比例</th>
+					<th rowspan="2">币种</th>
+					<th rowspan="2">机构状态</th>
+				</tr>
+				<tr>
+					<th>（万元） </th>
+					<th>（万元）</th>
+					<th>（%）</th>
+				</tr>
+				<#if legPerInfo2?exists>
+				<#if (legPerInfo2?size>0)>
+				   <#list legPerInfo2 as item>
+				<tr>
+					<td>${item_index?if_exists+1}</td>
+					<td>${item.entName?if_exists}</td>
+					<td>${item.regAssetsStr?if_exists}</td>
+					<td>${item.cashConStr?if_exists}</td>
+					<td>${item.cashRate?if_exists}</td>
+					<td>${item.curTypeName?if_exists}</td>
+					<td>${item.entStatus?if_exists}</td>
+				</tr>
+				    </#list>
+				<#else>
+				<tr>
+				<td colspan="7" class="align-center">无相关信息</td>
+				</tr>
+				</#if>
+				</#if>
+			</table>
+			<p class="section-2">被投资机构概要信息</p>
+				<#if legPerInfo2?exists>
+				<#if (legPerInfo2?size>0)>
+			<table>
+				   <#list legPerInfo2 as item>
+				<tr>
+					<td class="font_bold">机构名称</td>
+					<td>${item.entName?if_exists}</td>
+					<td class="font_bold">机构状态</td>
+					<td>${item.entStatus?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">工商注册号</td>
+					<td>${item.regNo?if_exists}</td>
+					<td class="font_bold">币种</td>
+					<td>${item.curTypeName?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">注册资本</td>
+					<td>${item.regAssetsStr?if_exists} 万元</td>
+					<td class="font_bold">企业类型 </td>
+					<td>${item.entType?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">登记机关</td>
+					<td colspan="3">${item.regOrg?if_exists}</td>
+				</tr>
+				<#if (legPerInfo2?size > (item_index + 1))>
+					<tr><td colspan="4">&nbsp;&nbsp;</td></tr>
+				</#if>
+				    </#list>
+			</table>
+				<#else>
+				<table>
+				<tr>
+				<td colspan="2" class="align-center">无相关信息</td>
+				</tr>
+				</table>
+				</#if>
+				</#if>
+		</#if>
+
+		<#if (templetMap.score)??>
+			<p class="setion-blue-title3">&nbsp;&nbsp;${templetMap.score}</p>
+			<table>
+				<tr>
+					<td>序号</td>
+					<td>变更日期</td>
+					<td>变更项</td>
+					<td>变更前 </td>
+					<td>变更后</td>
+				</tr>
+				<#if agentChangeInfo?exists>
+					<#if (agentChangeInfo?size>0)>
+				   <#list agentChangeInfo as item>
+				<tr>
+					<td width="5%">${item_index?if_exists+1}</td>
+					<td width="15%"><#if (item.changeTime)??>${item.changeTime?string("yyyy-MM-dd")}</#if></td>
+					<td width="20%">${item.changeItem?if_exists}</td>
+					<td width="30%">${item.preChange?if_exists}</td>
+					<td width="30%">${item.postChange?if_exists}</td>
+				</tr>
+				    </#list>
+					<#else>
+				<tr>
+				<td colspan="5" class="align-center">无相关信息</td>
+				</tr>
+					</#if>
+				</#if>
+			</table>
+		</#if>
+
+		<#if (templetMap.fzjg)??>
+			<p class="setion-blue-title3">&nbsp;&nbsp;${templetMap.fzjg}</p>
+			<#if fenzhiInfo?exists>
+			<#if (fenzhiInfo?size>0)>
+			<table>
+				   <#list fenzhiInfo as item>
+				<tr>
+					<td class="font_bold">机构名称</td>
+					<td>${item.brName?if_exists}</td>
+					<td class="font_bold">一般经营项目</td>
+					<td>${item.cbuItem?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">企业注册号</td>
+					<td>${item.brRegNo?if_exists}</td>
+					<td class="font_bold">注册所在工商管理局</td>
+					<td>${item.localAdministration?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">分支机构地址</td>
+					<td>${item.brAddr?if_exists}</td>
+					<td class="font_bold">分支机构负责人 </td>
+					<td>${item.brPrincipal?if_exists}</td>
+				</tr>
+				<#if (fenzhiInfo?size > (item_index + 1))>
+					<tr><td colspan="4">&nbsp;&nbsp;</td></tr>
+				</#if>
+				    </#list>
+			</table>
+				<#else>
+				<table>
+				<tr>
+				<td>机构名称</td>
+                 <td>一般经营项目</td>
+                 <td>企业注册号</td>
+                <td>注册所在工商管理局</td>
+                <td>分支机构地址</td>
+                <td>分支机构负责人</td>
+				</tr>
+				<tr>
+				<td colspan="6" class="align-center">无相关信息</td>
+				</tr>
+				</table>
+				</#if>
+				</#if>
+		</#if>
+
+		<#if (templetMap.qingsuan)??>
+			<p class="setion-blue-title3">&nbsp;&nbsp;${templetMap.qingsuan}</p>
+			<table>
+				<tr>
+					<td>序号</td>
+					<td>清算责任人</td>
+					<td>清算完结日期</td>
+					<td>清算负责人 </td>
+					<td>债务承接人</td>
+					<td>清算组成员</td>
+					<td>债权承接人 </td>
+					<td>清算完结情况</td>
+				</tr>
+				<#if liquidationInfo?exists>
+					<#if (liquidationInfo?size>0)>
+				   <#list liquidationInfo as item>
+				<tr>
+				    <td>${item_index?if_exists+1}</td>
+					<td>${item.entity?if_exists}</td>
+					<td><#if (item.endDate)??>${item.endDate?string("yyyy-MM-dd")}</#if></td>
+					<td>${item.principal?if_exists}</td>
+					<td>${item.debtTranee?if_exists}</td>
+					<td>${item.member?if_exists}</td>
+					<td>${item.clainTranee?if_exists}</td>
+					<td>${item.ligst?if_exists}</td>
+				</tr>
+				    </#list>
+					<#else>
+				<tr>
+				<td colspan="8" class="align-center">无相关信息</td>
+				</tr>
+					</#if>
+				</#if>
+			</table>
+		</#if>
+
+		<#if (templetMap.dcdy)??>
+			<p class="setion-blue-title3">&nbsp;&nbsp;${templetMap.dcdy}</p>
+				<#if agentMortgageInfo?exists>
+				<#if (agentMortgageInfo?size>0)>
+			<table>
+				   <#list agentMortgageInfo as item>
+				<tr>
+					<td class="font_bold">抵押ID</td>
+					<td>${item.morRegId?if_exists}</td>
+					<td class="font_bold">登记证号</td>
+					<td>${item.morRegcNo?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">抵押人</td>
+					<td>${item.morgagor?if_exists}</td>
+					<td class="font_bold">申请抵押原因</td>
+					<td>${item.appRegRea?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">抵押权人</td>
+					<td>${item.more?if_exists}</td>
+					<td class="font_bold">被担保主债权种类 </td>
+					<td>${item.priClaSecKind?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">登记机关</td>
+					<td>${item.regOrg?if_exists}</td>
+					<td class="font_bold">被担保主债权数额(元)</td>
+					<td>${item.priClaSecAm?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">登记日期</td>
+					<td><#if (item.regiDate)??>${item.regiDate?string("yyyy-MM-dd")}</#if></td>
+					<td class="font_bold">履约起始日期</td>
+					<td><#if (item.pefperFrom)??>${item.pefperFrom?string("yyyy-MM-dd")}</#if></td>
+				</tr>
+				<tr>
+					<td class="font_bold">状态标识</td>
+					<td>${item.morType?if_exists}</td>
+					<td class="font_bold">履约截止日期</td>
+					<td><#if (item.pefperTo)??>${item.pefperTo?string("yyyy-MM-dd")}</#if></td>
+				</tr>
+				<tr>
+					<td class="font_bold">注销日期</td>
+					<td colspan= "3"><#if (item.canDate)??>${item.canDate?string("yyyy-MM-dd")}</#if></td>
+				</tr>
+				    </#list>
+			</table>
+				<#else>
+				<table>
+				<tr>
+				<td>抵押ID</td>
+              <td>登记证号</td>
+              <td>抵押人</td>
+              <td>申请抵押原因</td>
+              <td>抵押权人</td>
+              <td>被担保主债权种类</td>
+              <td>登记机关</td>
+              <td>被担保主债权数额(元)</td>
+              <td>登记日期</td>
+              <td>履约起始日期</td>
+              <td>履约截止日期</td>
+              <td>状态标识</td>
+              <td>注销日期</td>
+				</tr>
+				<tr>
+				<td colspan="13" class="align-center">无相关信息</td>
+				</tr>
+				</table>
+				</#if>
+				</#if>
+		</#if>
+
+		<#if (templetMap.dcdyw)??>
+			<p class="setion-blue-title3">&nbsp;&nbsp;${templetMap.dcdyw}</p>
+			<table>
+				<tr>
+					<td>序号</td>
+					<td>抵押ID</td>
+					<td>抵押物名称</td>
+					<td>数量 </td>
+					<td>价值</td>
+				</tr>
+				<#if mortgageItemInfo?exists>
+					<#if (mortgageItemInfo?size>0)>
+				   <#list mortgageItemInfo as item>
+				<tr>
+					<td>${item_index?if_exists+1}</td>
+					<td>${item.morRegId?if_exists}</td>
+					<td>${item.quan?if_exists}</td>
+					<td>${item.guaName?if_exists}</td>
+					<td>${item.value?if_exists}</td>
+				</tr>
+				    </#list>
+					<#else>
+				<tr>
+				<td colspan="5" class="align-center">无相关信息</td>
+				</tr>
+					</#if>
+				</#if>
+			</table>
+		</#if>
+
+		<#if (templetMap.gqdjls)??>
+			<p class="setion-blue-title3">&nbsp;&nbsp;${templetMap.gqdjls}</p>
+				<#if agentSharesInfo?exists>
+				<#if (agentSharesInfo?size>0)>
+			<table>
+				   <#list agentSharesInfo as item>
+				<tr>
+					<td class="font_bold">冻结文号</td>
+					<td>${item.froDocNo?if_exists}</td>
+					<td class="font_bold">冻结机关</td>
+					<td>${item.froAuth?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">解冻文号</td>
+					<td>${item.thawDocNo?if_exists}</td>
+					<td class="font_bold">解冻机关</td>
+					<td>${item.thawAuth?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">冻结起始日期</td>
+					<td><#if (item.froFrom)??>${item.froFrom?string("yyyy-MM-dd")}</#if></td>
+					<td class="font_bold">冻结截止日期 </td>
+					<td><#if (item.thawDate)??>${item.thawDate?string("yyyy-MM-dd")}</#if></td>
+				</tr>
+				<tr>
+					<td class="font_bold">解冻日期</td>
+					<td><#if (item.froTo)??>${item.froTo?string("yyyy-MM-dd")}</#if></td>
+					<td class="font_bold">解冻说明</td>
+					<td>${item.thawCommodsEnt?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">冻结金额(元)</td>
+					<td colspan="3">${item.froAM?if_exists}</td>
+				</tr>
+				    </#list>
+			</table>
+				<#else>
+				<table>
+				<tr>
+                 <td>冻结文号</td>
+                 <td>冻结机关</td>
+                 <td>解冻文号</td>
+                 <td>解冻机关</td>
+                 <td>冻结起始日期</td>
+                 <td>冻结截止日期</td>
+                 <td>解冻日期</td>
+                 <td>解冻说明</td>
+                 <td>冻结金额(元)</td>
+				</tr>
+				<tr>
+				<td colspan="9" class="align-center">无相关信息</td>
+				</tr>
+				</table>
+				</#if>
+				</#if>
+		</#if>
+
+		<#if (templetMap.gqczls)??>
+			<p class="setion-blue-title3">&nbsp;&nbsp;${templetMap.gqczls}</p>
+			<table>
+				<tr>
+					<td>序号</td>
+					<td>质权人姓名</td>
+					<td>出质审批部门</td>
+					<td>出质人类别 </td>
+					<td>出质批准日期</td>
+					<td>出质金额(元)</td>
+					<td>出质截止日期 </td>
+					<td>出质备案日期</td>
+				</tr>
+				<#if agentSharesImpawInfo?exists>
+					<#if (agentSharesImpawInfo?size>0)>
+				   <#list agentSharesImpawInfo as item>
+				<tr>
+					<td>${item_index?if_exists+1}</td>
+					<td>${item.impOrg?if_exists}</td>
+					<td>${item.impExaeep?if_exists}</td>
+					<td>${item.impOrgType?if_exists}</td>
+					<td><#if (item.impSanDate)??>${item.impSanDate?string("yyyy-MM-dd")}</#if></td>
+					<td>${item.impAm?if_exists}</td>
+					<td><#if (item.impTo)??>${item.impTo?string("yyyy-MM-dd")}</#if></td>
+					<td><#if (item.imponRecDate)??>${item.imponRecDate?string("yyyy-MM-dd")}</#if></td>
+				</tr>
+				    </#list>
+					<#else>
+				<tr>
+				<td colspan="8" class="align-center">无相关信息</td>
+				</tr>
+					</#if>
+				</#if>
+			</table>
+		</#if>
+</#if>
+	<!-- 2、财务信息 -->
+<#if templetMap.financialInfo??>
+	<p class="section-blue">${templetMap.financialInfo}</p>
+		<#if templetMap.balanceSheet??>
+			<p class="setion-blue-title3">&nbsp;&nbsp;${templetMap.balanceSheet}</p>
+			<table>
+				<tr>
+					<td width="20px">项目</td>
+					<td width="10px">期末余额(元)</td>
+					<td width="10px">年初余额(元)</td>
+				</tr>
+				<#if balanceSheetInfo?exists>
+					<#if (balanceSheetInfo?size>0)>
+				   <#list balanceSheetInfo as item>
+				<tr>
+					<td>${item.item?if_exists}</td>
+					<td>${item.lastYear?if_exists}</td>
+					<td>${item.endingBalance?if_exists}</td>
+				</tr>
+				    </#list>
+					<#else>
+				<tr>
+				<td colspan="3" class="align-center">无相关信息</td>
+				</tr>
+					</#if>
+				</#if>
+			</table>
+		</#if>
+		<#if templetMap.profitStatemen??>
+			<p class="setion-blue-title3">&nbsp;&nbsp;${templetMap.profitStatemen}</p>
+			<table>
+				<tr>
+					<td width="50%">项目</td>
+					<td width="25%">上期金额(元)</td>
+					<td width="25%">本期金额(元)</td>
+				</tr>
+				<#if profitInfo?exists>
+					<#if (profitInfo?size>0)>
+				   <#list profitInfo as item>
+				<tr>
+					<td>${item.item?if_exists}</td>
+					<td>${item.preAmount?if_exists}</td>
+					<td>${item.curAmount?if_exists}</td>
+				</tr>
+				    </#list>
+					<#else>
+				<tr>
+				<td colspan="3" class="align-center">无相关信息</td>
+				</tr>
+					</#if>
+				</#if>
+			</table>
+		</#if>
+</#if>
+	<!-- 3、税务信息 -->
+<#if templetMap.taxInfo??>
+	<p class="section-blue">${templetMap.taxInfo}</p>
+		<#if templetMap.sysl??>
+			<p class="setion-blue-title3">&nbsp;&nbsp;${templetMap.sysl}</p>
+			<table>
+				<tr>
+				    <td>序号</td>
+					<td>增值税</td>
+					<td>企业所得税</td>
+				</tr>
+				<#if agentTaxAccountInfo?exists>
+					<#if (agentTaxAccountInfo?size>0)>
+				   <#list agentTaxAccountInfo as item>
+				<tr>
+					<td>${item_index?if_exists+1}</td>
+					<td>${item.addedValueTaxRate?if_exists}</td>
+					<td>${item.incomeTaxRate?if_exists}</td>
+				</tr>
+				    </#list>
+					<#else>
+				<tr>
+				<td colspan="3" class="align-center">无相关信息</td>
+				</tr>
+					</#if>
+				</#if>
+			</table>
+		</#if>
+		<#if templetMap.fsl??>
+			<p class="setion-blue-title3">&nbsp;&nbsp;${templetMap.fsl}</p>
+			<table>
+				<tr>
+				    <td>序号</td>
+					<td>年应税额(元)</td>
+				</tr>
+				<#if agentTaxAccountInfo?exists>
+					<#if (agentTaxAccountInfo?size>0)>
+				   <#list agentTaxAccountInfo as item>
+				<tr>
+				    <td>${item_index?if_exists+1}</td>
+					<td>${item.annualTax?if_exists}</td>
+				</tr>
+				    </#list>
+					<#else>
+				<tr>
+				<td colspan="2" class="align-center">无相关信息</td>
+				</tr>
+					</#if>
+				</#if>
+			</table>
+		</#if>
+		<#if templetMap.zzsybnarsb??>
+			<p class="setion-blue-title3">&nbsp;&nbsp;${templetMap.zzsybnarsb}</p>
+			<table>
+				<tr>
+				    <td>序号</td>
+					<td>按适用税率计税销售额(元)</td>
+					<td>按简易办法计税销售额(元)</td>
+					<td>免、抵、退办法出口销售额(元)</td>
+					<td>免税销售额(元)</td>
+					<td>合计(元)</td>
+					<td>销项税额(元)</td>
+					<td>进项税额(元)</td>
+					<td>上期留底税额(元)</td>
+					<td>应纳税额合计(元)</td>
+					<td>期末留底金额(元)</td>
+				</tr>
+				<#if agentTaxAccountInfo?exists>
+					<#if (agentTaxAccountInfo?size>0)>
+				   <#list agentTaxAccountInfo as item>
+				<tr>
+				    <td>${item_index?if_exists+1}</td>
+					<td>${item.taxableGoodsSales?if_exists}</td>
+					<td>${item.taxableLaberServiceSales?if_exists}</td>
+					<td>${item.ajustedSales?if_exists}</td>
+					<td>${item.taxExemptSales?if_exists}</td>
+					<td>${item.taxSum?if_exists}</td>
+					<td>${item.outputVat?if_exists}</td>
+					<td>${item.inputVat?if_exists}</td>
+					<td>${item.overpaidVat?if_exists}</td>
+					<td>${item.totalAmountOfTax?if_exists}</td>
+					<td>${item.taxCreditToStay?if_exists}</td>
+				</tr>
+				    </#list>
+					<#else>
+				<tr>
+				<td colspan="11" class="align-center">无相关信息</td>
+				</tr>
+					</#if>
+				</#if>
+			</table>
+		</#if>
+		<#if templetMap.yxse??>
+			<p class="setion-blue-title3">&nbsp;&nbsp;${templetMap.yxse}</p>
+			<table>
+				<tr>
+				    <td>序号</td>
+					<td>年应税销售额(元)</td>
+				</tr>
+				<#if agentTaxAccountInfo?exists>
+					<#if (agentTaxAccountInfo?size>0)>
+				   <#list agentTaxAccountInfo as item>
+				<tr>
+				    <td>${item_index?if_exists+1}</td>
+					<td>${item.annualTaxableSales?if_exists}</td>
+				</tr>
+				    </#list>
+					<#else>
+				<tr>
+				<td colspan="2" class="align-center">无相关信息</td>
+				</tr>
+					</#if>
+				</#if>
+			</table>
+		</#if>
+		<#if templetMap.zrse??>
+			<p class="setion-blue-title3">&nbsp;&nbsp;${templetMap.zrse}</p>
+			<table>
+				<tr>
+				    <td>序号</td>
+					<td>企业所得税(元)</td>
+					<td>增值税</td>
+					<td>其他税种</td>
+				</tr>
+				<#if agentTaxAccountInfo?exists>
+					<#if (agentTaxAccountInfo?size>0)>
+				   <#list agentTaxAccountInfo as item>
+				<tr>
+					<td>${item_index?if_exists+1}</td>
+					<td>${item.incomeTax?if_exists}</td>
+					<td>${item.addedValueTax?if_exists}</td>
+					<td>${item.otherTax?if_exists}</td>
+				</tr>
+				    </#list>
+					<#else>
+				<tr>
+				<td colspan="4" class="align-center">无相关信息</td>
+				</tr>
+					</#if>
+				</#if>
+			</table>
+		</#if>
+</#if>
+
+	<!-- 4、交易信息 -->
+<#if (templetMap.transactionInfo)??>
+	<p class="section-blue">${templetMap.transactionInfo}</p>
+
+		<#if (templetMap.hxjy)??>
+			<p class="setion-blue-title3">&nbsp;&nbsp;${templetMap.hxjy}</p>
+				<#if merchantTradeInfo?exists>
+				<#if (merchantTradeInfo?size>0)>
+				<table>
+				   <#list merchantTradeInfo as item>
+				<tr>
+					<td class="font_bold">商户名称</td>
+					<td>${item.mName?if_exists}</td>
+					<td class="font_bold">商户编号</td>
+					<td>${item.mid?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">营业执照注册编号</td>
+					<td>${item.busincessCode?if_exists}</td>
+					<td class="font_bold">负责人姓名</td>
+					<td>${item.name?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">负责人手机号码 </td>
+					<td>${item.mobile?if_exists}</td>
+					<td class="font_bold">负责人省份证号</td>
+					<td>${item.cid?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">月还贷能力区间</td>
+					<td>${item.repaymentAbility?if_exists}</td>
+					<td class="font_bold">首次交易日期</td>
+					<td><#if (item.firstTransDate)??>${item.firstTransDate?string("yyyy-MM-dd")}</#if></td>
+				</tr>
+				<tr>
+					<td class="font_bold">交易总金额(元) </td>
+					<td>${item.transAmountTotal?if_exists}</td>
+					<td class="font_bold">交易总笔数</td>
+					<td>${item.transCount?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">交易总人数</td>
+					<td>${item.transPersonCount?if_exists}</td>
+					<td class="font_bold">周均交易天数</td>
+					<td>${item.weekTransAmountAvg?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">周均交易金额(元)</td>
+					<td>${item.weekTransCountAvg?if_exists}</td>
+					<td class="font_bold">周均交易笔数</td>
+					<td>${item.monthDaysAvg?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">周均交易金额(元)</td>
+					<td>${item.num?if_exists}</td>
+					<td class="font_bold">周均交易笔数</td>
+					<td>${item.num?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">笔单价</td>
+					<td>${item.countPrice?if_exists}</td>
+					<td class="font_bold">客单价</td>
+					<td>${item.personPrice?if_exists}</td>
+				</tr>
+				<#if (merchantTradeInfo?size > (item_index + 1))>
+					<tr><td colspan="4">&nbsp;&nbsp;</td></tr>
+				</#if>
+				    </#list>
+				    </table>
+				<#else>
+				<table>
+				<tr>
+              <td>商户名称</td>
+              <td>商户编号</td>
+              <td>营业执照注册编号</td>
+              <td>负责人姓名</td>
+              <td>负责人手机号码</td>
+              <td>负责人身份证</td>
+              <td>月还债能力区间</td>
+              <td>首次交易日期</td>
+              <td>交易总金额(元)</td>
+              <td>交易总笔数</td>
+              <td>交易总人数</td>
+              <td>周均交易金额(元)</td>
+              <td>周均交易笔数</td>
+              <td>月均交易天数</td>
+               <td>笔单价</td>
+              <td>客单价</td>
+				</tr>
+				<tr>
+					<td colspan="16" class="align-center">无相关信息</td>
+				</tr>
+				</table>
+				</#if>
+				</#if>
+		</#if>
+
+		<#if (templetMap.yycjy)??>
+			<p class="setion-blue-title3">&nbsp;&nbsp;${templetMap.yycjy}</p>
+				<#if merchantTradeAbormalInfo?exists>
+				<#if (merchantTradeAbormalInfo?size>0)>
+				<table>
+				   <#list merchantTradeAbormalInfo as item>
+				<tr>
+					<td class="font_bold">反向交易金额(元)</td>
+					<td>${item.revrseTransAmount?if_exists}</td>
+					<td class="font_bold">反向交易笔数</td>
+					<td>${item.peverseTransCount?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">交易金额前五客户的金额占比</td>
+					<td>${item.top5TransAmount?if_exists}</td>
+					<td class="font_bold">交易金额前五客户的笔数占比</td>
+					<td>${item.top5TransCountProp?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">贷记卡的交易总金额(元)</td>
+					<td>${item.creditCardTransAmount?if_exists}</td>
+					<td class="font_bold">贷记卡的交易总笔数 </td>
+					<td>${item.creditCardTransCount?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">非正常时间的交易总笔数</td>
+					<td>${item.transFailedAmount?if_exists}</td>
+					<td class="font_bold">交易失败金额(元)</td>
+					<td>${item.transFailedAmount?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">交易失败笔数</td>
+					<td colspan="3">${item.transFailedCount?if_exists}</td>
+				</tr>
+				<#if (merchantTradeAbormalInfo?size > (item_index + 1))>
+					<tr><td colspan="4">&nbsp;&nbsp;</td></tr>
+				</#if>
+				    </#list>
+				    </table>
+				<#else>
+				<table>
+				<tr>
+              <td>反向交易金额(元)</td>
+              <td>反向交易笔数</td>
+              <td>交易金额前五客户的金额占比</td>
+              <td>交易金额前五客户的笔数占比</td>
+              <td>贷记卡的交易总金额(元)</td>
+              <td>贷记卡的交易总笔数</td>
+              <td>借记卡的交易总笔数</td>
+              <td>借记卡的交易总金额(元)</td>
+              <td>非正常时间的交易总笔数</td>
+              <td>非正常时间的交易总金额(元)</td>
+              <td>交易失败金额(元)</td>
+              <td>交易失败笔数</td>
+				</tr>
+				<tr>
+					<td colspan="12" class="align-center">无相关信息</td>
+				</tr>
+				</table>
+				</#if>
+				</#if>
+		</#if>
+
+		<#if (templetMap.jywdxzb)??>
+			<p class="setion-blue-title3">&nbsp;&nbsp;${templetMap.jywdxzb}</p>
+			<table>
+				<tr>
+					<td>序号</td>
+					<td>低于周均交易金额的周数</td>
+					<td>最近的连续低于周均交易金额的周数</td>
+					<td>交易额峰值常见旬 </td>
+					<td>周交易额中值</td>
+					<td>周均交易金额变异系数</td>
+					<td>周均交易笔数变异系数 </td>
+					<td>月均交易天数变异系数</td>
+				</tr>
+				<#if merchantStabilityInfo?exists>
+					<#if (merchantStabilityInfo?size>0)>
+				   <#list merchantStabilityInfo as item>
+				<tr>
+					<td>${item_index?if_exists+1}</td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+				    </#list>
+					<#else>
+				<tr>
+				<td colspan="8" class="align-center">无相关信息</td>
+				</tr>
+					</#if>
+				</#if>
+			</table>
+		</#if>
+
+		<#if (templetMap.jybhqs)??>
+			<p class="setion-blue-title3">&nbsp;&nbsp;${templetMap.jybhqs}</p>
+			<table>
+				<tr>
+					<td>序号</td>
+					<td>交易金额周均增长率</td>
+					<td>交易笔数周均增长率</td>
+					<td>每周交易金额(元) </td>
+					<td>每周交易笔数</td>
+				</tr>
+				<#if merchantTrandeReportChangeInfo?exists>
+					<#if (merchantTrandeReportChangeInfo?size>0)>
+				   <#list merchantTrandeReportChangeInfo as item>
+				<tr>
+					<td>${item_index?if_exists+1}</td>
+					<td>${item.weekTransAmountGrowthRate?if_exists}</td>
+					<td>${item.weekTransCountGrowthRate?if_exists}</td>
+					<td>${item.weekTransAmounts?if_exists}</td>
+					<td>${item.weekTransCounts?if_exists}</td>
+				</tr>
+				    </#list>
+					<#else>
+				<tr>
+				<td colspan="5" class="align-center">无相关信息</td>
+				</tr>
+					</#if>
+				</#if>
+			</table>
+		</#if>
+
+		<#if (templetMap.bsthxxdb)??>
+			<p class="setion-blue-title3">&nbsp;&nbsp;${templetMap.bsthxxdb}</p>
+			<table>
+				<tr>
+					<td>序号</td>
+					<td>月交易金额(元)</td>
+					<td>月交易金额在本市同行业中的排名</td>
+					<td>月交易笔数 </td>
+					<td>月交易笔数在本市同行业中的排名</td>
+				</tr>
+				<#if merchantTrandeReportConstrastInfo?exists>
+					<#if (merchantTrandeReportConstrastInfo?size>0)>
+				   <#list merchantTrandeReportConstrastInfo as item>
+				<tr>
+					<td>${item_index?if_exists+1}</td>
+					<td>${item.monthAmount?if_exists}</td>
+					<td>${item.monthAmountRank?if_exists}</td>
+					<td>${item.monthCount?if_exists}</td>
+					<td>${item.monthCountRank?if_exists}</td>
+				</tr>
+				    </#list>
+					<#else>
+				<tr>
+				<td colspan="5" class="align-center">无相关信息</td>
+				</tr>
+					</#if>
+				</#if>
+			</table>
+		</#if>
+
+		<#if (templetMap.khdyfb)??>
+			<p class="setion-blue-title3">&nbsp;&nbsp;${templetMap.khdyfb}</p>
+			<table>
+				<tr>
+					<td>序号</td>
+					<td>客户类型</td>
+					<td>金额占比</td>
+					<td>交易笔数占比 </td>
+					<td>交易人数占比</td>
+				</tr>
+				<#if merchantTrandeReportAreaInfo?exists>
+					<#if (merchantTrandeReportAreaInfo?size>0)>
+				   <#list merchantTrandeReportAreaInfo as item>
+				<tr>
+					<td>${item_index?if_exists+1}</td>
+					<td>${item.customerType?if_exists}</td>
+					<td>${item.amountProp?if_exists}</td>
+					<td>${item.countProp?if_exists}</td>
+					<td>${item.personProp?if_exists}</td>
+				</tr>
+				    </#list>
+					<#else>
+				<tr>
+				<td colspan="5" class="align-center">无相关信息</td>
+				</tr>
+					</#if>
+				</#if>
+			</table>
+		</#if>
+
+		<#if (templetMap.khzcd)??>
+			<p class="setion-blue-title3">&nbsp;&nbsp;${templetMap.khzcd}</p>
+			<table>
+				<tr>
+					<td>序号</td>
+					<td>客户类型</td>
+					<td>金额占比</td>
+					<td>交易笔数占比 </td>
+					<td>交易人数占比</td>
+				</tr>
+				<#if merchantTrandeReportLoyaltyInfo?exists>
+					<#if (merchantTrandeReportLoyaltyInfo?size>0)>
+				   <#list merchantTrandeReportLoyaltyInfo as item>
+				<tr>
+					<td>${item_index?if_exists+1}</td>
+					<td>${item.customerType?if_exists}</td>
+					<td>${item.amountProp?if_exists}</td>
+					<td>${item.countProp?if_exists}</td>
+					<td>${item.personProp?if_exists}</td>
+				</tr>
+				    </#list>
+					<#else>
+				<tr>
+				<td colspan="5" class="align-center">无相关信息</td>
+				</tr>
+					</#if>
+				</#if>
+			</table>
+		</#if>
+
+		<#if (templetMap.gys)??>
+			<p class="setion-blue-title3">&nbsp;&nbsp;${templetMap.gys}</p>
+			<table>
+				<tr>
+					<td>序号</td>
+					<td>供应商名称</td>
+					<td>年采购金额(元)</td>
+					<td>采购占比</td>
+					<td>前十名供应商金额合计</td>
+					<td>前十名供应商金额占比</td>
+					<td>年关联交易金额(元)</td>
+				</tr>
+				<#if test?exists>
+					<#if (test?size>0)>
+				   <#list test as item>
+				<tr>
+					<td>${item_index?if_exists+1}</td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+				    </#list>
+					<#else>
+				<tr>
+				<td colspan="7" class="align-center">无相关信息</td>
+				</tr>
+					</#if>
+				</#if>
+			</table>
+		</#if>
+
+		<#if (templetMap.kh)??>
+			<p class="setion-blue-title3">&nbsp;&nbsp;${templetMap.kh}</p>
+			<table>
+				<tr>
+					<td>序号</td>
+					<td>客户名称</td>
+					<td>年采购金额(元)</td>
+					<td>采购占比</td>
+					<td>前十名供应商金额合计</td>
+					<td>前十名供应商金额占比</td>
+					<td>年关联交易金额(元)</td>
+				</tr>
+				<#if test?exists>
+					<#if (test?size>0)>
+				   <#list test as item>
+				<tr>
+					<td>${item_index?if_exists+1}</td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+				    </#list>
+					<#else>
+				<tr>
+				<td colspan="7" class="align-center">无相关信息</td>
+				</tr>
+					</#if>
+				</#if>
+			</table>
+		</#if>
+</#if>
+
+	<!-- 5、高管商旅信息 -->
+<#if (templetMap.executivesBusinessInfo)??>
+	<p class="section-blue">${templetMap.executivesBusinessInfo}</p>
+	<#if (templetMap.legalFly)??>
+	<p class="setion-blue-title2">&nbsp;&nbsp;${templetMap.legalFly}</p>
+
+		<#if (templetMap.frdbcjztcx)??>
+			<p class="setion-blue-title3">&nbsp;&nbsp;&nbsp;&nbsp;${templetMap.frdbcjztcx}</p>
+				<#if test?exists>
+				<#if (test?size>0)>
+				<table>
+				   <#list test as item>
+				<tr>
+					<td class="font_bold">1年飞行次数</td>
+					<td>${item.name?if_exists}</td>
+					<td class="font_bold">飞行月数</td>
+					<td>${item.object?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">最繁忙的月份乘机X次</td>
+					<td>${item.court?if_exists}</td>
+					<td class="font_bold">1年平均折扣</td>
+					<td>${item.statuName?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">商务舱乘机次数</td>
+					<td>${item.num?if_exists}</td>
+					<td class="font_bold">公共舱乘机次数 </td>
+					<td>${item.num?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">经济舱乘机次数</td>
+					<td>${item.court?if_exists}</td>
+					<td class="font_bold">最频繁乘机出发城市</td>
+					<td>${item.statuName?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">最频繁乘机到达城市</td>
+					<td>${item.num?if_exists}</td>
+					<td class="font_bold">最频繁使用天数</td>
+					<td>${item.num?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">国内飞行次数</td>
+					<td>${item.num?if_exists}</td>
+					<td class="font_bold">国外飞行次数</td>
+					<td>${item.num?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">免费次数</td>
+					<td>${item.num?if_exists}</td>
+					<td class="font_bold">平均票价</td>
+					<td>${item.num?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">延误时间</td>
+					<td>${item.num?if_exists}</td>
+					<td class="font_bold">平均延误时间</td>
+					<td>${item.num?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">平均提前多少天出票</td>
+					<td>${item.num?if_exists}</td>
+					<td class="font_bold">最后飞行时间</td>
+					<td>${item.num?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">最后起飞时间</td>
+					<td>${item.num?if_exists}</td>
+					<td class="font_bold">最后起飞城市</td>
+					<td>${item.num?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">飞行的总里数</td>
+					<td colspan="3">${item.num?if_exists}</td>
+
+				</tr>
+				<#if (test?size > (item_index + 1))>
+					<tr><td colspan="4">&nbsp;&nbsp;</td></tr>
+				</#if>
+				    </#list>
+				    </table>
+				<#else>
+				<table>
+				 <tr>
+				      <td>年飞行次数</td>
+              <td>飞行月数</td>
+              <td>最繁忙的月份乘机X次</td>
+              <td>年均折扣</td>
+              <td>商务舱乘机次数</td>
+              <td>公共舱乘机次数</td>
+              <td>经济舱乘机次数</td>
+              <td>最频繁乘机出发城市</td>
+              <td>最频繁乘机到达城市</td>
+              <td>最频繁使用天数</td>
+              <td>国内飞行次数</td>
+              <td>国外飞行次数</td>
+              <td>免费次数</td>
+              <td>平均票价</td>
+              <td>延误时间</td>
+              <td>平均延误时间</td>
+              <td>平均提前多少天出票</td>
+              <td>最后飞行时间</td>
+              <td>最后起飞时间</td>
+              <td>最后起飞城市</td>
+              <td>飞行的总里数</td>
+				 </tr>
+				<tr>
+					<td colspan="21" class="align-center">无相关信息</td>
+				</tr>
+				</table>
+				</#if>
+				</#if>
+		</#if>
+
+		<#if (templetMap.frdbcjswcx)??>
+			<p class="setion-blue-title3">&nbsp;&nbsp;&nbsp;&nbsp;${templetMap.frdbcjswcx}</p>
+			<table>
+				<tr>
+					<td>序号</td>
+					<td>常乘坐舱位</td>
+					<td>城市广泛度</td>
+					<td>飞行次数</td>
+					<td>主要活动城市</td>
+					<td>占总体比</td>
+					<td>飞行的总里数</td>
+					<td>国内飞行次数</td>
+					<td>国外飞行次数</td>
+					<td>平均折扣</td>
+					<td>平均票价</td>
+				</tr>
+				<#if test?exists>
+					<#if (test?size>0)>
+				   <#list test as item>
+				<tr>
+					<td>${item_index?if_exists+1}</td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+				    </#list>
+					<#else>
+				<tr>
+				<td colspan="11" class="align-center">无相关信息</td>
+				</tr>
+					</#if>
+				</#if>
+			</table>
+		</#if>
+	</#if>
+
+	<#if (templetMap.shareholderFly)??>
+	<p class="setion-blue-title2">&nbsp;&nbsp;${templetMap.shareholderFly}</p>
+		<#if (templetMap.kggdztcxfx)??>
+			<p class="setion-blue-title3">&nbsp;&nbsp;&nbsp;&nbsp;${templetMap.kggdztcxfx}</p>
+				<#if test?exists>
+				<#if (test?size>0)>
+				<table>
+				   <#list test as item>
+				<tr>
+					<td class="font_bold">1年飞行次数</td>
+					<td>${item.name?if_exists}</td>
+					<td class="font_bold">飞行月数</td>
+					<td>${item.object?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">最繁忙的月份乘机X次</td>
+					<td>${item.court?if_exists}</td>
+					<td class="font_bold">1年平均折扣</td>
+					<td>${item.statuName?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">商务舱乘机次数</td>
+					<td>${item.num?if_exists}</td>
+					<td class="font_bold">公共舱乘机次数 </td>
+					<td>${item.num?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">经济舱乘机次数</td>
+					<td>${item.court?if_exists}</td>
+					<td class="font_bold">最频繁乘机出发城市</td>
+					<td>${item.statuName?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">最频繁乘机到达城市</td>
+					<td>${item.num?if_exists}</td>
+					<td class="font_bold">最频繁使用天数</td>
+					<td>${item.num?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">国内飞行次数</td>
+					<td>${item.num?if_exists}</td>
+					<td class="font_bold">国外飞行次数</td>
+					<td>${item.num?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">免费次数</td>
+					<td>${item.num?if_exists}</td>
+					<td class="font_bold">平均票价</td>
+					<td>${item.num?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">延误时间</td>
+					<td>${item.num?if_exists}</td>
+					<td class="font_bold">平均延误时间</td>
+					<td>${item.num?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">平均提前多少天出票</td>
+					<td>${item.num?if_exists}</td>
+					<td class="font_bold">最后飞行时间</td>
+					<td>${item.num?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">最后起飞时间</td>
+					<td>${item.num?if_exists}</td>
+					<td class="font_bold">最后起飞城市</td>
+					<td>${item.num?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">飞行的总里数</td>
+					<td colspan="3">${item.num?if_exists}</td>
+				</tr>
+				<#if (test?size > (item_index + 1))>
+					<tr><td colspan="4">&nbsp;&nbsp;</td></tr>
+				</#if>
+				    </#list>
+				    </table>
+				<#else>
+				<table>
+				   <tr>
+					 <td>年飞行次数</td>
+              <td>飞行月数</td>
+              <td>最繁忙的月份乘机X次</td>
+              <td>年均折扣</td>
+              <td>商务舱乘机次数</td>
+              <td>公共舱乘机次数</td>
+              <td>经济舱乘机次数</td>
+              <td>最频繁乘机出发城市</td>
+              <td>最频繁乘机到达城市</td>
+              <td>最频繁使用天数</td>
+              <td>国内飞行次数</td>
+              <td>国外飞行次数</td>
+              <td>免费次数</td>
+              <td>平均票价</td>
+              <td>延误时间</td>
+              <td>平均延误时间</td>
+              <td>平均提前多少天出票</td>
+              <td>最后飞行时间</td>
+              <td>最后起飞时间</td>
+              <td>最后起飞城市</td>
+              <td>飞行的总里数</td>
+				</tr>
+				<tr>
+					<td colspan="21" class="align-center">无相关信息</td>
+				</tr>
+				</table>
+				</#if>
+				</#if>
+		</#if>
+
+		<#if (templetMap.kggdswcx)??>
+			<p class="setion-blue-title3">&nbsp;&nbsp;&nbsp;&nbsp;${templetMap.kggdswcx}</p>
+			<table>
+				<tr>
+					<td>序号</td>
+					<td>常乘坐舱位</td>
+					<td>城市广泛度</td>
+					<td>飞行次数</td>
+					<td>主要活动城市</td>
+					<td>占总体比</td>
+					<td>飞行的总里数</td>
+					<td>国内飞行次数</td>
+					<td>国外飞行次数</td>
+					<td>平均折扣</td>
+					<td>平均票价</td>
+				</tr>
+				<#if test?exists>
+					<#if (test?size>0)>
+				   <#list test as item>
+				<tr>
+					<td>${item_index?if_exists+1}</td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+				    </#list>
+					<#else>
+				<tr>
+				<td colspan="11" class="align-center">无相关信息</td>
+				</tr>
+					</#if>
+				</#if>
+			</table>
+		</#if>
+	</#if>
+</#if>
+
+	<!-- 6、特殊事项 -->
+<#if (templetMap.specialEventInfo)??>
+	<p class="section-blue">${templetMap.specialEventInfo}</p>
+
+	<#if (templetMap.wfwg)??>
+	<p class="setion-blue-title2">&nbsp;&nbsp;${templetMap.wfwg}</p>
+
+		<#if (templetMap.wfwgcpws)??>
+			<p class="setion-blue-title3">&nbsp;&nbsp;&nbsp;&nbsp;${templetMap.wfwgcpws}</p>
+				<#if wfwgcpInfo?exists>
+				<#if (wfwgcpInfo?size>0)>
+				<table>
+				   <#list wfwgcpInfo as item>
+				<tr>
+					<td class="font_bold">裁判文书ID</td>
+					<td>${item.cpwsId?if_exists}</td>
+					<td class="font_bold">审结时间</td>
+					<td>${item.endTime?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">文书类型</td>
+					<td>${item.cpwsId?if_exists}</td>
+					<td class="font_bold">内容</td>
+					<td>${item.content?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">法院名称</td>
+					<td>${item.court?if_exists}</td>
+					<td class="font_bold">案由编码 </td>
+					<td>${item.caseNo?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">标题</td>
+					<td>${item.title?if_exists}</td>
+					<td class="font_bold">案号</td>
+					<td>${item.num?if_exists}</td>
+				</tr>
+				</#list>
+				     </table>
+				<#else>
+				<table>
+				<tr>
+              <td>裁判文书ID</td>
+              <td>审结时间</td>
+              <td>文书类型</td>
+              <td>内容</td>
+              <td>法院名称</td>
+              <td>案由编码</td>
+              <td>标题</td>
+              <td>审判员</td>
+              <td>案号</td>
+				</tr>
+				<tr>
+					<td colspan="9" class="align-center">无相关信息</td>
+				</tr>
+				</table>
+				</#if>
+				</#if>
+		</#if>
+
+		<#if (templetMap.wfwgzxgg)??>
+			<p class="setion-blue-title3">&nbsp;&nbsp;&nbsp;&nbsp;${templetMap.wfwgzxgg}</p>
+				<#if agentCoutEnforceInfo?exists>
+				<#if (agentCoutEnforceInfo?size>0)>
+				<table>
+				   <#list agentCoutEnforceInfo as item>
+				<tr>
+					<td class="font_bold">执行公告ID</td>
+					<td>${item.exeId?if_exists}</td>
+					<td class="font_bold">立案时间</td>
+					<td><#if (item.caseDate)??>${item.caseDate?string("yyyy-MM-dd")}</#if></td>
+				</tr>
+				<tr>
+					<td class="font_bold">内容</td>
+					<td>${item.content?if_exists}</td>
+					<td class="font_bold">标题</td>
+					<td>${item.title?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">执行状态</td>
+					<td>${item.status?if_exists}</td>
+					<td class="font_bold">被执行人姓名 </td>
+					<td>${item.executee?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">执行法院名称</td>
+					<td>${item.court?if_exists}</td>
+					<td class="font_bold">申请人</td>
+					<td>${item.applicant?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">案号</td>
+					<td>${item.caseNo?if_exists}</td>
+					<td class="font_bold">案件状态</td>
+					<td>${item.caseStatus?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">身份证/组织机构代码</td>
+					<td>${item.idCardNo?if_exists}</td>
+					<td class="font_bold">执行标的</td>
+					<td>${item.execMoney?if_exists}</td>
+				</tr>
+				</#list>
+				     </table>
+				<#else>
+				<table>
+				<tr>
+              <td>执行公告ID</td>
+              <td>立案时间</td>
+              <td>内容</td>
+              <td>标题</td>
+              <td>执行状态</td>
+              <td>被执行人姓名</td>
+              <td>执行法院名称</td>
+              <td>申请人</td>
+              <td>案号</td>
+              <td>案件状态</td>
+              <td>身份证/组织结构代码</td>
+              <td>执行标的</td>
+				</tr>
+				<tr>
+					<td colspan="12" class="align-center">无相关信息</td>
+				</tr>
+				</table>
+				</#if>
+				</#if>
+		</#if>
+	</#if>
+
+	<#if (templetMap.fddbrsx)??>
+	<p class="setion-blue-title2">&nbsp;&nbsp;${templetMap.fddbrsx}</p>
+		<#if (templetMap.fdrsxcpws)??>
+			<p class="setion-blue-title3">&nbsp;&nbsp;&nbsp;&nbsp;${templetMap.fdrsxcpws}</p>
+				<#if agentTopLeaderJudgentDocInfo?exists>
+				<#if (agentTopLeaderJudgentDocInfo?size>0)>
+				<table>
+				   <#list agentTopLeaderJudgentDocInfo as item>
+				<tr>
+					<td class="font_bold">裁判文书ID</td>
+					<td>${item.docId?if_exists}</td>
+					<td class="font_bold">审结时间</td>
+					<td><#if (item.date)??>${item.date?string("yyyy-MM-dd")}</#if></td>
+				</tr>
+				<tr>
+					<td class="font_bold">文书类型</td>
+					<td>${item.caseType?if_exists}</td>
+					<td class="font_bold">内容</td>
+					<td>${item.content?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">法院名称</td>
+					<td>${item.court?if_exists}</td>
+					<td class="font_bold">案由编码 </td>
+					<td>${item.caseCauseCode?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">标题</td>
+					<td>${item.title?if_exists}</td>
+					<td class="font_bold">审判员</td>
+					<td>${item.judger?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">案号</td>
+					<td colspan="3">${item.caseNo?if_exists}</td>
+				</tr>
+				</#list>
+				     </table>
+				<#else>
+				<table>
+				<tr>
+              <td>审结时间</td>
+              <td>案件类型</td>
+              <td>案由</td>
+              <td>标题</td>
+              <td>审理程序</td>
+              <td>当事人ID</td>
+              <td>匹配度</td>
+              <td>法院名称</td>
+              <td>裁判文书ID</td>
+              <td>案号</td>
+				</tr>
+				<tr>
+					<td colspan="10" class="align-center">无相关信息</td>
+				</tr>
+				</table>
+				</#if>
+				</#if>
+		</#if>
+
+		<#if (templetMap.fdrsxzxgg)??>
+			<p class="setion-blue-title3">&nbsp;&nbsp;&nbsp;&nbsp;${templetMap.fdrsxzxgg}</p>
+				<#if fdrsxzxInfo?exists>
+				<#if (fdrsxzxInfo?size>0)>
+				<table>
+				   <#list fdrsxzxInfo as item>
+				<tr>
+					<td class="font_bold">执行公告ID</td>
+					<td>${item.statement?if_exists}</td>
+					<td class="font_bold">审结时间</td>
+					<td><#if (item.endTime)??>${item.endTime?string("yyyy-MM-dd")}</#if></td>
+				</tr>
+				<tr>
+					<td class="font_bold">内容</td>
+					<td>${item.content?if_exists}</td>
+					<td class="font_bold">标题</td>
+					<td>${item.title?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">执行状态</td>
+					<td>${item.status?if_exists}</td>
+					<td class="font_bold">申请人 </td>
+					<td>${item.applicant?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">执行法院名称</td>
+					<td>${item.court?if_exists}</td>
+					<td class="font_bold">数据类型</td>
+					<td>${item.caseType?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">案号</td>
+					<td>${item.caseCod?if_exists}</td>
+					<td class="font_bold">案件状态</td>
+					<td>${item.caseStatus?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">身份证/组织机构代码</td>
+					<td>${item.identCardNo?if_exists}</td>
+					<td class="font_bold">执行标的</td>
+					<td>${item.execMony?if_exists}</td>
+				</tr>
+				</#list>
+				     </table>
+				<#else>
+				<table>
+				<tr>
+             <td>执行公告ID</td>
+              <td>立案时间</td>
+              <td>内容</td>
+              <td>标题</td>
+              <td>执行状态</td>
+              <td>被执行人姓名</td>
+              <td>执行法院名称</td>
+              <td>申请人</td>
+              <td>案号</td>
+              <td>案件状态</td>
+              <td>身份证/组织结构代码</td>
+              <td>执行标的</td>
+				</tr>
+				<tr>
+					<td colspan="12" class="align-center">无相关信息</td>
+				</tr>
+				</table>
+				</#if>
+				</#if>
+		</#if>
+
+		<#if (templetMap.fdrsxsxgg)??>
+			<p class="setion-blue-title3">&nbsp;&nbsp;&nbsp;&nbsp;${templetMap.fdrsxsxgg}</p>
+				<#if agentTopLeaderDishonourInfo?exists>
+				<#if (agentTopLeaderDishonourInfo?size>0)>
+				<table>
+				   <#list agentTopLeaderDishonourInfo as item>
+				<tr>
+					<td class="font_bold">失信公告ID</td>
+					<td>${item.dishounrNoticeId?if_exists}</td>
+					<td class="font_bold">立案时间</td>
+					<td><#if (item.caseTime)??>${item.caseTime?string("yyyy-MM-dd")}</#if></td>
+				</tr>
+				<tr>
+					<td class="font_bold">性别</td>
+					<td>${item.dishonourSex?if_exists}</td>
+					<td class="font_bold">被执行人履历情况</td>
+					<td>${item.proformanceStatus?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">执行依据文号</td>
+					<td>${item.documentId?if_exists}</td>
+					<td class="font_bold">执行法院名称</td>
+					<td>${item.court?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">身份证</td>
+					<td>${item.identityId?if_exists}</td>
+					<td class="font_bold">做出执行依据单位</td>
+					<td>${item.enforceBasisUnit?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">数据类型</td>
+					<td>${item.caseType?if_exists}</td>
+					<td class="font_bold">失信被执行人行为具体情形</td>
+					<td>${item.behivourDescrible?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">生效法律文书确定的义务</td>
+					<td>${item.obligition?if_exists}</td>
+					<td class="font_bold">年龄</td>
+					<td>${item.dishonourAge?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">匹配度</td>
+					<td>${item.matchDegree?if_exists}</td>
+					<td class="font_bold">姓名</td>
+					<td>${item.dishonourName?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">省份</td>
+					<td>${item.caseProvince?if_exists}</td>
+					<td class="font_bold">案号</td>
+					<td>${item.caseNo?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">发布时间</td>
+					<td colspan="3"><#if (item.noticeTime)??>${item.noticeTime?string("yyyy-MM-dd")}</#if></td>
+				</tr>
+				</#list>
+				     </table>
+				<#else>
+				<table>
+				<tr>
+              <td>立案时间</td>
+              <td>性别</td>
+              <td>被执行人的履历情况</td>
+              <td>失信公告ID</td>
+              <td>执行依据文号</td>
+              <td>执行法院名称</td>
+              <td>身份证/组织结构代码</td>
+              <td>做出执行依据单位</td>
+              <td>数据类型</td>
+              <td>失信被执行人行为具体情形</td>
+              <td>生效法律文书确定的义务</td>
+              <td>年龄</td>
+              <td>匹配度</td>
+              <td>姓名</td>
+              <td>省份</td>
+              <td>案号</td>
+              <td>发布时间</td>
+				</tr>
+				<tr>
+					<td colspan="17" class="align-center">无相关信息</td>
+				</tr>
+				</table>
+				</#if>
+				</#if>
+		</#if>
+
+		<#if (templetMap.fdrsxwdhmd)??>
+			<p class="setion-blue-title3">&nbsp;&nbsp;&nbsp;&nbsp;${templetMap.fdrsxwdhmd}</p>
+				<#if agentTopLeaderNetloanInfo?exists>
+				<#if (agentTopLeaderNetloanInfo?size>0)>
+				<table>
+				   <#list agentTopLeaderNetloanInfo as item>
+				<tr>
+					<td class="font_bold">网贷黑名单ID</td>
+					<td>${item.blackSheetId?if_exists}</td>
+					<td class="font_bold">贷款时间</td>
+					<td><#if (item.loanTime)??>${item.loanTime?string("yyyy-MM-dd")}</#if></td>
+				</tr>
+				<tr>
+					<td class="font_bold">内容</td>
+					<td>${item.content?if_exists}</td>
+					<td class="font_bold">性别</td>
+					<td>${item.ownerSex?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">居住电话</td>
+					<td>${item.ownerHomePhone?if_exists}</td>
+					<td class="font_bold">信息更新时间</td>
+					<td><#if (item.ownerInforUpdateTime)??>${item.ownerInforUpdateTime?string("yyyy-MM-dd")}</#if></td>
+				</tr>
+				<tr>
+					<td class="font_bold">执行法院</td>
+					<td>${item.court?if_exists}</td>
+					<td class="font_bold">相关当事人</td>
+					<td>${item.litigant?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">未还/罚息</td>
+					<td>${item.debt?if_exists}</td>
+					<td class="font_bold">身份证号</td>
+					<td>${item.ownerIdentityNo?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">籍贯地址</td>
+					<td>${item.ownerHomeTownAddress?if_exists}</td>
+					<td class="font_bold">本金/本息</td>
+					<td>${item.principle?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">案号</td>
+					<td>${item.caseNo?if_exists}</td>
+					<td class="font_bold">居住地址</td>
+					<td>${item.ownerAddress?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">邮箱地址</td>
+					<td>${item.ownerPostAddress?if_exists}</td>
+					<td class="font_bold">来源单位名称</td>
+					<td>${item.ownerUnit?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">年龄</td>
+					<td>${item.ownerAge?if_exists}</td>
+					<td class="font_bold">姓名</td>
+					<td>${item.ownerName?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">数据源</td>
+					<td>${item.source?if_exists}</td>
+					<td class="font_bold">已还金额(元)</td>
+					<td>${item.paidMoney?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">手机号</td>
+					<td colspan="3">${item.ownerMobileNumber?if_exists}</td>
+				</tr>
+				</#list>
+				     </table>
+				<#else>
+				<table>
+				<tr>
+				<td>网贷黑名单ID</td>
+              <td>贷款时间</td>
+              <td>内容</td>
+              <td>性别</td>
+              <td>居住电话</td>
+              <td>信息更新时间</td>
+              <td>执行法院</td>
+              <td>相关当事人</td>
+              <td>未还/罚息</td>
+              <td>身份证号</td>
+               <td>籍贯地址</td>
+              <td>本金/本息</td>
+              <td>案号</td>
+              <td>居住地址</td>
+              <td>邮箱地址</td>
+              <td>来源单位名称</td>
+              <td>姓名</td>
+              <td>年龄</td>
+               <td>数据源</td>
+              <td>已还金额(元)</td>
+				</tr>
+				<tr>
+					<td colspan="20" class="align-center">无相关信息</td>
+				</tr>
+				</table>
+				</#if>
+				</#if>
+		</#if>
+
+		<#if (templetMap.fdrsxbgt)??>
+			<p class="setion-blue-title3">&nbsp;&nbsp;&nbsp;&nbsp;${templetMap.fdrsxbgt}</p>
+				<#if agentTopLeaderCourtExposInfo?exists>
+				<#if (agentTopLeaderCourtExposInfo?size>0)>
+				<table>
+				   <#list agentTopLeaderCourtExposInfo as item>
+				<tr>
+					<td class="font_bold">曝光台ID</td>
+					<td>${item.exposureId?if_exists}</td>
+					<td class="font_bold">立案日期</td>
+					<td><#if (item.caseDate)??>${item.caseDate?string("yyyy-MM-dd")}</#if></td>
+				</tr>
+				<tr>
+					<td class="font_bold">内容</td>
+					<td>${item.content?if_exists}</td>
+					<td class="font_bold">曝光日期</td>
+					<td><#if (item.exposureDate)??>${item.exposureDate?string("yyyy-MM-dd")}</#if></td>
+				</tr>
+				<tr>
+					<td class="font_bold">当事人类型</td>
+					<td>${item.ownerType?if_exists}</td>
+					<td class="font_bold">法院名称</td>
+					<td>${item.court?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">申请人</td>
+					<td>${item.applicant?if_exists}</td>
+					<td class="font_bold">身份证/组织结构代码</td>
+					<td>${item.ownerIdentCardNo?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">案由</td>
+					<td>${item.caseCause?if_exists}</td>
+					<td class="font_bold">未执行金额(元)</td>
+					<td>${item.ownedMoney?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">地址</td>
+					<td>${item.ownerAddress?if_exists}</td>
+					<td class="font_bold">当事人</td>
+					<td>${item.litigant?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">案号</td>
+					<td>${item.caseNo?if_exists}</td>
+					<td class="font_bold">依据</td>
+					<td>${item.basis?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">标的金额(元)</td>
+					<td colspan="3">${item.applyMoney?if_exists}</td>
+				</tr>
+				</#list>
+				     </table>
+				<#else>
+				<table>
+				<tr>
+              <td>曝光台ID</td>
+              <td>立案时间</td>
+              <td>内容</td>
+              <td>曝光时间</td>
+              <td>当事人类型</td>
+              <td>法院名称</td>
+              <td>申请人</td>
+              <td>身份证/组织机构代码</td>
+              <td>案由</td>
+              <td>未执行金额(元)</td>
+              <td>地址</td>
+              <td>当事人</td>
+              <td>案号</td>
+              <td>依据</td>
+               <td>标的金额(元)</td>
+				</tr>
+				<tr>
+					<td colspan="15" class="align-center">无相关信息</td>
+				</tr>
+				</table>
+				</#if>
+				</#if>
+		</#if>
+	</#if>
+
+	<#if (templetMap.kggdsx)??>
+	<p class="setion-blue-title2">&nbsp;&nbsp;${templetMap.kggdsx}</p>
+
+		<#if (templetMap.kggdsxcpws)??>
+			<p class="setion-blue-title3">&nbsp;&nbsp;&nbsp;&nbsp;${templetMap.kggdsxcpws}</p>
+				<#if agentStockHolderJudgentDocInfo?exists>
+				<#if (agentStockHolderJudgentDocInfo?size>0)>
+				<table>
+				   <#list agentStockHolderJudgentDocInfo as item>
+				<tr>
+					<td class="font_bold">文书类型</td>
+					<td>${item.caseType?if_exists}</td>
+					<td class="font_bold">内容</td>
+					<td>${item.content?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">法院名称</td>
+					<td>${item.court?if_exists}</td>
+					<td class="font_bold">案由编码 </td>
+					<td>${item.caseCauseCode?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">标题</td>
+					<td>${item.title?if_exists}</td>
+					<td class="font_bold">审判员</td>
+					<td>${item.judger?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">案号</td>
+					<td colspan="12">${item.caseNo?if_exists}</td>
+				</tr>
+				</#list>
+				     </table>
+				<#else>
+				<table>
+				<tr>
+              <td>案由</td>
+              <td>标题</td>
+              <td>审理程序</td>
+              <td>当事人ID</td>
+              <td>匹配度</td>
+              <td>法院名称</td>
+              <td>裁判文书ID</td>
+              <td>案号</td>
+				</tr>
+				<tr>
+					<td colspan="8" class="align-center">无相关信息</td>
+				</tr>
+				</table>
+				</#if>
+				</#if>
+		</#if>
+
+		<#if (templetMap.kggdsxzxgg)??>
+			<p class="setion-blue-title3">&nbsp;&nbsp;&nbsp;&nbsp;${templetMap.kggdsxzxgg}</p>
+				<#if agentStockHolderEexdocInfo?exists>
+				<#if (agentStockHolderEexdocInfo?size>0)>
+				<table>
+				   <#list agentStockHolderEexdocInfo as item>
+				<tr>
+					<td class="font_bold">执行公告ID</td>
+					<td>${item.statement?if_exists}</td>
+					<td class="font_bold">审结时间</td>
+					<td><#if (item.endTime)??>${item.endTime?string("yyyy-MM-dd")}</#if></td>
+				</tr>
+				<tr>
+					<td class="font_bold">内容</td>
+					<td>${item.content?if_exists}</td>
+					<td class="font_bold">标题</td>
+					<td>${item.title?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">执行状态</td>
+					<td>${item.status?if_exists}</td>
+					<td class="font_bold">申请人 </td>
+					<td>${item.applicant?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">执行法院名称</td>
+					<td>${item.court?if_exists}</td>
+					<td class="font_bold">数据类型</td>
+					<td>${item.caseType?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">案号</td>
+					<td>${item.caseCod?if_exists}</td>
+					<td class="font_bold">案件状态</td>
+					<td>${item.caseStatus?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">身份证/组织机构代码</td>
+					<td>${item.identCardNo?if_exists}</td>
+					<td class="font_bold">执行标的</td>
+					<td>${item.execMony?if_exists}</td>
+				</tr>
+				   </#list>
+				     </table>
+				<#else>
+				<table>
+					<tr>
+              <td>执行公告ID</td>
+              <td>立案时间</td>
+              <td>内容</td>
+              <td>标题</td>
+              <td>执行状态</td>
+              <td>被执行人姓名</td>
+              <td>执行法院名称</td>
+              <td>申请人</td>
+              <td>案号</td>
+              <td>案件状态</td>
+              <td>身份证/组织结构代码</td>
+              <td>执行标的</td>
+				</tr>
+				<tr>
+					<td colspan="12" class="align-center">无相关信息</td>
+				</tr>
+				</table>
+				 </#if>
+				</#if>
+		</#if>
+
+		<#if (templetMap.kggdsxsxgg)??>
+			<p class="setion-blue-title3">&nbsp;&nbsp;&nbsp;&nbsp;${templetMap.kggdsxsxgg}</p>
+				<#if agentStockHolderDishonourInfo?exists>
+				<#if (agentStockHolderDishonourInfo?size>0)>
+				<table>
+				   <#list agentStockHolderDishonourInfo as item>
+				<tr>
+					<td class="font_bold">失信公告ID</td>
+					<td>${item.dishounrNoticeId?if_exists}</td>
+					<td class="font_bold">立案时间</td>
+					<td><#if (item.caseTime)??>${item.caseTime?string("yyyy-MM-dd")}</#if></td>
+				</tr>
+				<tr>
+					<td class="font_bold">性别</td>
+					<td>${item.dishonourSex?if_exists}</td>
+					<td class="font_bold">被执行人履历情况</td>
+					<td>${item.statuName?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">执行依据文号</td>
+					<td>${item.documentId?if_exists}</td>
+					<td class="font_bold">执行法院名称</td>
+					<td>${item.court?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">身份证</td>
+					<td>${item.identityId?if_exists}</td>
+					<td class="font_bold">做出执行依据单位</td>
+					<td>${item.enforceBasisUnit?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">数据类型</td>
+					<td>${item.caseType?if_exists}</td>
+					<td class="font_bold">失信被执行人行为具体情形</td>
+					<td>${item.behivourDescrible?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">生效法律文书确定的义务</td>
+					<td>${item.obligition?if_exists}</td>
+					<td class="font_bold">年龄</td>
+					<td>${item.dishonourAge?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">匹配度</td>
+					<td>${item.matchDegree?if_exists}</td>
+					<td class="font_bold">姓名</td>
+					<td>${item.dishonourName?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">省份</td>
+					<td>${item.caseProvince?if_exists}</td>
+					<td class="font_bold">案号</td>
+					<td>${item.caseNo?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">发布时间</td>
+					<td colspan="3"><#if (item.noticeTime)??>${item.noticeTime?string("yyyy-MM-dd")}</#if></td>
+				</tr>
+				  </#list>
+				     </table>
+				<#else>
+				<table>
+				<tr>
+               <td>立案时间</td>
+              <td>性别</td>
+              <td>被执行人的履历情况</td>
+              <td>失信公告ID</td>
+              <td>执行依据文号</td>
+              <td>执行法院名称</td>
+              <td>身份证/组织结构代码</td>
+              <td>做出执行依据单位</td>
+              <td>数据类型</td>
+              <td>失信被执行人行为具体情形</td>
+              <td>生效法律文书确定的义务</td>
+              <td>年龄</td>
+              <td>匹配度</td>
+              <td>姓名</td>
+              <td>省份</td>
+              <td>案号</td>
+              <td>发布时间</td>
+				</tr>
+				<tr>
+					<td colspan="17" class="align-center">无相关信息</td>
+				</tr>
+				</table>
+				</#if>
+				</#if>
+		</#if>
+
+		<#if (templetMap.kggdsxwdhmd)??>
+			<p class="setion-blue-title3">&nbsp;&nbsp;&nbsp;&nbsp;${templetMap.kggdsxwdhmd}</p>
+				<#if agentStockHolderNetloanInfo?exists>
+				<#if (agentStockHolderNetloanInfo?size>0)>
+				<table>
+				   <#list agentStockHolderNetloanInfo as item>
+				<tr>
+					<td class="font_bold">网贷黑名单ID</td>
+					<td>${item.blackSheetId?if_exists}</td>
+					<td class="font_bold">贷款时间</td>
+					<td><#if (item.loanTime)??>${item.loanTime?string("yyyy-MM-dd")}</#if></td>
+				</tr>
+				<tr>
+					<td class="font_bold">内容</td>
+					<td>${item.content?if_exists}</td>
+					<td class="font_bold">性别</td>
+					<td>${item.ownerSex?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">居住电话</td>
+					<td>${item.ownerHomePhone?if_exists}</td>
+					<td class="font_bold">信息更新时间</td>
+					<td><#if (item.ownerInforUpdateTime)??>${item.ownerInforUpdateTime?string("yyyy-MM-dd")}</#if></td>
+				</tr>
+				<tr>
+					<td class="font_bold">执行法院</td>
+					<td>${item.court?if_exists}</td>
+					<td class="font_bold">相关当事人</td>
+					<td>${item.litigant?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">未还/罚息</td>
+					<td>${item.debt?if_exists}</td>
+					<td class="font_bold">身份证号</td>
+					<td>${item.ownerIdentityNo?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">籍贯地址</td>
+					<td>${item.ownerHomeTownAddress?if_exists}</td>
+					<td class="font_bold">本金/本息</td>
+					<td>${item.principle?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">案号</td>
+					<td>${item.caseNo?if_exists}</td>
+					<td class="font_bold">居住地址</td>
+					<td>${item.ownerAddress?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">邮箱地址</td>
+					<td>${item.ownerPostAddress?if_exists}</td>
+					<td class="font_bold">来源单位名称</td>
+					<td>${item.ownerUnit?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">年龄</td>
+					<td>${item.ownerAge?if_exists}</td>
+					<td class="font_bold">姓名</td>
+					<td>${item.ownerName?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">数据源</td>
+					<td>${item.source?if_exists}</td>
+					<td class="font_bold">已坏金额(元)</td>
+					<td>${item.paidMoney?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">手机号</td>
+					<td colspan="3">${item.ownerMobileNumber?if_exists}</td>
+				</tr>
+				</#list>
+				     </table>
+				<#else>
+				<table>
+				<tr>
+             <td>网贷黑名单ID</td>
+              <td>贷款时间</td>
+              <td>内容</td>
+              <td>性别</td>
+              <td>居住电话</td>
+              <td>信息更新时间</td>
+              <td>执行法院</td>
+              <td>相关当事人</td>
+              <td>未还/罚息</td>
+              <td>身份证号</td>
+               <td>籍贯地址</td>
+              <td>本金/本息</td>
+              <td>案号</td>
+              <td>居住地址</td>
+              <td>邮箱地址</td>
+              <td>来源单位名称</td>
+              <td>姓名</td>
+              <td>年龄</td>
+               <td>数据源</td>
+              <td>已还金额(元)</td>
+				</tr>
+				<tr>
+					<td colspan="20" class="align-center">无相关信息</td>
+				</tr>
+				</table>
+				 </#if>
+				</#if>
+		</#if>
+	</#if>
+	
+	<#if (templetMap.qtbl)??>
+	<p class="setion-blue-title2">&nbsp;&nbsp;${templetMap.qtbl}</p>
+		<#if (templetMap.qtblalqd)??>
+			<p class="setion-blue-title3">&nbsp;&nbsp;&nbsp;&nbsp;${templetMap.qtblalqd}</p>
+				<#if agentAliloadBreakInfo?exists>
+				<#if (agentAliloadBreakInfo?size>0)>
+				<table>
+				   <#list agentAliloadBreakInfo as item>
+				<tr>
+					<td class="font_bold">省份</td>
+					<td>${item.province?if_exists}</td>
+					<td class="font_bold">发布时间</td>
+					<td><#if (item.exposureTime)??>${item.exposureTime?string("yyyy-MM-dd")}</#if></td>
+				</tr>
+				<tr>
+					<td class="font_bold">欠款额度(元)</td>
+					<td>${item.ownedMoney?if_exists}</td>
+					<td class="font_bold">违约情况</td>
+					<td>${item.brief?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">贷款到期时间</td>
+					<td><#if (item.loanDate)??>${item.loanDate?string("yyyy-MM-dd")}</#if></td>
+					<td class="font_bold">淘宝账户</td>
+					<td>${item.taobaoAccount?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">法定代表人</td>
+					<td>${item.juridicalPerson?if_exists}</td>
+					<td class="font_bold">贷款期限</td>
+					<td>${item.loanDueTime?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">被执行人姓名</td>
+					<td>${item.ownedName?if_exists}</td>
+					<td class="font_bold">性别</td>
+					<td>${item.ownerSex?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">年龄</td>
+					<td>${item.ownerAge?if_exists}</td>
+					<td class="font_bold">身份证/工商注册号</td>
+					<td>${item.ownerIdentityCardId?if_exists}</td>
+				</tr>
+				    </#list>
+				     </table>
+				<#else>
+				<table>
+				<tr>
+              <td>省份</td>
+              <td>发布时间</td>
+              <td>欠款额度(元)</td>
+              <td>违约情况</td>
+              <td>货到款时间</td>
+              <td>淘宝账户</td>
+              <td>法定代表人</td>
+              <td>贷款期限</td>
+              <td>被执行姓名</td>
+              <td>性别</td>
+              <td>年龄</td>
+              <td>身份证/工商注册号</td>
+				</tr>
+				<tr>
+					<td colspan="12" class="align-center">无相关信息</td>
+				</tr>
+				</table>
+				</#if>
+				</#if>
+		</#if>
+
+		<#if (templetMap.qtblwdhmd)??>
+			<p class="setion-blue-title3">&nbsp;&nbsp;&nbsp;&nbsp;${templetMap.qtblwdhmd}</p>
+				<#if agentotherNetloanInfo?exists>
+				<#if (agentotherNetloanInfo?size>0)>
+				<table>
+				   <#list agentotherNetloanInfo as item>
+				<tr>
+					<td class="font_bold">网贷黑名单ID</td>
+					<td>${item.blackSheetId?if_exists}</td>
+					<td class="font_bold">贷款时间</td>
+					<td><#if (item.loanDate)??>${item.loanDate?string("yyyy-MM-dd")}</#if></td>
+				</tr>
+				<tr>
+					<td class="font_bold">内容</td>
+					<td>${item.content?if_exists}</td>
+					<td class="font_bold">性别</td>
+					<td>${item.ownerSex?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">居住电话</td>
+					<td>${item.ownerHomePhone?if_exists}</td>
+					<td class="font_bold">信息更新时间</td>
+					<td><#if (item.ownerInforUpdateTime)??>${item.ownerInforUpdateTime?string("yyyy-MM-dd")}</#if></td>
+				</tr>
+				<tr>
+					<td class="font_bold">执行法院</td>
+					<td>${item.court?if_exists}</td>
+					<td class="font_bold">相关当事人</td>
+					<td>${item.litigant?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">未还/罚息</td>
+					<td>${item.debt?if_exists}</td>
+					<td class="font_bold">身份证号</td>
+					<td>${item.ownerIdentityNo?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">籍贯地址</td>
+					<td>${item.ownerHomeTownAddress?if_exists}</td>
+					<td class="font_bold">本金/本息</td>
+					<td>${item.principle?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">案号</td>
+					<td>${item.caseNo?if_exists}</td>
+					<td class="font_bold">居住地址</td>
+					<td>${item.ownerAddress?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">邮箱地址</td>
+					<td>${item.ownerPostAddress?if_exists}</td>
+					<td class="font_bold">来源单位名称</td>
+					<td>${item.ownerUnit?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">年龄</td>
+					<td>${item.ownerAge?if_exists}</td>
+					<td class="font_bold">姓名</td>
+					<td>${item.ownerName?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">数据源</td>
+					<td>${item.source?if_exists}</td>
+					<td class="font_bold">已坏金额(元)</td>
+					<td>${item.paidMoney?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">手机号</td>
+					<td colspan="3">${item.ownerMobileNumber?if_exists}</td>
+				</tr>
+				    </#list>
+				     </table>
+				<#else>
+				<table>
+				<tr>
+              <td>网贷黑名单ID</td>
+              <td>贷款时间</td>
+              <td>内容</td>
+              <td>性别</td>
+              <td>居住电话</td>
+              <td>信息更新时间</td>
+              <td>执行法院</td>
+              <td>相关当事人</td>
+              <td>未还/罚息</td>
+              <td>身份证号</td>
+               <td>籍贯地址</td>
+              <td>本金/本息</td>
+              <td>案号</td>
+              <td>居住地址</td>
+              <td>邮箱地址</td>
+              <td>来源单位名称</td>
+              <td>姓名</td>
+              <td>年龄</td>
+               <td>数据源</td>
+              <td>已还金额(元)</td>
+				</tr>
+				<tr>
+					<td colspan="20" class="align-center">无相关信息</td>
+				</tr>
+				</table>
+				</#if>
+				</#if>
+		</#if>
+	</#if>
+</#if>
+
+	<!-- 7、法院被执行 -->
+<#if (templetMap.courtInfo)??>
+		<p class="section-blue">${templetMap.courtInfo}</p>
+		<#if (templetMap.special)??>
+			<p class="setion-blue-title2">&nbsp;&nbsp;${templetMap.special}</p>
+				<#if specialInfo?exists>
+				<#if (specialInfo?size>0)>
+				<table>
+				   <#list specialInfo as item>
+				<tr>
+					<td class="font_bold">被执行人名称</td>
+					<td>${item.name?if_exists}</td>
+					<td class="font_bold">执行标的</td>
+					<td>${item.object?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">执行法院</td>
+					<td>${item.court?if_exists}</td>
+					<td class="font_bold">案件状态</td>
+					<td>${item.statuName?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">案 号</td>
+					<td>${item.num?if_exists}</td>
+					<td class="font_bold">立案时间 </td>
+					<td><#if (item.caseDate)??>${item.caseDate?string("yyyy-MM-dd")}</#if></td>
+				</tr>
+				<tr>
+					<td class="font_bold">性别</td>
+					<td>${item.sex?if_exists}</td>
+					<td class="font_bold">年龄</td>
+					<td>${item.ageStr?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">省份证号</td>
+					<td>${item.cardNumber?if_exists}</td>
+					<td class="font_bold">身份证始发地</td>
+					<td>${item.indentityDepature?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">法定代表人</td>
+					<td>${item.head?if_exists}</td>
+					<td class="font_bold">省份</td>
+					<td>${item.province?if_exists}</td>
+				</tr>
+				<tr>
+					<td class="font_bold">信息获取日期 </td>
+					<td colspan="3"><#if (item.getinfoDate)??>${item.getinfoDate?string("yyyy-MM-dd")}</#if></td>
+				</tr>
+				<#if (specialInfo?size > (item_index + 1))>
+					<tr><td colspan="4">&nbsp;&nbsp;</td></tr>
+				</#if>
+				    </#list>
+				    <tr>
+					<td>提 示 </td>
+					<td colspan="3" class="align-left">1、执行状态分未执行完毕、不予执行、执行完毕、终结执行四种；<br/>
+					2、案件是否执行完毕以"执行状态"为准，"执行状态"标记为"执行完毕"表示该案件已结案；<br/>
+					3、本报告保留案件的历史信息，标记为"执行完毕"的案件，"未执行标的"仍将显示；<br/>
+					4、"未执行标的"显示为1元的，表示该案件申请的是行为执行。</td>
+					</tr>
+					</table>
+				<#else>
+				<table>
+				<tr>
+				<td>被执行人姓名</td>
+				<td>执行标的</td>
+				<td>执行法院</td>
+				<td>案件状态</td>
+				<td>案号</td>
+				<td>立案时间</td>
+				<td>性别</td>
+				<td>年龄</td>
+				<td>省份证号</td>
+				<td>省份证始发地</td>
+				<td>法定代表人</td>
+				<td>省份</td>
+				<td>信息获取日期</td>
+				</tr>
+				<tr>
+					<td colspan="13" class="align-center">无相关信息</td>
+				</tr>
+				</table>
+				</#if>
+				</#if>
+		</#if>
+</#if>
+
+<#if templetMap.scoreInfo?exists> 
+	<p class="section-blue">${templetMap.scoreInfo}</p>
+	<#if templetMap.pfzb??>
+		<p class="setion-blue-title2">&nbsp;&nbsp;${templetMap.pfzb}</p>
+		<table>
+			<tr>
+				<td></td>
+				<td>基础信息</td>
+				<td>特殊事项</td>
+				<td>交易行为</td>
+				<td>履约能力</td>
+			</tr>
+			<#if scoreWeight?exists> 
+				<#if (scoreWeight?size>0)>
+			   <#list scoreWeight as item>
+			<tr>
+				<td>${item.itemName?if_exists}</td>
+				<td>${item.base?if_exists}</td>
+				<td>${item.special?if_exists}</td>
+				<td>${item.behavior?if_exists}</td>
+				<td>${item.capacity?if_exists}</td>
+			</tr>
+			    </#list> 
+				<#else>
+			<tr>
+			<td colspan="6" class="align-center">无相关信息</td>
+			</tr>
+				</#if>
+			</#if>
+		</table>
+		<p>备注： 详细信息请参考评分指标报告</p>
+	</#if>
+</#if>
+		
+	<#if declareList?exists>
+		<#if (declareList?size>0)>
+		<p class="section-red">重要声明</p>
+		<ul>
+			<#list declareList as item>
+			<li>${item}</li>
+			</#list>
+		</ul>
+		</#if>
+	</#if>
+	</body>
+</html>

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title></title>
+<style type="text/css">
+body {
+	font-family: simsun;
+	font-size: 14px;
+}
+
+.font_16 {
+	font-size: 20px;
+}
+
+.align-left {
+	text-align: left;
+}
+
+.align-right {
+	text-align: right;
+}
+
+.align-center {
+	text-align: center;
+}
+
+.title {
+	width: 100%;
+	font-size: 32px;
+}
+
+.section-blue {
+	font-size: 20px;
+	color: blue;
+}
+
+.section-red {
+	font-size: 20px;
+	color: red;
+}
+
+table {
+	width: 100%;
+	border-collapse: collapse;
+	border-spacing: 0;
+	border-left: 1px solid #000;
+	border-top: 1px solid #000;
+	text-align: center;
+}
+
+th, td {
+	border-right: 1px solid #000;
+	border-bottom: 1px solid #000;
+	padding: 5px 2px;
+	font-size: 14px;
+}
+
+th {
+	font-weight: bold;
+}
+.max-width1 {
+	width: 15%;
+}
+.max-width2 {
+	width: 8%;
+}
+.max-width3 {
+	width: 10%;
+}
+.desc_div {
+	border: 1px solid;
+}
+.li_style{
+	list-style:none;
+}
+</style>
+</head>
+<body>
+	<h1 class="title align-center">${compName?if_exists}<br/>评分报告</h1>
+	<p class="align-right font_16"><span class="font_bold">算法名称：${algor?if_exists}</span></p>
+	<table>
+		<tr>
+			<th class="max-width1">指标大类</th>
+			<th>指标小类</th>
+			<th>指标名称</th>
+			<th class="max-width1">行业属性</th>
+			<th class="max-width2">权重</th>
+			<th class="max-width3">得分</th>
+		</tr>
+		<tr>
+			<td>${totalLevelName?if_exists}</td>
+			<td colspan="3"></td>
+			<td>${totalLevelWeight?if_exists}</td>
+			<td>${totalLevelScore?if_exists}</td>
+		</tr>
+		<#if rows?exists>
+		<#list rows as item>
+		<tr>
+			<#if (item.topLevel)??>
+			<td rowspan="${item.topLevelcount?if_exists}" class="align-left">${item.topLevel}</td>
+			</#if>
+			<#if (item.firstLevel)??>
+			<td rowspan="${item.firstLevelcount?if_exists}" class="align-left">${item.firstLevel}</td>
+			</#if>
+			<td>${item.secondLevelName?if_exists}</td>
+			<td>${item.indAttr?if_exists}</td>
+			<td>${item.secondLevelWeight?if_exists}</td>
+			<td>${item.secondLevelScore?if_exists}</td>
+		</tr>
+		</#list> 
+		</#if>
+	</table>
+	<#if desc?exists> 
+		<#if (desc?size>0)>
+	<p class="section-red">备注</p>
+	<ul style="margin-left: -30px;">
+		<#list desc as item>
+		<li>${item?if_exists}</li>
+		</#list> 
+	</ul>
+		</#if>
+	</#if>
+</body>
+</html>

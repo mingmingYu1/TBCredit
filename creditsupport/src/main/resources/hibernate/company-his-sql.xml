@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>  
+<!DOCTYPE dynamic-hibernate-statement SYSTEM "classpath://hibernate/dynamic-hibernate-statement-1.0.dtd">
+<dynamic-hibernate-statement>  
+    <!-- 查询高管历史信息 -->
+    <hql-query name="companyHisDao.getTopManagerInfoHis">
+   	<![CDATA[from TopManagerInfoHisEntity where fileNo='${fileNo}']]>  
+    </hql-query>
+    
+    
+    
+    <!-- 查询对外股权投资历史信息 -->
+    <hql-query name="companyHisDao.getOthEntInvestsInfoHis">
+   	<![CDATA[from OthEntInvestsInfoHisEntity where fileNo='${fileNo}']]>  
+    </hql-query>
+    
+    <!-- 查询个指标大类的得分和权重历史信息 -->
+    <hql-query name="companyHisDao.getBasicIndiScoreHis">
+   	<![CDATA[from BasicIndiScoreHisEntity where fileNo='${fileNo}']]>  
+    </hql-query>
+    
+    <!-- 查询裁判文书信息记录 -->
+     <hql-query name="companyHisDao.getJudgementDocmentHis">
+   	<![CDATA[from AgentTopLeaderJudgementDocumentHisEntity where fileNo = ? and CASE_OWNER_TYPE = ?]]>  
+    </hql-query>
+    
+    <!-- 查询执行公告信息记录 -->
+     <hql-query name="companyHisDao.getExecuteDocHis">
+   	<![CDATA[from AgentTopLeaderExecuteDocHisEntity where fileNo = ? and CASE_OWNER_TYPE = ?]]>  
+    </hql-query>
+    
+    <!-- 查询失信公告信息记录 -->
+     <hql-query name="companyHisDao.getDishonourNoticHis">
+   	<![CDATA[from AgentTopleaderDishonourNoticHisEntity where fileNo = ? and CASE_OWNER_TYPE = ?]]>  
+    </hql-query>
+    
+    <!-- 查询网贷黑名单信息记录 -->
+     <hql-query name="companyHisDao.getNetloadHis">
+   	<![CDATA[from AgentTopleaderNetloanHisEntity where fileNo = ? and CASE_OWNER_TYPE = ?]]>  
+    </hql-query>
+    
+    <!-- 查询曝光台信息记录 -->
+     <hql-query name="companyHisDao.getCourtExposeHis">
+   	<![CDATA[from AgentTopleaderCourExposureHisEntity where fileNo = ? and CASE_OWNER_TYPE = ?]]>  
+    </hql-query>
+    
+    <!-- 查询法人任职信息 -->
+     <hql-query name="companyHisDao.getLegPerHis">
+   	<![CDATA[from LegPerInfoHisEntity where fileNo = ?]]>  
+    </hql-query>
+    
+    <!-- 查询法人投资信息 -->
+    <sql-query name="companyHisDao.getLegPerQuityHis">
+   	<![CDATA[
+		SELECT distinct ste.reg_id regId, ste.ENT_NAME entName, ste.REG_CAP regCap, ste.CASH_RATE cashRate,
+			ste.NAME name, ste.REG_NO regNo, ste.ENT_TYPE entType,ste.CUR_TYPE curType,ste.CANCEL_TIME cancelTime,
+			ste.REVOKE_TIME revokeTime,ste.REG_ORG regOrg,ste.SUBSCRIBE_CON_CUR_TYPE subscribeConCurType,ste.OPERATION_TIME operationTime,
+			ste.SUB_CONAM subConam,ste.ENT_STATUS entStatus,dit.NAME curTypeName
+		FROM credit_db.ods_leg_per_equity_his ste
+		LEFT JOIN credit_db.ods_dict dit ON ste.cur_type = dit.VALUE AND dit.CATEGORY = '100005'
+		WHERE ste.file_no='${fileNo}'
+	]]>  
+    </sql-query>
+    
+    
+    <!-- 查询企业联系地址历史记录 -->
+    <sql-query name="companyHisDao.getEntAttrInfoHis">
+   	<![CDATA[
+		SELECT id, ea.reg_id regId, ea.file_no fileNo, ea.create_time createTime,
+			ea.district, ea.addr, ea.tel, ea.post, ea.type, dit.NAME typeName 
+		FROM credit_db.ods_ent_attr_info_his ea
+		LEFT JOIN (SELECT NAME, VALUE FROM credit_db.ods_dict WHERE CATEGORY = '100010') dit
+			ON ea.type = dit.VALUE WHERE ea.file_no='${fileNo}'
+	]]>  
+    </sql-query>
+    
+    <!-- 查询法院历史记录 -->
+    <sql-query name="companyHisDao.getSpecialInfoHis">
+   	<![CDATA[
+		SELECT si.reg_id regId, si.name, si.object, si.court, si.num, si.case_date caseDate,
+			si.getinfo_date getinfoDate, si.status statuName 
+		FROM credit_db.ods_special_info_his si
+		WHERE si.file_no='${fileNo}'
+	]]>  
+    </sql-query>
+    
+    <!-- 查询法人历史记录 -->
+    <sql-query name="companyHisDao.getLegPerInfoHis">
+   	<![CDATA[
+		SELECT lpe.reg_id regId, lpe.org_name orgName, lpe.type type,
+			lpe.position, lpe.reg_assets regAssets, lpe.cash_con cashCon,
+			lpe.ent_type entType, lpe.reg_auth regAuth, dit1.NAME orgSta, dit2.NAME curTypeName, dit3.NAME isLegalName
+		FROM credit_db.ods_leg_per_info_his lpe
+		LEFT JOIN credit_db.ods_dict dit1 ON lpe.org_sta = dit1.VALUE
+        LEFT JOIN credit_db.ods_dict dit2 ON lpe.cur_type = dit2.VALUE
+        LEFT JOIN credit_db.ods_dict dit3 ON lpe.is_legal = dit3.VALUE
+		WHERE lpe.file_no='${fileNo}'
+		    AND dit1.CATEGORY = '100012' 
+            AND dit2.CATEGORY = '100005'
+            AND dit3.CATEGORY = '100011'
+	]]>  
+    </sql-query>
+    
+    
+    
+    <!-- 查询股东历史记录 -->
+    <sql-query name="companyHisDao.getStockholderInfoHis">
+   	<![CDATA[
+		SELECT ste.reg_id regId, ste.name name, ste.cash_con cashCon,
+			ste.cash_rate cashRate, ste.con_date conDate, dit.NAME curTypeName
+		FROM credit_db.ods_stockholder_info_his ste
+		LEFT JOIN credit_db.ods_dict dit ON ste.cur_type = dit.VALUE AND dit.CATEGORY = '100005'
+        WHERE ste.file_no='${fileNo}'
+	]]>  
+    </sql-query>
+    
+    <!-- 查询资产负债记录 -->
+    <sql-query name="companyHisDao.getBalanceSheetHis">
+   	<![CDATA[
+		SELECT * FROM credit_db.ods_balance_sheet_his 
+        WHERE file_no='${fileNo}'
+	]]>  
+    </sql-query>
+    
+    <!-- 获取企业注册资金的币种名称 -->
+    <sql-query name="companyHisDao.getCurTypeName">
+   	<![CDATA[
+		select NAME from credit_db.ods_dict where CATEGORY = '100005' and VALUE='${curType}'
+	]]>  
+    </sql-query>
+</dynamic-hibernate-statement>

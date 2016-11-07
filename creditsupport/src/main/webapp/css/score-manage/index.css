@@ -1,0 +1,54 @@
+#content {
+  min-width: 100%;
+}
+.creditReportListTitle .checkboxInput {
+  width: 100%;
+}
+#creditReportModelForm .checkbox-inline {
+  margin-right: 15px;
+  margin-top: 5px;
+}
+#creditReportModelModal .borderBottomColor {
+  border-bottom: 1px solid #eff3f8;
+}
+#creditReportModelModal .modalOne > div {
+  padding-left: 0;
+}
+#creditReportModelModal .modalOne > div input {
+  width: 320px;
+}
+/********指标体系*******/
+#search_indicator_btn {
+  margin-left: 200px;
+}
+#controlOverflow .fixed-table-body::-webkit-scrollbar{
+  height: 12px;
+}
+#controlOverflow .fixed-table-body::-webkit-scrollbar-thumb {
+  background-color: #4A6C72;
+}
+#controlOverflow .fixed-table-body::-webkit-scrollbar-track {
+  background-color: #F6F5F4;
+}
+#controlOverflow .fixed-table-body {
+  width: 100%; 
+}
+#indicator_table {
+  min-width: 2000px;
+  margin-bottom: 20px !important;
+}
+/*************评分 模型管理******************/
+  #scoreModelManage .searchInput {
+    margin-top: 20px;
+    overflow: hidden;
+  }
+	#scoreModelManage .searchInput > div {
+    float: left;
+  }
+  #search_scoreModel_btn {
+    margin-left: 30px;
+  }
+  #scoreModelManage .modalInput textarea {
+    margin-left: 0;
+  }
+

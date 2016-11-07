@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>  
+<!DOCTYPE dynamic-hibernate-statement SYSTEM "classpath://hibernate/dynamic-hibernate-statement-1.0.dtd">
+<dynamic-hibernate-statement>  
+    <!-- 指标分页查询 -->  
+    <sql-query name="indicatorDao.getPageIndicators">  
+    <![CDATA[
+        SELECT id, indicator, IND_CODE indCode, IND_NAME indName,
+            IND_TARGET indTarget, IND_ATTR indAttr, WEIGHT weight, CAL_CYCLE calCycle,
+            IND_DESC indDesc, CALA_REGU calaRegu, STAT stat, UNIT unit,
+            SIGN sign, START_DATE startDate, END_DATE endDate, IF_EVAL ifEval,
+            AVAILABLE available, DETAIL_URL detailURL, LEVEL1 level1, LEVEL2 level2,
+            LEVEL3 level3, LEVEL4 level4, LEVEL5 level5, LEVEL6 level6,
+            LEVEL7 level7, SORT sort
+        FROM credit_db.ods_dim_indicator
+        WHERE 1 = 1
+        <#if indCode ?exists>
+             AND IND_CODE = '${indCode}'
+        </#if>
+        <#if indName ?exists>
+             AND IND_NAME like '%${indName}%' 
+        </#if>
+        <#if level1 ?exists>
+             AND level1 = '${level1}'
+        </#if>
+        <#if sortStr ?exists>
+            ORDER BY ${sortStr}
+            <#else>
+                ORDER BY SORT ASC 
+        </#if>
+        
+    ]]>   
+    </sql-query>
+    <!-- 指标分页查询总条数 -->  
+    <sql-query name="indicatorDao.getPageIndicatorsCount">  
+    <![CDATA[
+        select id FROM credit_db.ods_dim_indicator where 1=1
+        <#if indCode ?exists>
+             AND IND_CODE = '${indCode}'
+        </#if>
+        <#if indName ?exists>
+             AND IND_NAME like '%${indName}%' 
+        </#if>
+        <#if level1 ?exists>
+             AND level1 = '${level1}'
+        </#if> 
+    ]]>   
+    </sql-query>
+    
+    
+    <!-- 查询一级指标 -->
+    <hql-query name="indicatorDao.queryLevelIndicatorList">
+        <![CDATA[
+            SELECT DISTINCT level1 FROM IndicatorEntity
+        ]]>
+    </hql-query>
+    
+    <!-- 根据级别查询所有当前级别的指标 -->
+    <sql-query name="indicatorDao.queryLevelIndicatorListByLevel">
+        <![CDATA[
+            SELECT distinct
+			<#if levelNum == 2>
+			    level1, IF(IFNULL(level2,'')='', ind_name, level2) level2
+			    <#elseif levelNum == 3>
+			    IF(IFNULL(level2,'')='', ind_name, level2) level1,
+			    IF(IFNULL(level3, '')='',IF(IFNULL(level2, '')='', '', ind_name), level3) level2
+			    <#elseif levelNum gte 4 >
+			        IF(IFNULL(level${levelNum-1}, '')='',IF(IFNULL(level${levelNum - 2}, '')='', '', ind_name),level${levelNum - 1}) level1,
+			        IF(IFNULL(level${levelNum}, '')='', IF(IFNULL(level${levelNum - 1}, '')='', '', ind_name), level${levelNum}) level2
+			</#if>  
+			FROM credit_db.ods_dim_indicator
+			where level${levelNum - 1} IS NOT NULL AND level${levelNum - 1} != ''
+        ]]>
+    </sql-query>
+    
+    <sql-query name="indicatorDao.getAllEntityListByType">
+        <![CDATA[
+            SELECT tdi.id, tdi.indicator, tdi.IND_CODE indCode, tdi.IND_NAME indName,        
+	            tdi.IND_TARGET indTarget, tdi.IND_ATTR indAttr, tdm.WEIGHT weight, tdi.CAL_CYCLE calCycle,        
+	            tdi.IND_DESC indDesc, tdi.CALA_REGU calaRegu, tdi.STAT stat, tdi.UNIT unit,        
+	            tdi.SIGN sign, tdi.START_DATE startDate, tdi.END_DATE endDate, tdi.IF_EVAL ifEval,        
+	            tdi.AVAILABLE available, tdi.DETAIL_URL detailURL, tdi.LEVEL1 level1, tdi.LEVEL2 level2,        
+	            tdi.LEVEL3 level3, tdi.LEVEL4 level4, tdi.LEVEL5 level5, tdi.LEVEL6 level6,        
+	            tdi.LEVEL7 level7, tdi.SORT sort        
+            FROM credit_db.ods_dim_indicator tdi
+            LEFT JOIN credit_db.ods_dim_model tdm ON tdi.indicator = tdm.indicator        
+            WHERE tdm.TYPE = '${algorithmType}'       
+                AND tdm.CREATE_TIME = (SELECT MAX(CREATE_TIME) FROM credit_db.ods_dim_model WHERE TYPE = '${algorithmType}' ) 
+        ]]>
+    </sql-query>
+    
+</dynamic-hibernate-statement>

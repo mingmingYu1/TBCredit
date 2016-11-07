@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title></title>
+<style type="text/css">
+body {
+	font-family: simsun;
+	font-size: 14px;
+}
+.rf {
+	float: right;
+}
+.font_20 {
+	font-size: 20px;
+}
+.font_16 {
+	font-size: 16px;
+}
+
+.align-left {
+	text-align: left;
+}
+
+.align-right {
+	text-align: right;
+}
+
+.align-center {
+	text-align: center;
+}
+
+.title {
+	width: 100%;
+	font-size: 32px;
+}
+
+.section-blue {
+	font-size: 20px;
+	color: blue;
+	font-weight: bold;
+}
+
+.section-red {
+	font-size: 18px;
+	color: red;
+}
+
+table {
+	width: 100%;
+	border-collapse: collapse;
+	border-spacing: 0;
+	border-left: 1px solid #000;
+	border-top: 1px solid #000;
+	text-align: center;
+}
+
+th, td {
+	border-right: 1px solid #000;
+	border-bottom: 1px solid #000;
+	padding: 5px 2px;
+	font-size: 14px;
+}
+
+th {
+	font-weight: bold;
+}
+.font_bold {
+	font-weight: bold;
+}
+.max-width1 {
+	width: 15%;
+}
+.max-width2 {
+	width: 8%;
+}
+.max-width3 {
+	width: 10%;
+}
+.desc_div {
+	border: 1px solid;
+}
+.li_style{
+	list-style:none;
+}
+</style>
+</head>
+<body>
+	<h1 class="title align-center">${compName?if_exists}<br/>评分报告</h1>
+	<p class="align-right font_20"><span class="font_bold">权重：</span>100%&nbsp;&nbsp;&nbsp;&nbsp;<span class="font_bold">总分：</span>${score?if_exists}&nbsp;&nbsp;&nbsp;&nbsp;<span class="font_bold">算法名称：</span>${algor?if_exists}</p>
+	<p class="section-blue">通用类指标</p>
+	<table>
+		<tr>
+			<th class="max-width1">指标大类</th>
+			<th>指标小类</th>
+			<th>指标名称</th>
+			<th class="max-width1">行业属性</th>
+			<th class="max-width2">权重</th>
+			<th class="max-width3">得分</th>
+		</tr>
+		<tr>
+			<td>百分制得分</td>
+			<td colspan="3"></td>
+			<td>100%</td>
+			<td>${score1per?if_exists}</td>
+		</tr>
+		<tr>
+			<td>${totalLevelName?if_exists}</td>
+			<td colspan="3"></td>
+			<td>${totalLevelWeight1?if_exists}</td>
+			<td>${totalLevelScore1?if_exists}</td>
+		</tr>
+		<#if rows1?exists>
+		<#list rows1 as item>
+		<tr>
+			<#if (item.topLevel)??>
+			<td rowspan="${item.topLevelcount?if_exists}" class="align-left">${item.topLevel}<br/>得分：${item.topLevelScore}<br/>权重：${(item.topLevelWeight)?string("percent")}</td>
+			</#if>
+			<#if (item.firstLevel)??>
+			<td rowspan="${item.firstLevelcount?if_exists}" class="align-left">${item.firstLevel}<br/>得分：${item.firstLevelScore}<br/>权重：${(item.firstLevelWeight)?string("percent")}</td>
+			</#if>
+			<td>${item.secondLevelName?if_exists}</td>
+			<td>${item.indAttr?if_exists}</td>
+			<td>${item.secondLevelWeight?if_exists}</td>
+			<td>${item.secondLevelScore?if_exists}</td>
+		</tr>
+		</#list> 
+		</#if>
+	</table>
+	
+	<br/>
+	<p class="section-blue">行业类指标</p>
+	<table>
+		<tr>
+			<th class="max-width1">指标大类</th>
+			<th>指标小类</th>
+			<th>指标名称</th>
+			<th class="max-width1">行业属性</th>
+			<th class="max-width2">权重</th>
+			<th class="max-width3">得分</th>
+		</tr>
+		<tr>
+			<td>百分制得分</td>
+			<td colspan="3"></td>
+			<td>100%</td>
+			<td>${score2per?if_exists}</td>
+		</tr>
+		<tr>
+			<td>${totalLevelName?if_exists}</td>
+			<td colspan="3"></td>
+			<td>${totalLevelWeight2?if_exists}</td>
+			<td>${totalLevelScore2?if_exists}</td>
+		</tr>
+		<#if rows2?exists>
+		<#list rows2 as item>
+		<tr>
+			<#if (item.topLevel)??>
+			<td rowspan="${item.topLevelcount?if_exists}" class="align-left">${item.topLevel}<br/>得分：${item.topLevelScore}<br/>权重：${(item.topLevelWeight)?string("percent")}</td>
+			</#if>
+			<#if (item.firstLevel)??>
+			<td rowspan="${item.firstLevelcount?if_exists}" class="align-left">${item.firstLevel}<br/>得分：${item.firstLevelScore}<br/>权重：${(item.firstLevelWeight)?string("percent")}</td>
+			</#if>
+			<td>${item.secondLevelName?if_exists}</td>
+			<td>${item.indAttr?if_exists}</td>
+			<td>${item.secondLevelWeight?if_exists}</td>
+			<td>${item.secondLevelScore?if_exists}</td>
+		</tr>
+		</#list> 
+		</#if>
+	</table>
+	<#if desc?exists> 
+		<#if (desc?size>0)>
+		<div class="desc_div">
+	<p class="section-red">备注</p>
+	<ul style="margin-left: -30px;">
+		<#list desc as item>
+		<li>${item?if_exists}</li>
+		</#list> 
+	</ul>
+		</div>
+		</#if>
+	</#if>
+</body>
+</html>

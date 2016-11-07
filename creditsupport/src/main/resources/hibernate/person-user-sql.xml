@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>  
+<!DOCTYPE dynamic-hibernate-statement SYSTEM "classpath://hibernate/dynamic-hibernate-statement-1.0.dtd">
+<dynamic-hibernate-statement>  
+    <!-- 用户分页查询 -->  
+    <sql-query name="perUserdao.getPageUsers">  
+    <![CDATA[
+        SELECT
+            user1.u_id AS userId,
+            user1.u_name AS userName,
+            user1.real_name AS realName,
+            dept1.dept_name AS deptName,
+            dept1.dept_id AS deptId,
+            GROUP_CONCAT(DISTINCT role1.role_name SEPARATOR ' | ')  as roleName,
+            GROUP_CONCAT(DISTINCT CAST(role1.role_id AS CHAR(7)) SEPARATOR ' | ') as roleIdList,
+            user1.u_password AS password,
+            user1.status AS status
+        FROM credit_db.sp_per_user AS user1
+        LEFT JOIN credit_db.sp_dept AS dept1 ON dept1.dept_id = user1.dept_id
+        LEFT JOIN credit_db.sp_per_user_role AS ur ON ur.user_id = user1.u_id
+        LEFT JOIN credit_db.sp_per_role AS role1 ON role1.role_id = ur.role_id
+        WHERE 1=1
+        <#if condition ?exists>
+            <#if values ?exists>
+                <#if condition == '0'>
+                    AND (
+                        user1.real_name like '${values}'  
+                        or dept1.dept_name like '${values}' 
+                        or role1.role_name like '${values}'
+                    )
+                <#elseif condition == '1'>
+                    AND dept1.dept_name like '${values}'
+                <#elseif condition == '2'>
+                    AND role1.role_name like '${values}'
+                <#elseif condition == '3'>
+                    AND user1.real_name like '${values}'
+                </#if>
+            </#if>
+        </#if>
+        GROUP BY user1.u_id 
+        ORDER BY user1.create_time DESC
+    ]]>   
+    </sql-query>
+    <sql-query name="perUserdao.getPageUsersCount">  
+    <![CDATA[
+        SELECT COUNT(*) FROM
+	       (SELECT
+	            user1.u_id AS uid,
+	            user1.u_name AS username,
+	            user1.real_name AS realname,
+	            dept1.dept_name AS deptName,
+	            dept1.dept_id AS deptId,
+	            GROUP_CONCAT(DISTINCT role1.role_name SEPARATOR ' | ')  as rolename,
+	            GROUP_CONCAT(DISTINCT CAST(role1.role_id AS CHAR(7)) SEPARATOR ' | ') as roleIdList,
+	            user1.u_password AS password,
+	            user1.status AS status
+	        FROM credit_db.sp_per_user AS user1
+	        LEFT JOIN credit_db.sp_dept AS dept1 ON dept1.dept_id = user1.dept_id
+	        LEFT JOIN credit_db.sp_per_user_role AS ur ON ur.user_id = user1.u_id
+	        LEFT JOIN credit_db.sp_per_role AS role1 ON role1.role_id = ur.role_id
+	        WHERE 1=1
+	        <#if condition ?exists>
+	            <#if values ?exists>
+	                <#if condition == '0'>
+	                    AND (
+	                        user1.real_name like '${values}'  
+	                        or dept1.dept_name like '${values}' 
+	                        or role1.role_name like '${values}'
+	                    )
+	                <#elseif condition == '1'>
+	                    AND dept1.dept_name like '${values}'
+	                <#elseif condition == '2'>
+	                    AND role1.role_name like '${values}'
+	                <#elseif condition == '3'>
+	                    AND user1.real_name like '${values}'
+	                </#if>
+	            </#if>
+	        </#if>
+	        GROUP BY user1.u_id ) AS tb
+    ]]>   
+    </sql-query>
+    
+    <!-- 根据用户ID查询角色ID -->
+    <sql-query name="perUserDao.queryRoleByUserId">  
+    <![CDATA[
+        SELECT
+            r.role_id,r.role_name
+            FROM credit_db.sp_cas_user AS u ,credit_db.sp_user_role AS ur, credit_db.sp_pere_role AS r
+            WHERE u.u_id = ur.user_id 
+                and r.role_id = ur.role_id 
+                and u.`status` = '1'
+                and r.`status`= '1'
+                and u.u_id = ${userId}
+    ]]>   
+    </sql-query>
+    
+</dynamic-hibernate-statement>

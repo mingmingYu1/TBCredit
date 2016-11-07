@@ -1,0 +1,13 @@
+#DB Configure
+url=jdbc\:mysql\://172.17.130.101:3306/credit_db?useUnicode=true&characterEncoding=utf8&autoReconnect=true
+driverClassName=com.mysql.jdbc.Driver
+username=root
+password=tempus
+poolSize=5
+
+# KPI Info
+kpi_tb_name=base_score_kpi
+kpi_excel=\u817E\u90A6\u5F81\u4FE1\u6307\u6807\u4F53\u7CFB_v2.9.xlsx
+
+#webService
+webServiceAddr=http://10.48.1.31:8080/creditdata-web/services/credit

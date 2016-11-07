@@ -1,0 +1,316 @@
+/************新增***********/
+#isAsingle1 .table {
+  margin-top: 10px;
+}
+#isAsingle1 .fixed-table-container .bs-checkbox {
+  text-align: left;
+}
+#isAsingle1 thead .th-inner {
+  padding-left: 8px;
+  padding-top: 0;
+  padding-bottom: 4px;
+}
+/******************/
+#searchEnterpriseBtn {
+  margin-left: 100px;
+}
+.investmentTotal > label {
+  padding-left: 8px;
+  border-top: 1px solid #efe3f8;
+}
+.investmentTotalInput {
+  border-right: 1px solid #eff3f8;
+}
+.investmentTotalInput > input {
+  border-top: 1px solid #efe3f8;
+}
+.moneyTotal {
+  padding-left: 0;
+  padding-right: 0;	
+}
+.moneyTotal > label {
+  padding-left: 20px;
+  border-top: 1px solid #efe3f8;
+}
+.moneyTotalInput > input {
+  border-top: 1px solid #efe3f8;
+}
+.nullInput > div {
+  height: 40px;
+  border-bottom:1px solid #eff3f8;
+  border-top: 1px solid #eff3f8;
+}
+.basicText3 .alertLabel {
+  border-bottom: 1px solid #eff3f8;
+  color: red;
+}
+.borderBottomColor {
+  border-bottom:1px solid #eff3f8;
+}
+#creditReportDetail .borderBottomColor {
+  border-bottom:1px solid #eff3f8;
+}
+#basicdetail .borderBottomColor {
+  border-bottom:1px solid #eff3f8;
+}
+.basicText3 .textareaLabel{
+	height: 80px;
+	line-height: 40px;
+}
+.textareaContainer {
+	height: 80px;
+}
+.textareaContainer > textarea {
+	width:100%;
+	margin-left: 0;
+	height: 80px;
+	border-color: #eff3f8;
+	border-right: none;
+	border-bottom: none;
+}
+/************���ֱ���*************/
+#score-report {
+  min-width: 1100px;
+}
+.scoreReportTitle {
+  font-size: 22px;
+}
+.tableColor {
+  background-color: #fff;
+  border-right: 1px solid #eff3f8;
+  vertical-align: middle;
+}
+#indexReportTable th.tableColor,
+#indexReportAttrTable1 th.tableColor,
+#indexReportAttrTable2 th.tableColor{
+  border-right: none;
+  font-size:14px;
+  font-weight: none;
+}
+#indexReportTable tbody tr:first-child td,
+#indexReportAttrTable1 tbody tr:first-child td,
+#indexReportAttrTable2 tbody tr:first-child td,
+#indexReportAttrTable1 tbody tr:nth-of-type(2) td,
+#indexReportAttrTable2 tbody tr:nth-of-type(2) td{
+  border-right: none;
+  color: red;
+  font-size:14px;
+  font-weight: none;
+}
+#indexReportAttrTable1 tbody tr:nth-of-type(2),
+#indexReportAttrTable2 tbody tr:nth-of-type(2) {
+  background-color: #fff;
+}
+#indexReportAttrTable1 tbody tr:first-child td,
+#indexReportAttrTable2 tbody tr:first-child td {
+  color: #666;
+}
+/******noneRight******/
+#creditReportDetail .noneBorderRight,
+#basicdetail .noneBorderRight{
+  border-right: none;
+}
+/*.likeTable > div:first-child {*/
+/*display:none;*/
+/*}*/
+#enterprisePortrait .dengFen,
+#lastTitle .dengFen {
+  display: inline-block;
+  height: 30px;
+  line-height: 30px;
+  font-size: 18px;
+  padding: 5px 25px;
+}
+#enterprisePortrait .dengFen > span:first-child,
+#lastTitle .dengFen > span:first-child{
+  padding-right: 10px;
+}
+#lastTitle .zhi {
+  font-size: 22px;
+  color: red;
+}
+#enterprisePortrait .zhi {
+  font-size: 22px;
+  color: #119E5A;
+}
+.likeTables {
+  width:290px;
+  margin:0 auto;
+}
+.likeTables > div:first-child{
+  height: 105px;
+  padding: 25px 10px;
+  font-size: 14px;
+  color:#333;
+  font-weight: bold;
+  text-align: center;
+  /*border-right: 5px solid #80deea;*/
+  background-color: #eee;
+  cursor: pointer;
+  border-top: 1px solid #eff3f8;
+  border-bottom: 1px solid #eff3f8;
+}
+.likeTables > div.active {
+  border: none;
+  /*  background-color: #4dd0e1; */
+  color: #fff;
+}
+.likeTables > div:last-child > div{
+  height: 35px;
+  width: 200px;
+  overflow: hidden;
+  font-size: 12px;
+}
+.likeTables > div:last-child > div > span {
+  /*width: 50%;*/
+  float: left;
+  padding-left: 10px;
+  border: 1px solid #eff3f8;
+  border-left: none;
+  height: 35px;
+  line-height: 35px;
+}
+.likeTables > div:last-child > div:first-child > span{
+  border-bottom: none;
+}
+.likeTables > div:last-child > div:last-child > span {
+  border-top: none;
+}
+.likeTables > div:last-child > div > span:first-child {
+  background-color: #fcfcfc;
+  width: 60%;
+}
+.likeTables > div:last-child > div > span:last-child {
+  width: 40%;
+}
+.reportBig {
+  font-size: 18px;
+  font-weight: bold;
+}
+.reportsmall {
+  font-size: 16px;
+  font-weight: 700;
+}
+.titleDiv {
+  padding: 5px 15px;
+}
+.reportTitle {
+  background-color: #00bcd4;
+  color: #fff;
+  padding: 2px 10px;  
+  border-radius: 2px;
+  font-size: 16px;
+  font-weight: bold;
+}
+#downloadScore1,
+#downloadScore2 {
+  display: inline-block;
+  margin-top: 20px;
+  font-size: 18px; 	
+}
+/***********����ҳ��***************/
+#table100 .titleNumber {
+  width: 10%;
+  display: inline-block;
+  text-align: center
+}
+#table100 .creditCode {
+  width: 36%;
+  display: inline-block;
+}
+#table100 .basicName {
+  width: 36%;
+  display: inline-block;
+}
+#table100 .operating {
+  width: 10%;
+  display: inline-block;
+  text-align: center
+}
+#table100 .addInput {
+  margin-left: 4px;
+}
+#addAgents .ok {
+  padding: 4px 21px;
+}
+
+/******** ע���ʱ� *********/
+
+#capitalGrowth .lineChart {
+  border: 1px solid #eff3f8;
+  margin-bottom: 40px;
+}
+#capitalGrowth .lineChart > div {
+  width: 100%;
+  height: 300px;
+  margin-top: 40px;
+}
+
+/************��6���³�Ʊ������*************/
+
+#ticketGrowth .lineChart {
+  border: 1px solid #eff3f8;
+  margin-bottom: 40px;
+}
+#ticketGrowth .lineChart > div {
+  width: 100%;
+  height: 300px;
+  margin-top: 40px;
+}
+
+/************��6����ƽ���˷�Ʊ��**************/
+#retirementTicket .lineChart {
+  border: 1px solid #eff3f8;
+  margin-bottom: 40px;
+}
+#retirementTicket .lineChart > div {
+  width: 100%;
+  height: 300px;
+  margin-top: 40px;
+}
+
+/************���������ƽ������ë�����ܶ�**************/
+#grossProfit .lineChart {
+  border: 1px solid #eff3f8;
+  margin-bottom: 40px;
+}
+#grossProfit .lineChart>div {
+  width: 100%;
+  height: 300px;
+  margin-top: 40px;
+}
+/*********征信报告******/
+.scoreDetail {
+  padding-left: 80px;
+  margin-top: 10px;
+}
+.scoreDetail span {
+  color: #41c5da;
+}
+.scoreDetail span:nth-of-type(3),
+.scoreDetail span:nth-of-type(5) {
+  padding-left: 30px;
+}
+.scoreDetail .red {
+  color: red;
+}
+
+.btn.btnSubmit {
+  color: #00bcd4;
+  background-color: #fff;
+  border: 1px solid #00bcd4;
+}
+
+.btn.btnSubmit:hover {
+  background-color: #26c6da;
+  color: #fff;
+}
+
+.btn.btnSubmit.active {
+  background-color: #00bcd4;
+  color: #fff;
+}
+
+.btn.btnSubmit.active {
+  box-shadow: none;
+}

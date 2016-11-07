@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>  
+<!DOCTYPE dynamic-hibernate-statement SYSTEM "classpath://hibernate/dynamic-hibernate-statement-1.0.dtd">
+<dynamic-hibernate-statement>  
+    <!-- 根据角色ID删除角色菜单的关联关系 -->  
+    <hql-query name="roleMenuDao.deleteRoleMenu">  
+    <![CDATA[
+        DELETE FROM RoleMenuEntity WHERE roleId = ${roleId}
+    ]]>   
+    </hql-query>
+    
+    <!-- 角色分页查询 -->  
+    <sql-query name="roleDao.getPageRoles">  
+    <![CDATA[
+        SELECT
+		    role1.role_id AS roleId,
+		    role1.role_name AS roleName,
+		    GROUP_CONCAT(cp.menu_name SEPARATOR ' | ') AS  enRoleName
+	    FROM credit_db.sp_role role1
+	    LEFT JOIN credit_db.sp_role_menu rp on role1.role_id=rp.role_id
+	    LEFT JOIN credit_db.sp_menu cp on cp.menu_id=rp.MENU_ID
+	    WHERE role1.status != '-1'
+		<#if roleName ?exists>
+		    AND role1.role_name LIKE '%${roleName}%'
+		</#if>
+	    GROUP BY roleId,roleName
+	    ORDER BY role1.create_time DESC, roleId ASC
+    ]]>   
+    </sql-query>
+    <!-- 角色分页查询总条数 -->  
+    <sql-query name="roleDao.getPageRolesCount">  
+    <![CDATA[
+        SELECT COUNT(*) FROM
+	        (SELECT
+	            role1.role_id AS roleId,
+	            role1.role_name AS roleName,
+	            GROUP_CONCAT(cp.menu_name SEPARATOR ' | ') AS  menuName
+	        FROM credit_db.sp_role role1
+	        LEFT JOIN credit_db.sp_role_menu rp on role1.role_id=rp.role_id
+	        LEFT JOIN credit_db.sp_menu cp on cp.menu_id=rp.MENU_ID
+	        WHERE role1.status != '-1'
+	        <#if roleName ?exists>
+	             AND role1.role_name LIKE '%${roleName}%'
+	        </#if>
+	        GROUP BY roleId,roleName) AS tb
+    ]]>   
+    </sql-query>
+    
+</dynamic-hibernate-statement>

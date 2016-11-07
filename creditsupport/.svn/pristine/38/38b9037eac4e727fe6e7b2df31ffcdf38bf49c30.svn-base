@@ -1,0 +1,23 @@
+#这个只是Lo4j的一个基本的配置
+log4j.rootLogger=info,stdout,R
+log4j.appender.stdout=org.apache.log4j.ConsoleAppender
+log4j.appender.stdout.layout=org.apache.log4j.PatternLayout
+log4j.appender.stdout.layout.ConversionPattern=%-d{yyyy-MM-dd   HH:mm:ss,SSS}   [%c]-[%p]   %m%n
+
+
+
+log4j.appender.R=org.apache.log4j.RollingFileAppender
+log4j.appender.R.File=${catalina.home}/logs/basic.log
+log4j.appender.R.MaxFileSize=100MB
+log4j.appender.R.layout=org.apache.log4j.PatternLayout
+log4j.appender.R.layout.ConversionPattern=%-d{yyyy-MM-dd   HH:mm:ss,SSS}   [%c]-[%p]   %m%n
+
+
+##login模块输出 ##　　  
+log4j.logger.login=INFO,login,error,debug    
+log4j.appender.login=org.apache.log4j.DailyRollingFileAppender   
+log4j.appender.login.File=${catalina.home}/logs/login.log  
+log4j.appender.R.MaxFileSize=100MB
+log4j.appender.login.layout=org.apache.log4j.PatternLayout  
+log4j.appender.login.layout.ConversionPattern=%d %p [%c] - %m%n  
+log4j.additivity.login=false 

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>  
+<!DOCTYPE dynamic-hibernate-statement SYSTEM "classpath://hibernate/dynamic-hibernate-statement-1.0.dtd">
+<dynamic-hibernate-statement>  
+    <!-- 评分等级版本分页查询 -->  
+    <sql-query name="scoreLevelVersionDao.getPageScoreLevelVersions">  
+    <![CDATA[
+        select id, version,create_time,status,create_user  FROM credit_db.sp_score_level_version where 1=1
+        <#if id ?exists>
+            AND id = ${id}
+        </#if>
+    ]]>   
+    </sql-query>
+    <!-- 评分等级版本分页查询总条数 -->  
+    <hql-query name="scoreLevelVersionDao.getPageScoreLevelVersionsCount">  
+    <![CDATA[
+        select count(id) FROM ScoreLevelVersionEntity where 1=1
+        <#if id ?exists>
+            AND id = ${id}
+        </#if>
+    ]]>   
+    </hql-query>
+    
+    <!-- 评分等级版本所有分数之和 -->  
+    <sql-query name="scoreLevelVersionDao.getScoreSumByVersion">  
+    <![CDATA[
+        select sum(sc_lvl_max-sc_lvl_min+1) from credit_db.sp_score_level where sc_lvl_version='${id}'
+    ]]>   
+    </sql-query>
+    
+    <!-- 查询评分区间是否有重叠区域 -->  
+    <hql-query name="scoreLevelDao.getScoreLevelEntityByScore">  
+    <![CDATA[
+        from ScoreLevelEntity
+        where
+            ((levelScoreMin <= ${levelScoreMin} and levelScoreMax >= ${levelScoreMin})
+            or (levelScoreMin <= ${levelScoreMax} and levelScoreMax >= ${levelScoreMax})
+            or (levelScoreMin >= ${levelScoreMin} and levelScoreMax <= ${levelScoreMax}))
+            AND levelVersion= ${levelVersion}
+            <#if id ?exists>
+                AND id <> ${id}
+            </#if>
+    ]]>   
+    </hql-query>
+    
+    <!-- 评分等级分页查询 -->  
+    <sql-query name="scoreLevelDao.getPageScoreLevels">  
+    <![CDATA[
+        SELECT sc_lvl_id id, sc_lvl_code levelCode, sc_lvl_area levelScore,
+            sc_lvl_min levelScoreMin, sc_lvl_max levelScoreMax, 
+            sc_lvl_name levelName, cre_assess levelDesc, cre_sc_offer remark 
+        FROM credit_db.sp_score_level
+        WHERE 1=1 
+        <#if id ?exists>
+            AND sc_lvl_id = ${id}
+        </#if>
+    ]]>   
+    </sql-query>
+    <!-- 评分等级分页查询总条数 -->  
+    <hql-query name="scoreLevelDao.getPageScoreLevelsCount">  
+    <![CDATA[
+        select count(sc_lvl_id) FROM ScoreLevelEntity where 1=1 
+        <#if id ?exists>
+            AND sc_lvl_id = ${id}
+        </#if>
+    ]]>   
+    </hql-query>
+    
+</dynamic-hibernate-statement>

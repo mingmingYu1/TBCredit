@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>  
+<!DOCTYPE dynamic-hibernate-statement SYSTEM "classpath://hibernate/dynamic-hibernate-statement-1.0.dtd">
+<dynamic-hibernate-statement>  
+    <!-- 查询一个数据库或模式下的所有的表名 -->  
+    <sql-query name="dictionaryDao.queryTables">  
+    <![CDATA[
+        SELECT a.TABLE_SCHEMA,a.TABLE_NAME 
+        FROM information_schema.`tables` a
+        WHERE a.TABLE_SCHEMA= '${tableSchema}'
+    ]]>   
+    </sql-query>
+    <!-- 查询一个数据库或模式下的所有表的详细信息 -->  
+    <sql-query name="dictionaryDao.queryDictionary">  
+    <![CDATA[
+        select
+			distinct a.TABLE_SCHEMA as databaseName ,
+			a.TABLE_NAME as tableName,
+			a.COLUMN_NAME as columName,
+			a.COLUMN_TYPE as columType,
+			case when a.IS_NULLABLE='yes' then 'Y'else 'N' end as isNullAble,
+			case when a.COLUMN_DEFAULT='' then '' else a.COLUMN_DEFAULT end  as columDefault,
+			a.CHARACTER_SET_NAME as characterSetName,
+			a.COLLATION_NAME as collationName,
+			a.EXTRA as extra,
+			case when b.CONSTRAINT_NAME='PRIMARY'  then 'PRIMARY' else '' end  as constraintName,
+			c.CONSTRAINT_NAME  as '外键名',
+			c.REFERENCED_TABLE_NAME as '关联父表',
+			c.REFERENCED_COLUMN_NAME as '父表字段',
+			d. CONSTRAINT_NAME as '索引名称',
+			a.column_comment as columnComment
+			from INFORMATION_SCHEMA.COLUMNS as a
+			left join (
+			    select CONSTRAINT_NAME,TABLE_NAME table_name2,COLUMN_NAME col_name2
+			        from INFORMATION_SCHEMA .KEY_COLUMN_USAGE
+			        where  CONSTRAINT_NAME='PRIMARY'
+			        and table_name in ${parameter}) as b
+			        on a.TABLE_NAME=b.table_name2
+			        and a.COLUMN_NAME=b.col_name2
+			left join (
+			    select CONSTRAINT_NAME,REFERENCED_TABLE_NAME,REFERENCED_COLUMN_NAME,TABLE_NAME table_name3,COLUMN_NAME col_name3
+			    from INFORMATION_SCHEMA .KEY_COLUMN_USAGE
+			    where REFERENCED_COLUMN_NAME!=''
+			    and table_name in ${parameter}) as c
+			    on a.TABLE_NAME=c.table_name3
+			    and a.COLUMN_NAME=c.col_name3
+			left join (
+			    select CONSTRAINT_NAME,REFERENCED_TABLE_NAME,REFERENCED_COLUMN_NAME,TABLE_NAME table_name4,COLUMN_NAME col_name4
+			    from INFORMATION_SCHEMA .KEY_COLUMN_USAGE
+			    where REFERENCED_COLUMN_NAME is null
+			    and CONSTRAINT_NAME!='PRIMARY'
+			    and table_name in ${parameter}) as d
+			on a.TABLE_NAME=d.table_name4
+			and a.COLUMN_NAME=d.col_name4
+			where TABLE_SCHEMA = '${databaseName}'
+			AND table_name in ${parameter}
+    ]]>   
+    </sql-query>
+    
+</dynamic-hibernate-statement>
